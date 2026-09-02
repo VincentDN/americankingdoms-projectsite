@@ -1,5 +1,31 @@
 # American Kingdoms — Changelog
 
+## 1.17.4 — 2026-09-02
+- Replaced the Union faction summary with the revised account of its rebellion, imperial structure and Old World rivals.
+
+## 1.17.3 — 2026-09-02
+- Updated the opening **Connect with Us** link to jump directly to the final **Interested? Connect with us.** section instead of the Crew carousel.
+
+## 1.17.2 — 2026-09-02
+- Replaced the opening hero image with the supplied Union court artwork while retaining the established warm brown overlay and right-side legibility gradient.
+- Corrected the footer link capitalization to **About Vincent De Nil**.
+
+## 1.17.1 — 2026-09-02
+- Added the existing Vincent De Nil portrait to his `Person` structured-data node.
+- Removed the Kaiser Cat Cinema YouTube channel from Vincent's personal `sameAs` links while retaining it on the KCC organization.
+- Updated the Flagmaker & Print profile reference to `http://flagmaker-print.com/about-vincent`.
+
+## 1.17.0 — 2026-09-02
+- Replaced the Southern Kingdoms, Vinland, Free Cities, Dragon Coast and Natives faction-card images with the supplied concept art.
+- Optimized all five source images as high-resolution WebP assets for faster delivery and sharp card crops.
+
+## 1.16.2 — 2026-09-02
+- Replaced the Connect With Us crew photograph with the supplied higher-resolution WebP image.
+
+## 1.16.1 — 2026-09-02
+- Removed the Gallery paragraph about the KCC artists and webshop.
+- Replaced the poster section's two italic lore passages with the supplied quotation from the Making Of development diary.
+
 ## 1.16.0 — 2026-09-02
 - Added a subtle typographic **Featured Wiki Articles** list beneath the Factions carousel.
 - Featured four pinned entries covering the Sidennic League, Pueblo Kingdom, New France and the Shining Republic of Mahatamus.

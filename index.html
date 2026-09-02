@@ -4,7 +4,7 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.16.0
+  VERSION : 1.17.4
   BUILD   : 2026-09-02
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
@@ -79,6 +79,21 @@
            Gallery carousel and removed the scattered standalone Shorts.
     1.16.0 Added a restrained Featured Wiki Articles list beneath Factions,
            with four pinned lore entries and concise editorial summaries.
+    1.16.1 Removed the Gallery artist-credit paragraph and replaced the poster
+           lore passages with the supplied Making Of development-diary quote.
+    1.16.2 Replaced the Connect With Us crew photo with the supplied higher-
+           resolution WebP image.
+    1.17.0 Replaced five remaining faction placeholders with supplied concept
+           art for the South, Vinland, Free Cities, Dragon Coast and Natives.
+    1.17.1 Added Vincent De Nil's portrait to his Person schema, removed the
+           KCC YouTube channel from his sameAs links, and corrected the
+           Flagmaker & Print profile URL.
+    1.17.2 Replaced the opening hero artwork with the supplied Union court
+           illustration and corrected Vincent De Nil's footer capitalization.
+    1.17.3 Pointed the opening Connect with Us link directly to the final
+           Interested? Connect with us section instead of the Crew carousel.
+    1.17.4 Replaced the Union faction summary with the revised account of its
+           rebellion, imperial structure and Old World rivals.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -89,7 +104,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" href="assets/favicon.png">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.16.0">
+<meta name="version" content="1.17.4">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -573,14 +588,14 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 
 <!-- ============================ HERO ============================ -->
 <section class="hero" id="top">
-  <div class="hero-bg"><img src="assets/hero-left.jpg" alt="King Arthur Washington enthroned in his court" fetchpriority="high"></div>
+  <div class="hero-bg"><img src="assets/hero-union-court.jpg" alt="King Arthur Washington enthroned before the assembled knights of the Union" fetchpriority="high"></div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
       <h1>What if the Americas had been settled during the Dark Ages?</h1>
       <p class="lede">In American Kingdoms, American history is re-imagined as an Arthurian medieval epic – an age defined not by musket and cannon, but by knightly honor and courtly intrigue. This alt-history project is a collaborative worldbuilding effort: anyone can join our wiki to add their own character or fief to the strange but familiar setting of American Kingdoms. Join a medieval pastiche where the Natives fight on equal footing with conquistadores, and where Asian, European and American cultures clash for control of the New World.</p>
       <div class="hero-cta">
         <a class="btn btn-primary" href="https://wiki.american-kingdoms.com/">Visit the AK Wiki</a>
-        <a class="btn btn-ghost" href="#team">Connect with Us</a>
+        <a class="btn btn-ghost" href="#connect">Connect with Us</a>
       </div>
     </div>
   </div>
@@ -636,12 +651,12 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         <div class="fc-photo"><img src="assets/editorial/faction-union.webp" alt="Knights of the Union assembled beneath American banners" loading="lazy"></div>
         <div class="fc-body">
           <h3>The Union</h3>
-          <p>The Thirteen Realms bound as a Holy American Empire, its High King elected and raised from among his peers. Strong in ideal, fragile in practice, and the prize every ambitious lord covets.</p>
+          <p>After rebelling against their Anglo-Saxon overlords, the free American kingdoms united in a Holy Roman Empire-style American Union. This union of 13 realms is governed by an elected High King - strong in ideal, fragile in practice, and beset on all sides by the machinations of the old European empires.</p>
           <a class="readlink" href="https://americankingdoms.miraheze.org/wiki/The_Union">Read the Wiki article</a>
         </div>
       </article>
       <article class="faction-card">
-        <div class="fc-photo"><img src="assets/editorial/faction-navajo.webp" alt="Navajo Nation totem-knight concept art" loading="lazy"></div>
+        <div class="fc-photo"><img src="assets/factions/natives-card.webp" alt="Native travelers overlook a desert landscape of mesas and canyons" loading="lazy"></div>
         <div class="fc-body">
           <h3>The Natives</h3>
           <p>The first nations of the continent, who meet the newcomers as equals in war and in council. Proud and unbroken, they defend ancestral lands against every crown that would claim them.</p>
@@ -657,7 +672,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </div>
       </article>
       <article class="faction-card">
-        <div class="fc-photo"><img src="assets/factions/southern.jpg" alt="The Southern Kingdoms crest" loading="lazy"></div>
+        <div class="fc-photo"><img src="assets/factions/southern-kingdoms-card.webp" alt="A Southern Kingdoms knight leads a cavalry charge beneath heraldic banners" loading="lazy"></div>
         <div class="fc-body">
           <h3>The Southern Kingdoms</h3>
           <p>Proud chivalric realms of the warm South, where courtly honour, the tournament and the bloodline rule as surely as any law. Fierce keepers of tradition and the old codes.</p>
@@ -665,7 +680,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </div>
       </article>
       <article class="faction-card">
-        <div class="fc-photo"><img src="assets/factions/vinland.jpg" alt="Vinland crest" loading="lazy"></div>
+        <div class="fc-photo"><img src="assets/factions/vinland-card.webp" alt="Vinlandian warriors assemble before a northern hill fortress" loading="lazy"></div>
         <div class="fc-body">
           <h3>Vinland</h3>
           <p>Norse-blooded settlers of the frozen north, raiders and seafarers whose claim to the New World runs deeper than any crown's. Bound to the sea, the saga and the old gods.</p>
@@ -673,7 +688,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </div>
       </article>
       <article class="faction-card">
-        <div class="fc-photo"><img src="assets/factions/freecities.jpg" alt="The Free Cities crest" loading="lazy"></div>
+        <div class="fc-photo"><img src="assets/factions/free-cities-card.webp" alt="Merchants gather beneath the banner of a Free City market" loading="lazy"></div>
         <div class="fc-body">
           <h3>The Free Cities</h3>
           <p>As settlers spread inland, free cities and trade republics took root far beyond the reach of both the Redcloaks and the Union. Ruled by councils of coin, they answer only to profit and their own hard-won liberty.</p>
@@ -681,7 +696,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </div>
       </article>
       <article class="faction-card">
-        <div class="fc-photo"><img src="assets/factions/dragoncoast.jpg" alt="Dragon Coast crest" loading="lazy"></div>
+        <div class="fc-photo"><img src="assets/factions/dragon-coast-card.webp" alt="A fortified Dragon Coast city rises above a busy harbour" loading="lazy"></div>
         <div class="fc-body">
           <h3>Dragon Coast</h3>
           <p>Along the western shores rises the Dragon Coast: colonies of Ming-descended settlers who crossed the great ocean generations ago, bringing the steel, silk and statecraft of the Middle Kingdom to a new frontier.</p>
@@ -835,7 +850,6 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </figure>
       </div>
     </div>
-    <p class="muted" style="margin-top:1.6rem;font-size:.95rem;max-width:70ch">Inspired by our wiki collaborators and worldbuilders, KCC artists Vincent De Nil and Yana Dmitruk create original art and animations for the world of American Kingdoms. You can support their work by picking up <a href="https://kaisercatcinema.com/" style="color:var(--gold)">art prints in our webshop</a>.</p>
   </div>
 </section>
 
@@ -850,8 +864,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
       <div class="section-head"><h2>Support the project by buying American Kingdoms art prints</h2></div>
       <p class="lead">KCC artists Yana and Vincent create original artworks and art prints to help fund the creation of new projects in the world of American Kingdoms. Discover our top-rated merchandise store to get your own and support the project.</p>
       <div class="prints-divider" aria-hidden="true"></div>
-      <p class="prints-story"><em>“From the Roman settlers to the Thirteen Kingdoms... discover the world's largest exhibition on the 1375 Revolutionary war, and the American Medieval Age! Manhattan Castle at Old Town, New York is proud to host a year-round exhibition exploring this defining chapter in American history.”</em></p>
-      <p class="prints-story"><em>Originally developed in 1959 by renowned illustrator L.C. Meyenbecker and commissioned by the Royal Galleries of New York, the American Medieval Exhibition poster series has become synonymous with the era it depicts. Meyenbecker’s defining image - a knight of the Thirteen Kingdoms draped in the American banner, his squire presenting the sword to his outstretched hand - endures as one of the most powerful visual icons of medieval America.</em></p>
+      <p class="prints-story"><em>From the Making Of dev diary: “The Kaiser Cat Collective team is proud to present the world's first American Kingdoms 'propaganda poster'! For the American Kingdoms project, me and Yana developed a new series of posters that play up the unusual iconography of medieval American knights. Because a traditional propaganda poster would not really fit the setting, we are developing alternate ideas such as museum exhibition posters, travel posters and other art prints that add lore to the alt-history universe.”</em></p>
       <div class="prints-actions">
         <a class="btn btn-dark" href="https://kaisercatcinema.com/products/medieval-american-museum-poster-manhattan-castle-exhibition">Visit our Merch Shop</a>
         <a class="btn btn-outline-dark" href="https://kaisercatcinema.com/blogs/dev-diaries/making-of-medieval-american-museum-poster">Making Of: Medieval American Poster</a>
@@ -1025,7 +1038,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
     </div>
 
     <figure class="connect-photo">
-      <img src="assets/crew-photo.jpg" alt="The Kaiser Cat Collective team gathered in front of a vintage truck" loading="lazy">
+      <img src="assets/kcc-crew-photo.webp" alt="The Kaiser Cat Collective team gathered in front of a vintage truck" loading="lazy">
     </figure>
 
     <div style="text-align:center;max-width:64ch;margin:0 auto">
@@ -1065,7 +1078,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
     <a href="https://wiki.american-kingdoms.com/">AK Wiki</a> &nbsp;·&nbsp;
     <a href="https://kaisercatcinema.com/">Kaiser Cat Collective</a> &nbsp;·&nbsp;
     <a href="https://flagmaker-print.com/">Flagmaker &amp; Print</a> &nbsp;·&nbsp;
-    <a href="https://vincentdenil.com/">About Vincent De nil</a> &nbsp;·&nbsp;
+    <a href="https://vincentdenil.com/">About Vincent De Nil</a> &nbsp;·&nbsp;
     <a href="https://kaisercatcinema.com/patreon">Patreon</a>
   </p>
 </footer>
@@ -1183,6 +1196,7 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
       "name": "Vincent De Nil",
       "alternateName": "The Vehement Vexillographer",
       "url": "https://vincentdenil.com/",
+      "image": "https://american-kingdoms.com/assets/team/vincent.jpg",
       "jobTitle": [
         "Founder",
         "Art Director"
@@ -1206,10 +1220,9 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
       "sameAs": [
         "https://vincentdenil.com/",
         "https://kaisercatcinema.com/pages/about-vincent",
-        "https://flagmaker-print.com/about",
+        "http://flagmaker-print.com/about-vincent",
         "https://www.linkedin.com/in/vincentdn/",
         "https://github.com/VincentDN",
-        "https://www.youtube.com/channel/UCoqMfyTcyPwd3zMx0-wZc9w",
         "https://www.reddit.com/user/KR-VincentDN/"
       ]
     },
