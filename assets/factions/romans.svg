@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-labelledby="title desc">
+  <title id="title">The Roman Settlers</title>
+  <desc id="desc">A gold SPQR emblem on an imperial burgundy field.</desc>
+  <rect width="600" height="600" fill="#4c2024"/>
+  <rect x="34" y="34" width="532" height="532" fill="none" stroke="#c9a64d" stroke-width="2"/>
+  <rect x="48" y="48" width="504" height="504" fill="none" stroke="#c9a64d" stroke-width="1" opacity=".55"/>
+  <circle cx="300" cy="260" r="132" fill="none" stroke="#c9a64d" stroke-width="3"/>
+  <circle cx="300" cy="260" r="120" fill="none" stroke="#c9a64d" stroke-width="1" opacity=".65"/>
+  <text x="300" y="286" fill="#c9a64d" font-family="Georgia,serif" font-size="86" text-anchor="middle" letter-spacing="8">SPQR</text>
+  <path d="M185 310c18 53 55 86 103 101M415 310c-18 53-55 86-103 101" fill="none" stroke="#c9a64d" stroke-width="5" stroke-linecap="round"/>
+  <g fill="#c9a64d" opacity=".9">
+    <ellipse cx="202" cy="337" rx="8" ry="18" transform="rotate(-38 202 337)"/><ellipse cx="222" cy="365" rx="8" ry="18" transform="rotate(-48 222 365)"/><ellipse cx="248" cy="388" rx="8" ry="18" transform="rotate(-58 248 388)"/>
+    <ellipse cx="398" cy="337" rx="8" ry="18" transform="rotate(38 398 337)"/><ellipse cx="378" cy="365" rx="8" ry="18" transform="rotate(48 378 365)"/><ellipse cx="352" cy="388" rx="8" ry="18" transform="rotate(58 352 388)"/>
+  </g>
+  <text x="300" y="480" fill="#c9a64d" font-family="Georgia,serif" font-size="34" text-anchor="middle" letter-spacing="5">THE ROMAN SETTLERS</text>
+  <text x="300" y="520" fill="#c9a64d" font-family="Georgia,serif" font-size="17" text-anchor="middle" letter-spacing="5">ANNO · 0</text>
+</svg>
