@@ -4,7 +4,7 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.20.2
+  VERSION : 1.21.1
   BUILD   : 2026-09-03
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
@@ -104,6 +104,9 @@
            italics, and refreshed the Patreon carousel with five selected works.
     1.20.2 Reduced both merchandise headings and introductory paragraphs to
            the site's compact content typography scale.
+    1.21.0 Brought both merchandise sections into the shared page container,
+           with normal section typography and contained square product images.
+    1.21.1 Removed the Making Of quotation and updated the flag purchase heading.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -114,7 +117,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" href="assets/favicon.png">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.20.2">
+<meta name="version" content="1.21.1">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -361,25 +364,24 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
-.prints-grid{display:grid;grid-template-columns:1fr 1fr;align-items:stretch}
-.prints-art{margin:0;position:relative;min-height:100%;overflow:hidden;cursor:pointer}
-.prints-art img{width:100%;height:100%;object-fit:cover;object-position:center}
-.prints-art .prints-hover{position:absolute;inset:0;opacity:0;transition:opacity .38s ease}
+.prints + .prints{padding-top:0}
+.prints-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,5vw,4rem);align-items:center}
+.prints-art{margin:0;position:relative;min-width:0;width:100%;aspect-ratio:1;overflow:hidden;cursor:pointer}
+.prints-art img{width:100%;height:auto;object-fit:cover;object-position:center}
+.prints-art .prints-hover{position:absolute;inset:0;height:100%;opacity:0;transition:opacity .38s ease}
 .prints-art:hover .prints-hover,.prints-art:focus .prints-hover{opacity:1}
 .prints-art:focus-visible{outline:3px solid var(--gold-2);outline-offset:-5px}
-.prints-copy{align-self:center;width:100%;max-width:calc(var(--wrap) / 2);padding:clamp(3.5rem,6vw,5.25rem) var(--pad)}
+.prints-copy{min-width:0}
 .prints-copy .section-head{margin-bottom:1.2rem}
-.prints-copy .section-head h2{font-size:clamp(1.45rem,1rem + 1.25vw,2rem);line-height:1.12}
-.prints-copy .lead{font-size:.98rem;line-height:1.62;margin-bottom:1rem}
-.prints-copy .lead a{text-decoration:underline;text-underline-offset:.18em}
-.prints-copy .lead a:hover{color:var(--crimson)}
+.prints-copy p a{text-decoration:underline;text-underline-offset:.18em}
+.prints-copy p a:hover{color:var(--crimson)}
 .prints-copy .muted{color:var(--parch-ink-2)}
 .prints-divider{width:82px;height:1px;background:var(--gold-2);margin:1.7rem 0;opacity:.75}
-.prints-story{font-size:.96rem;color:var(--parch-ink-2);line-height:1.58;margin-bottom:1rem}
+.prints-story{color:var(--parch-ink-2)}
 .prints-copy .btn{margin-top:.7rem}
 .prints-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem}
 .prints--reverse .prints-art{grid-column:2;grid-row:1}
-.prints--reverse .prints-copy{grid-column:1;grid-row:1;justify-self:end}
+.prints--reverse .prints-copy{grid-column:1;grid-row:1}
 .flags .prints-hover{object-fit:contain;background:var(--parch)}
 .btn-outline-dark{background:transparent;color:var(--parch-ink);border-color:rgba(62,46,35,.45)}
 .btn-outline-dark:hover{color:var(--crimson);border-color:var(--crimson)}
@@ -543,6 +545,8 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 /* ============================ RESPONSIVE ============================ */
 @media (max-width:900px){
   .world-grid,.join-grid{grid-template-columns:1fr}
+  .prints-grid{grid-template-columns:1fr}
+  .prints--reverse .prints-art,.prints--reverse .prints-copy{grid-column:auto;grid-row:auto}
   .hero-inner{grid-template-columns:minmax(0,.7fr) minmax(340px,1.3fr)}
   .hero-copy{padding-left:clamp(.5rem,3vw,2rem)}
   .world .portrait{max-width:420px;margin-inline:auto}
@@ -570,10 +574,6 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
   .hero-copy{padding-left:0;max-width:600px;margin-left:auto}
   .hero h1{max-width:none}
   .hero p.lede{text-shadow:none}
-  .prints-grid{grid-template-columns:1fr}
-  .prints--reverse .prints-art,.prints--reverse .prints-copy{grid-column:auto;grid-row:auto}
-  .prints-art{height:clamp(360px,78vw,560px)}
-  .prints-copy{max-width:none;padding:clamp(3.5rem,10vw,5rem) var(--pad)}
   .g-tall,.g-half,.g-third,.g-wide,.g-landscape{grid-column:span 12}
   .g-half{aspect-ratio:16/10}
   .shorts-track{grid-auto-columns:minmax(160px,68vw);gap:1rem}
@@ -886,17 +886,16 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 </section>
 
 <!-- ============================ ART PRINTS ============================ -->
-<section class="page prints" id="prints">
-  <div class="prints-grid">
+<section class="page prints sec-pad" id="prints">
+  <div class="wrap prints-grid">
     <figure class="prints-art" tabindex="0" aria-label="American Kingdoms art print; hover or focus to see the holding mockup">
       <img src="assets/manhattan-castle-lifestyle-v2.webp" alt="The framed American Kingdoms exhibition print displayed beside a bookcase and reading chair" loading="lazy">
       <img class="prints-hover" src="assets/manhattan-castle-holding-v2.webp" alt="The American Kingdoms Manhattan Castle exhibition print held in front of a stone wall" loading="lazy">
     </figure>
     <div class="prints-copy">
       <div class="section-head"><h2>Support us by buying American Kingdoms art prints and custom flags</h2></div>
-      <p class="lead">KCC artists Yana and Vincent create original artworks, flags and art prints to help fund the creation of new projects in the world of American Kingdoms. Discover our top-rated merchandise stores to get your own <a href="https://kaisercatcinema.com/collections/althistory-posters">art prints</a> or <a href="https://flagmaker-print.com/collections/alt-history-flags">alt-history flags</a>, and support the project.</p>
+      <p>KCC artists Yana and Vincent create original artworks, flags and art prints to help fund the creation of new projects in the world of American Kingdoms. Discover our top-rated merchandise stores to get your own <a href="https://kaisercatcinema.com/collections/althistory-posters">art prints</a> or <a href="https://flagmaker-print.com/collections/alt-history-flags">alt-history flags</a>, and support the project.</p>
       <div class="prints-divider" aria-hidden="true"></div>
-      <p class="prints-story"><em>From the Making Of dev diary: “The Kaiser Cat Collective team is proud to present the world's first American Kingdoms 'propaganda poster'! For the American Kingdoms project, me and Yana developed a new series of posters that play up the unusual iconography of medieval American knights. Because a traditional propaganda poster would not really fit the setting, we are developing alternate ideas such as museum exhibition posters, travel posters and other art prints that add lore to the alt-history universe.”</em></p>
       <div class="prints-actions">
         <a class="btn btn-dark" href="https://kaisercatcinema.com/products/medieval-american-museum-poster-manhattan-castle-exhibition">Visit our Merch Shop</a>
         <a class="btn btn-outline-dark" href="https://kaisercatcinema.com/blogs/dev-diaries/making-of-medieval-american-museum-poster">Making Of: Medieval American Poster</a>
@@ -907,15 +906,15 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 
 <!-- ============================ CUSTOM FLAGS ============================ -->
 <!-- Main photo supplied by Vincent De Nil; hover design from https://flagmaker-print.com/products/american-monarchist-flag-heraldic -->
-<section class="page prints prints--reverse flags" id="flags" aria-labelledby="flags-title">
-  <div class="prints-grid">
+<section class="page prints prints--reverse flags sec-pad" id="flags" aria-labelledby="flags-title">
+  <div class="wrap prints-grid">
     <figure class="prints-art" tabindex="0" aria-label="American Monarchist flag; hover or focus to see the full flag design">
       <img src="assets/american-kingdoms-flag-vincent.webp" alt="Vincent De Nil holding the American Kingdoms Union flag, with its crowned bald eagle and red-and-white stripes" loading="lazy" width="1920" height="1920">
       <img class="prints-hover" src="assets/american-monarchist-flag-flat.webp" alt="Full American Monarchist flag design, with the arms of the Thirteen Colonies arranged around a crowned bald eagle" loading="lazy" width="2074" height="1305">
     </figure>
     <div class="prints-copy">
-      <div class="section-head"><h2 id="flags-title">The Flag of the American Kingdoms</h2></div>
-      <p class="lead">Commissioned from Pepin, the Kaiser Cat Collective's chief heraldist, the American Kingdoms Union flag reimagines the American bald eagle as a grand coat of arms, uniting the heraldry of the Thirteen Realms beneath a single crown.</p>
+      <div class="section-head"><h2 id="flags-title">Buy the Flag of the American Kingdoms</h2></div>
+      <p>Commissioned from Pepin, the Kaiser Cat Collective's chief heraldist, the American Kingdoms Union flag reimagines the American bald eagle as a grand coat of arms, uniting the heraldry of the Thirteen Realms beneath a single crown.</p>
       <div class="prints-divider" aria-hidden="true"></div>
       <p class="prints-story">Available as a one-sided wall flag or a double-sided display flag, made from polyester knit and finished with grommets. Explore this design and more alt-history banners at Flagmaker &amp; Print.</p>
       <div class="prints-actions">

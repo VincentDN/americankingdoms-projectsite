@@ -1,5 +1,15 @@
 # American Kingdoms — Changelog
 
+## 1.21.1 — 2026-09-03
+- Removed the italic Making Of development-diary quotation from the poster section, retaining its Making Of button.
+- Changed the flag section heading to **Buy the Flag of the American Kingdoms**.
+
+## 1.21.0 — 2026-09-03
+- Moved both merchandise layouts into the shared 1180px page container with the same responsive side gutters as the rest of the website.
+- Restored the global section-heading and regular paragraph typography, removing merchandise-specific font-size and line-height overrides and enlarged lead styling.
+- Replaced edge-to-edge, section-height images with contained square artwork, retaining the mirrored flag layout and hover/focus image swaps without extra borders.
+- Applied normal section spacing and the site's 900px stacked-layout breakpoint, with artwork first on smaller screens.
+
 ## 1.20.2 — 2026-09-03
 - Reduced both merchandise headings to the site's compact heading scale, ranging from 1.45rem to 2rem.
 - Replaced the enlarged lead-paragraph sizing in both merchandise sections with the 0.98rem body size used by other content sections.
