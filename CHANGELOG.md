@@ -1,5 +1,35 @@
 # American Kingdoms — Changelog
 
+## 1.20.2 — 2026-09-03
+- Reduced both merchandise headings to the site's compact heading scale, ranging from 1.45rem to 2rem.
+- Replaced the enlarged lead-paragraph sizing in both merchandise sections with the 0.98rem body size used by other content sections.
+- Preserved the existing fonts, weights, supporting copy, buttons, imagery and responsive split layouts.
+
+## 1.20.1 — 2026-09-03
+- Replaced the Gallery's Triumph of the Union Knights artwork with the supplied version without the website URL.
+- Removed italics from the art prints and alt-history flags links while preserving their destinations.
+- Replaced the first Patreon carousel image with the supplied two-knight artwork and added the Argonauts cameos featuring Ian Dunnet and Inq. Hawke.
+- Removed the Smokies Native Infantry and Orion Behrendt's Knight slides from the Patreon carousel; the five remaining slides retain lightbox support.
+- Preserved the original assets on disk and in earlier releases for recovery.
+
+## 1.20.0 — 2026-09-03
+- Renamed the flag feature to **The Flag of the American Kingdoms** and polished the description of Pepin's heraldic design, retaining the availability information.
+- Replaced the main flag photograph with Vincent's supplied mockup; preserved the flat-design hover/focus image.
+- Added five non-duplicate artworks from the public **World of American Kingdoms - The Union concept art** Patreon post to the Gallery, with responsive layouts and existing lightbox support.
+- Added the supplied **Ghoststar & Frost** artwork as the sixth Patreon backer carousel image, including keyboard-accessible lightbox support.
+- Stored all seven new images as local, optimized WebP assets rather than relying on expiring Patreon URLs.
+
+## 1.19.0 — 2026-09-03
+- Updated the merchandise heading and introduction to promote art prints and custom flags, with italic links to the requested collections.
+- Added a mirrored Flagmaker & Print section immediately below the poster section: text on the left and artwork on the right, returning to image-first stacking on mobile.
+- Used the first two American Monarchist product images as optimized WebP assets, with the lifestyle photo as the default and the uncropped flat flag design on hover or focus.
+- Preserved the existing Free Cities artwork because the supplied replacement attachment was blank gray.
+
+## 1.18.0 — 2026-09-03
+- Redesigned the hero on screens 720px wide and smaller with the supplied mobile Oath of the Union artwork, displayed full-width and uncropped above the text.
+- Matched the background to the artwork's brown lower edge and added a subtle finishing gradient for a seamless transition into the headline, copy and buttons.
+- Kept the desktop image, layout and overlay unchanged; responsive image selection loads the appropriate artwork for each viewport.
+
 ## 1.17.4 — 2026-09-02
 - Replaced the Union faction summary with the revised account of its rebellion, imperial structure and Old World rivals.
 

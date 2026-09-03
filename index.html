@@ -4,8 +4,8 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.17.4
-  BUILD   : 2026-09-02
+  VERSION : 1.20.2
+  BUILD   : 2026-09-03
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
            Simply Static export. Hero, World, Factions, Gallery, Join,
@@ -94,6 +94,16 @@
            Interested? Connect with us section instead of the Crew carousel.
     1.17.4 Replaced the Union faction summary with the revised account of its
            rebellion, imperial structure and Old World rivals.
+    1.18.0 Redesigned the mobile hero with dedicated full-width Oath of the
+           Union artwork fading into brown above the copy. Desktop unchanged.
+    1.19.0 Expanded merchandise copy and collection links, then added a mirrored
+           Flagmaker & Print feature with lifestyle and flat-design images.
+    1.20.0 Refined the Union flag copy and replaced its main photograph; added
+           five Union concept artworks and the Ghoststar & Frost backer image.
+    1.20.1 Installed the clean Triumph artwork, removed merchandise-link
+           italics, and refreshed the Patreon carousel with five selected works.
+    1.20.2 Reduced both merchandise headings and introductory paragraphs to
+           the site's compact content typography scale.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -104,7 +114,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" href="assets/favicon.png">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.17.4">
+<meta name="version" content="1.20.2">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -347,6 +357,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .g-tall{grid-column:span 4;aspect-ratio:3/4}
 .g-half{grid-column:span 4;aspect-ratio:1/1}
 .g-third{grid-column:span 4;aspect-ratio:16/10}
+.g-landscape{grid-column:span 6;aspect-ratio:16/9}
 
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
@@ -358,12 +369,18 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .prints-art:focus-visible{outline:3px solid var(--gold-2);outline-offset:-5px}
 .prints-copy{align-self:center;width:100%;max-width:calc(var(--wrap) / 2);padding:clamp(3.5rem,6vw,5.25rem) var(--pad)}
 .prints-copy .section-head{margin-bottom:1.2rem}
-.prints-copy .lead{margin-bottom:1rem}
+.prints-copy .section-head h2{font-size:clamp(1.45rem,1rem + 1.25vw,2rem);line-height:1.12}
+.prints-copy .lead{font-size:.98rem;line-height:1.62;margin-bottom:1rem}
+.prints-copy .lead a{text-decoration:underline;text-underline-offset:.18em}
+.prints-copy .lead a:hover{color:var(--crimson)}
 .prints-copy .muted{color:var(--parch-ink-2)}
 .prints-divider{width:82px;height:1px;background:var(--gold-2);margin:1.7rem 0;opacity:.75}
 .prints-story{font-size:.96rem;color:var(--parch-ink-2);line-height:1.58;margin-bottom:1rem}
 .prints-copy .btn{margin-top:.7rem}
 .prints-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.8rem}
+.prints--reverse .prints-art{grid-column:2;grid-row:1}
+.prints--reverse .prints-copy{grid-column:1;grid-row:1;justify-self:end}
+.flags .prints-hover{object-fit:contain;background:var(--parch)}
 .btn-outline-dark{background:transparent;color:var(--parch-ink);border-color:rgba(62,46,35,.45)}
 .btn-outline-dark:hover{color:var(--crimson);border-color:var(--crimson)}
 
@@ -543,15 +560,21 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
   .nav-links.open li+li::before{display:none}
   .nav-links.open a{display:block;padding:.72rem 0;border-bottom:1px solid rgba(245,241,220,.12);text-align:center}
   .burger{display:block}
-  .hero{min-height:620px}
-  .hero-bg img{object-position:38% center}
-  .hero::after{background:linear-gradient(180deg,rgba(76,60,53,.48) 0%,rgba(76,60,53,.64) 48%,rgba(58,44,38,.84) 100%)}
-  .hero-inner{display:flex;align-items:flex-end;padding-block:3.5rem}
+  /* The dedicated mobile artwork stays uncropped; only its bottom edge fades. */
+  .hero{--hero-mobile-brown:#3a2d24;min-height:0;background:var(--hero-mobile-brown)}
+  .hero-bg{display:block;position:relative;inset:auto;z-index:auto;background:var(--hero-mobile-brown)}
+  .hero-bg img{height:auto;aspect-ratio:1920 / 1855;object-fit:contain;object-position:center}
+  .hero-bg::after{content:"";position:absolute;inset:auto 0 0;height:18%;background:linear-gradient(180deg,rgba(58,45,36,0),var(--hero-mobile-brown));pointer-events:none}
+  .hero::after{display:none}
+  .hero-inner{position:relative;display:block;min-height:0;margin-top:clamp(-2rem,-5vw,-1rem);padding-block:0 3.5rem}
   .hero-copy{padding-left:0;max-width:600px;margin-left:auto}
+  .hero h1{max-width:none}
+  .hero p.lede{text-shadow:none}
   .prints-grid{grid-template-columns:1fr}
+  .prints--reverse .prints-art,.prints--reverse .prints-copy{grid-column:auto;grid-row:auto}
   .prints-art{height:clamp(360px,78vw,560px)}
   .prints-copy{max-width:none;padding:clamp(3.5rem,10vw,5rem) var(--pad)}
-  .g-tall,.g-half,.g-third,.g-wide{grid-column:span 12}
+  .g-tall,.g-half,.g-third,.g-wide,.g-landscape{grid-column:span 12}
   .g-half{aspect-ratio:16/10}
   .shorts-track{grid-auto-columns:minmax(160px,68vw);gap:1rem}
   .short-card figcaption{font-size:.84rem;padding:.85rem;min-height:4.6em}
@@ -588,7 +611,10 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 
 <!-- ============================ HERO ============================ -->
 <section class="hero" id="top">
-  <div class="hero-bg"><img src="assets/hero-union-court.jpg" alt="King Arthur Washington enthroned before the assembled knights of the Union" fetchpriority="high"></div>
+  <picture class="hero-bg">
+    <source media="(max-width:720px)" srcset="assets/hero-oath-mobile.jpg" width="1920" height="1855">
+    <img src="assets/hero-union-court.jpg" alt="King Arthur Washington enthroned before the assembled knights of the Union" fetchpriority="high">
+  </picture>
   <div class="wrap hero-inner">
     <div class="hero-copy">
       <h1>What if the Americas had been settled during the Dark Ages?</h1>
@@ -758,6 +784,12 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
       <figure class="g-third reveal"><img src="assets/editorial/gallery-bunker-hill-tapestry.webp" alt="A medieval tapestry interpretation of the Battle of Bunker Hill" loading="lazy"></figure>
       <figure class="g-third reveal"><img src="assets/editorial/gallery-washington-crossing.webp" alt="King Washington and his knights cross the Delaware" loading="lazy"></figure>
       <figure class="g-third reveal"><img src="assets/editorial/gallery-roman-landing.webp" alt="Roman mariners land on an American shore as Native scouts observe" loading="lazy"></figure>
+      <!-- Additional concept art: https://www.patreon.com/kaisercatcinema/posts/world-of-union-134317311 -->
+      <figure class="g-landscape reveal"><img src="assets/editorial/gallery-union-triumph-clean.webp" alt="Triumph of the Union Knights: a mounted knight raises his fist during a procession through streets hung with American banners" loading="lazy" width="1920" height="1080"></figure>
+      <figure class="g-landscape reveal"><img src="assets/editorial/gallery-union-knights.webp" alt="Armoured Union knights assemble with heraldic shields and American banners" loading="lazy" width="1920" height="1080"></figure>
+      <figure class="g-third reveal"><img src="assets/editorial/gallery-union-court.webp" alt="A Union ruler presides over a medieval court beneath red-and-white banners" loading="lazy" width="1920" height="1080"></figure>
+      <figure class="g-third reveal"><img src="assets/editorial/gallery-union-windmills.webp" alt="Windmills and sailing boats line a medieval American waterway" loading="lazy" width="1920" height="1080"></figure>
+      <figure class="g-third reveal"><img src="assets/editorial/gallery-union-harbor.webp" alt="A crowned statue bearing a shield overlooks a fortified American harbor" loading="lazy" width="1920" height="1080"></figure>
     </div>
     <div class="shorts-collection">
       <div class="team-head">
@@ -861,13 +893,34 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
       <img class="prints-hover" src="assets/manhattan-castle-holding-v2.webp" alt="The American Kingdoms Manhattan Castle exhibition print held in front of a stone wall" loading="lazy">
     </figure>
     <div class="prints-copy">
-      <div class="section-head"><h2>Support the project by buying American Kingdoms art prints</h2></div>
-      <p class="lead">KCC artists Yana and Vincent create original artworks and art prints to help fund the creation of new projects in the world of American Kingdoms. Discover our top-rated merchandise store to get your own and support the project.</p>
+      <div class="section-head"><h2>Support us by buying American Kingdoms art prints and custom flags</h2></div>
+      <p class="lead">KCC artists Yana and Vincent create original artworks, flags and art prints to help fund the creation of new projects in the world of American Kingdoms. Discover our top-rated merchandise stores to get your own <a href="https://kaisercatcinema.com/collections/althistory-posters">art prints</a> or <a href="https://flagmaker-print.com/collections/alt-history-flags">alt-history flags</a>, and support the project.</p>
       <div class="prints-divider" aria-hidden="true"></div>
       <p class="prints-story"><em>From the Making Of dev diary: “The Kaiser Cat Collective team is proud to present the world's first American Kingdoms 'propaganda poster'! For the American Kingdoms project, me and Yana developed a new series of posters that play up the unusual iconography of medieval American knights. Because a traditional propaganda poster would not really fit the setting, we are developing alternate ideas such as museum exhibition posters, travel posters and other art prints that add lore to the alt-history universe.”</em></p>
       <div class="prints-actions">
         <a class="btn btn-dark" href="https://kaisercatcinema.com/products/medieval-american-museum-poster-manhattan-castle-exhibition">Visit our Merch Shop</a>
         <a class="btn btn-outline-dark" href="https://kaisercatcinema.com/blogs/dev-diaries/making-of-medieval-american-museum-poster">Making Of: Medieval American Poster</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CUSTOM FLAGS ============================ -->
+<!-- Main photo supplied by Vincent De Nil; hover design from https://flagmaker-print.com/products/american-monarchist-flag-heraldic -->
+<section class="page prints prints--reverse flags" id="flags" aria-labelledby="flags-title">
+  <div class="prints-grid">
+    <figure class="prints-art" tabindex="0" aria-label="American Monarchist flag; hover or focus to see the full flag design">
+      <img src="assets/american-kingdoms-flag-vincent.webp" alt="Vincent De Nil holding the American Kingdoms Union flag, with its crowned bald eagle and red-and-white stripes" loading="lazy" width="1920" height="1920">
+      <img class="prints-hover" src="assets/american-monarchist-flag-flat.webp" alt="Full American Monarchist flag design, with the arms of the Thirteen Colonies arranged around a crowned bald eagle" loading="lazy" width="2074" height="1305">
+    </figure>
+    <div class="prints-copy">
+      <div class="section-head"><h2 id="flags-title">The Flag of the American Kingdoms</h2></div>
+      <p class="lead">Commissioned from Pepin, the Kaiser Cat Collective's chief heraldist, the American Kingdoms Union flag reimagines the American bald eagle as a grand coat of arms, uniting the heraldry of the Thirteen Realms beneath a single crown.</p>
+      <div class="prints-divider" aria-hidden="true"></div>
+      <p class="prints-story">Available as a one-sided wall flag or a double-sided display flag, made from polyester knit and finished with grommets. Explore this design and more alt-history banners at Flagmaker &amp; Print.</p>
+      <div class="prints-actions">
+        <a class="btn btn-dark" href="https://flagmaker-print.com/">Visit Flagmaker &amp; Print</a>
+        <a class="btn btn-outline-dark" href="https://flagmaker-print.com/collections/alt-history-flags">Alt-History Flags</a>
       </div>
     </div>
   </div>
@@ -896,7 +949,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
         </div>
         <div class="backer-track" id="backerTrack" tabindex="0" aria-label="Patreon backer character artwork, scroll horizontally">
           <figure class="backer-slide" tabindex="0" role="button" aria-label="Open House Cromter artwork">
-            <img src="assets/contributor.jpg" alt="House Cromter, the Mayflower Knight" loading="lazy">
+            <img src="assets/backers/mayflower-knights.webp" alt="Patreon backer character artwork showing two armoured knights with heraldic shields" loading="lazy" width="1440" height="1440">
             <figcaption>House Cromter, the Mayflower Knight</figcaption>
           </figure>
           <figure class="backer-slide" tabindex="0" role="button" aria-label="Open Lady Brianna Roosevelt artwork">
@@ -907,13 +960,13 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
             <img src="assets/backers/greyshark-pirate.webp" alt="Greyshark Pirate character concept" loading="lazy">
             <figcaption>The Greyshark Pirate</figcaption>
           </figure>
-          <figure class="backer-slide" tabindex="0" role="button" aria-label="Open Orion Behrendt knight concept">
-            <img src="assets/backers/orion-behrendt.webp" alt="Orion Behrendt knight helmet concept" loading="lazy">
-            <figcaption>Orion Behrendt's Knight</figcaption>
+          <figure class="backer-slide" tabindex="0" role="button" aria-label="Open Ghoststar and Frost artwork">
+            <img src="assets/backers/ghoststar-frost.webp" alt="Patreon backer characters Ghoststar and Frost as Vinland warriors with green shields" loading="lazy" width="1080" height="1080">
+            <figcaption>Ghoststar &amp; Frost</figcaption>
           </figure>
-          <figure class="backer-slide" tabindex="0" role="button" aria-label="Open Smokies Native infantry artwork">
-            <img src="assets/backers/smokies-native.webp" alt="Smokies Native infantry character artwork" loading="lazy">
-            <figcaption>Smokies Native Infantry</figcaption>
+          <figure class="backer-slide" tabindex="0" role="button" aria-label="Open Ian Dunnet and Inq. Hawke cameo artwork">
+            <img src="assets/backers/argonauts-patreon-cameos.webp" alt="Ian Dunnet and Inq. Hawke appear as Patreon cameos among sailors unloading a ship in the Argonauts artwork" loading="lazy" width="1080" height="1080">
+            <figcaption>Ian Dunnet &amp; Inq. Hawke</figcaption>
           </figure>
         </div>
       </div>
