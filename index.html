@@ -579,6 +579,32 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
   .shorts-track{grid-auto-columns:minmax(160px,68vw);gap:1rem}
   .short-card figcaption{font-size:.84rem;padding:.85rem;min-height:4.6em}
 }
+/* ============================ NEWSLETTER MODAL ============================ */
+.newsletter-modal[hidden]{display:none}
+.newsletter-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:clamp(1rem,4vw,3rem)}
+.newsletter-backdrop{position:absolute;inset:0;border:0;background:rgba(47,31,22,.84);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);cursor:pointer}
+.newsletter-card{position:relative;display:grid;grid-template-columns:minmax(0,1.02fr) minmax(300px,.98fr);width:min(940px,100%);max-height:min(720px,calc(100vh - 2rem));overflow:auto;background:var(--paper,#f5f1dc);color:var(--ink,#29231d);border:1px solid rgba(198,155,73,.72);box-shadow:0 28px 90px rgba(16,8,4,.58)}
+.newsletter-card::after{content:"";position:absolute;inset:10px;border:1px solid rgba(117,74,36,.22);pointer-events:none}
+.newsletter-image{min-height:420px;margin:0}
+.newsletter-image img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}
+.newsletter-copy{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center;padding:clamp(2rem,5vw,4.25rem)}
+.newsletter-copy h2{margin:0 0 1rem;color:var(--brown,#3a2d24);font-size:clamp(2rem,4vw,3.25rem);font-weight:900;line-height:.98;text-transform:uppercase}
+.newsletter-copy p{margin:0 0 1.6rem;font-size:clamp(1rem,1.5vw,1.12rem);line-height:1.65}
+.newsletter-copy .btn{align-self:flex-start}
+.newsletter-close{position:absolute;z-index:3;top:.8rem;right:.8rem;width:2.65rem;height:2.65rem;border:1px solid rgba(245,241,220,.42);border-radius:50%;background:rgba(47,31,22,.88);color:#f5f1dc;font:300 1.65rem/1 Ysabeau,sans-serif;cursor:pointer}
+.newsletter-close:hover,.newsletter-close:focus-visible{background:var(--red,#7c2924);outline:2px solid var(--gold,#c69b49);outline-offset:2px}
+body.newsletter-open{overflow:hidden}
+@media (max-width:720px){
+  .newsletter-modal{padding:.75rem}
+  .newsletter-card{grid-template-columns:1fr;max-height:calc(100vh - 1.5rem)}
+  .newsletter-image{min-height:0;height:clamp(190px,35vh,280px)}
+  .newsletter-copy{padding:1.65rem 1.5rem 2rem}
+  .newsletter-copy h2{font-size:clamp(1.65rem,8vw,2.25rem)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .newsletter-card{animation:newsletter-in .28s ease-out both}
+  @keyframes newsletter-in{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:none}}
+}
 </style>
 </head>
 <body>
@@ -620,7 +646,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
       <h1>What if the Americas had been settled during the Dark Ages?</h1>
       <p class="lede">In American Kingdoms, American history is re-imagined as an Arthurian medieval epic – an age defined not by musket and cannon, but by knightly honor and courtly intrigue. This alt-history project is a collaborative worldbuilding effort: anyone can join our wiki to add their own character or fief to the strange but familiar setting of American Kingdoms. Join a medieval pastiche where the Natives fight on equal footing with conquistadores, and where Asian, European and American cultures clash for control of the New World.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="https://wiki.american-kingdoms.com/">Visit the AK Wiki</a>
+        <a class="btn btn-primary" href="https://kaisercatcinema.com/newsletter">Join the Newsletter</a>
         <a class="btn btn-ghost" href="#connect">Connect with Us</a>
       </div>
     </div>
@@ -1135,6 +1161,22 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
   </p>
 </footer>
 
+<!-- ============================ NEWSLETTER MODAL ============================ -->
+<div class="newsletter-modal" id="newsletterModal" role="dialog" aria-modal="true" aria-labelledby="newsletterTitle" aria-describedby="newsletterDescription" hidden>
+  <button class="newsletter-backdrop" type="button" data-newsletter-close aria-label="Close newsletter invitation"></button>
+  <div class="newsletter-card">
+    <button class="newsletter-close" type="button" data-newsletter-close aria-label="Close newsletter invitation">×</button>
+    <figure class="newsletter-image">
+      <img src="assets/kcc-crew-photo.webp" alt="The Kaiser Cat Collective team in front of a vintage truck">
+    </figure>
+    <div class="newsletter-copy">
+      <h2 id="newsletterTitle">Support American Kingdoms and join the newsletter!</h2>
+      <p id="newsletterDescription">If you’d like to support the project, join the Kaiser Cat Collective newsletter and get access to our monthly newsletter, hidden sales, and more.</p>
+      <a class="btn btn-primary" id="newsletterJoin" href="https://kaisercatcinema.com/newsletter">Join the KCC Newsletter</a>
+    </div>
+  </div>
+</div>
+
 <!-- lightbox -->
 <div class="lightbox" id="lightbox"><button class="close" aria-label="Close">×</button><img src="" alt=""></div>
 
@@ -1195,6 +1237,50 @@ initCarousel('teamTrack','teamPrev','teamNext','.member');
 initCarousel('factionTrack','facPrev','facNext','.faction-card');
 initCarousel('backerTrack','backerPrev','backerNext','.backer-slide');
 initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
+
+/* Timed newsletter invitation; dismissal is remembered for 14 days. */
+(()=>{
+  const modal=document.getElementById('newsletterModal');
+  if(!modal) return;
+  const storageKey='ak-newsletter-dismissed';
+  const cooldown=14*24*60*60*1000;
+  let previousFocus=null;
+  let dismissedAt=0;
+  try{dismissedAt=Number(localStorage.getItem(storageKey)||0)}catch(e){}
+  if(Date.now()-dismissedAt<cooldown) return;
+
+  const focusable=()=>[...modal.querySelectorAll('a[href],button:not([disabled])')];
+  const close=()=>{
+    try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}
+    modal.hidden=true;
+    document.body.classList.remove('newsletter-open');
+    document.removeEventListener('keydown',onKeydown);
+    if(previousFocus) previousFocus.focus();
+  };
+  const onKeydown=e=>{
+    if(e.key==='Escape'){close();return}
+    if(e.key!=='Tab') return;
+    const items=focusable();
+    if(!items.length) return;
+    const first=items[0],last=items[items.length-1];
+    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  };
+  const open=()=>{
+    if(document.hidden) return;
+    previousFocus=document.activeElement;
+    modal.hidden=false;
+    document.body.classList.add('newsletter-open');
+    document.addEventListener('keydown',onKeydown);
+    const closeButton=modal.querySelector('.newsletter-close');
+    if(closeButton) closeButton.focus();
+  };
+
+  modal.querySelectorAll('[data-newsletter-close]').forEach(button=>button.addEventListener('click',close));
+  const join=document.getElementById('newsletterJoin');
+  if(join) join.addEventListener('click',()=>{try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}});
+  window.setTimeout(open,20000);
+})();
 </script>
 <script type="application/ld+json">
 {
