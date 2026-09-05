@@ -1279,7 +1279,7 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
   modal.querySelectorAll('[data-newsletter-close]').forEach(button=>button.addEventListener('click',close));
   const join=document.getElementById('newsletterJoin');
   if(join) join.addEventListener('click',()=>{try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}});
-  window.setTimeout(open,20000);
+  window.setTimeout(open,40000);
 })();
 </script>
 <script type="application/ld+json">
