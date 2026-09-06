@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#2c2118">
+  <meta name="robots" content="noindex">
+  <title>Atlas | American Kingdoms</title>
+  <meta name="description" content="Explore the lands of American Kingdoms in an interactive atlas.">
+  <link rel="icon" href="assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="atlas.css">
+  <script defer src="vendor/leaflet.js"></script>
+  <script defer src="atlas.js"></script>
+</head>
+<body>
+  <header>
+    <a href="https://american-kingdoms.com/" aria-label="American Kingdoms home"><img src="assets/ak-logo.svg" alt="American Kingdoms"></a>
+    <h1>Atlas of the Americas</h1>
+    <nav aria-label="Atlas controls"><button id="reset" type="button">Full map</button><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button></nav>
+  </header>
+  <main>
+    <div id="map" aria-label="Interactive North America map. Use arrow keys to pan and plus or minus to zoom."></div>
+    <aside id="panel">
+      <h2>The known world</h2>
+      <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
+      <fieldset><legend>Show on the map</legend>
+        <label><input id="countries" type="checkbox" checked> Canonical states</label>
+        <label><input id="regions" type="checkbox" checked> Provisional territories</label>
+        <label><input id="rivers" type="checkbox" checked> Rivers</label>
+        <label hidden><input id="samples" type="checkbox"> Sample territory</label>
+      </fieldset>
+      <p id="status" role="status">Unrolling the atlas…</p>
+      <div id="territory-list" aria-label="Territories"></div>
+      <section id="details" hidden aria-live="polite"><h2 id="detail-name"></h2><p id="detail-description"></p><a id="detail-link" hidden>Read in the wiki</a></section>
+      <section id="editor" hidden>
+        <h2>Chart a territory</h2>
+        <p>Draw a polygon, then select it to name it. Export your work before leaving this page.</p>
+        <form id="edit-form">
+          <label>Name <input id="edit-name" maxlength="100" required></label>
+          <label>Layer <select id="edit-kind"><option value="country">Country</option><option value="region">Region</option></select></label>
+          <label>Colour <input id="edit-color" type="color" value="#b31f34"></label>
+          <label>Description <textarea id="edit-description" maxlength="2000"></textarea></label>
+          <label>Wiki URL <input id="edit-wiki" type="url" placeholder="https://wiki.american-kingdoms.com/…"></label>
+          <button type="submit">Apply to selected territory</button>
+        </form>
+        <button id="export" type="button">Export territories</button>
+        <p id="editor-status" role="status"></p>
+      </section>
+      <a class="wiki" href="https://wiki.american-kingdoms.com/">American Kingdoms Wiki</a>
+    </aside>
+    <div class="atlas-caption">North America <span>American Kingdoms</span></div>
+  </main>
+  <noscript>This atlas needs JavaScript for zooming and territory information.</noscript>
+</body>
+</html>
