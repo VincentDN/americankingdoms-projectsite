@@ -9,7 +9,7 @@
   L.control.zoom({position:'topright'}).addTo(map);
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
-  const home = () => map.fitBounds([[7,-168],[73,-52]], {padding:[20,20],animate:false});
+  const home = () => map.fitBounds([[14,-125],[55,-58]], {padding:[20,20],animate:false});
   home(); $('reset').onclick = home;
   let panelMode = 'key';
   function setPanel(open, mode = panelMode) {
