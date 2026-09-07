@@ -59,6 +59,8 @@
     $('details').hidden=false;$('detail-name').textContent=p.name;$('detail-description').textContent=p.summary || '';
     const flag=$('detail-flag');flag.hidden=!p.flag;if(p.flag){flag.src=p.flag;flag.alt='Flag of '+(p.name || 'this territory');}
     const url=safeURL(p.wiki);$('detail-link').hidden=!url;if(url)$('detail-link').href=url;
+    const hasAuthor=url && p.claim && p.claim.trim() && p.claim.trim().toLowerCase()!=='unclaimed';
+    $('detail-author').hidden=!hasAuthor;if(hasAuthor)$('detail-author').textContent='By '+p.claim.trim();
     if(editMode) { $('edit-name').value=p.name || ''; $('edit-kind').value=p.kind==='region'?'region':'country';$('edit-color').value=p.color || '#b31f34';$('edit-description').value=p.summary || '';$('edit-wiki').value=url || ''; }
   }
   function wire(layer,feature,sample=false) {
