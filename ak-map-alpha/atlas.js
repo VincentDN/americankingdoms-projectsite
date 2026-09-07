@@ -71,7 +71,7 @@
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
       addFeatures(territories);addFeatures(samples,true);refreshList();
-      status.textContent='East Coast states follow the canonical reference. Other territories have provisional names and lore. Borders are approximate traces.';
+      status.textContent='East Coast realms follow the canonical reference. Interior borders follow rivers and inferred mountain divides; their names and lore remain provisional.';
       if(editMode) await enableEditor();
     } catch(error) { status.textContent='Part of the atlas could not load. Reload to try again.';console.error(error); }
   }

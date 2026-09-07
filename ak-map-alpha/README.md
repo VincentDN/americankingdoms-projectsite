@@ -109,3 +109,26 @@ The alpha is served at `/ak-map-alpha/` by the existing production Pages project
 through its GitHub integration. It has no navigation link on the main site and
 retains `noindex` metadata. Publication uses the existing `main` branch; no DNS
 change, separate Pages project or new domain is needed.
+
+## Shared-border and interior-region update (7 September 2026)
+
+Run `python ak-map-alpha/scripts/refine-territories.py` after the initial trace
+to reproduce the current map. It uses the frozen 16-state canonical input in
+`sources/canonical-territories.geojson`, the existing physical land/lake mask,
+Natural Earth river courses and the inferred guide lines saved in
+`sources/inferred-divides.geojson`. The original rough continental reference
+remains available, but its hundreds of raster fragments no longer determine
+the provisional state boundaries.
+
+Narrow missing canonical seams are allocated to adjoining states by distance,
+in 500-metre steps, within a fixed 6-kilometre morphological closing target.
+Thin coastal remnants are attached without filling bays or lakes. The interior
+is a single polygonized network using major river trunks and inferred mountain
+divides; small remnants are merged into neighbouring territories. Common edges
+are simplified together. All remaining land belongs to a coloured region.
+
+These 46 provisional regions are a fictional interpretation of geography, not
+HydroBASINS data, surveyed catchments, or established American Kingdoms canon.
+River courses are from the existing public-domain Natural Earth source. Mountain
+guides and connecting passes are inferred and editable. The pipeline checks
+coverage, overlap, validity and lake exclusion before publication.
