@@ -33,6 +33,7 @@ in `[longitude, latitude]` order. Each Polygon or MultiPolygon has properties:
 | color | Six-digit hex fill colour |
 | summary | Plain-text hover and details copy |
 | wiki | Optional HTTPS lore URL |
+| flag | Optional path to a small flag image, shown in the details panel |
 
 Names and descriptions are rendered as text, not injected HTML.
 Political geometry is traced from `sources/east-coast-canon.png` (authoritative)
@@ -166,3 +167,22 @@ continental scale and was checked visually along several borders. A later
 pass could re-node the full coverage into one mesh to simplify vertex
 density at the new seams, the way `refine-territories.py` already does for
 its own regions.
+
+## First hand-added canon territory: the Sidennic League (7 September 2026)
+
+Added as a test of taking a territory from provisional placeholder to full
+canon: name, colour, wiki link and a small flag image, sourced from the
+existing "Featured Wiki Articles" copy on the main site. Cuba's landmass was
+split out of the larger Caribbean provisional region it was previously
+bundled into (a MultiPolygon also covering Jamaica and nearby cays, which
+keeps its old provisional id and the rest of its geometry) into its own
+canon `country` feature, `sidennic-league`, coloured `#2e7d32` to match its
+flag. The split only reassigns which feature owns which existing polygon
+part; no other territory's geometry changed.
+
+The `flag` property (see the data model above) is new: an optional path to
+a small image shown above the name in the details panel. Sidennic League's
+flag is a hand-drawn SVG placeholder at
+`assets/flags/sidennic-league.svg` -- seven golden apples (one per Sister
+City) on a green field, 3:5 ratio -- not sourced from any established
+in-world heraldry.

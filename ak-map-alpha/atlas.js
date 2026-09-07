@@ -57,6 +57,7 @@
   function select(layer) {
     selected=layer; setPanel(true, 'details'); layer.closeTooltip(); const p=layer.feature.properties;
     $('details').hidden=false;$('detail-name').textContent=p.name;$('detail-description').textContent=p.summary || '';
+    const flag=$('detail-flag');flag.hidden=!p.flag;if(p.flag){flag.src=p.flag;flag.alt='Flag of '+(p.name || 'this territory');}
     const url=safeURL(p.wiki);$('detail-link').hidden=!url;if(url)$('detail-link').href=url;
     if(editMode) { $('edit-name').value=p.name || ''; $('edit-kind').value=p.kind==='region'?'region':'country';$('edit-color').value=p.color || '#b31f34';$('edit-description').value=p.summary || '';$('edit-wiki').value=url || ''; }
   }
