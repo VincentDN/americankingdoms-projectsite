@@ -281,6 +281,7 @@ header{
 /* ============================ SECTIONS ============================ */
 section{position:relative}
 .plate{background:var(--ink)}      /* dark cinematic plate */
+#gallery{border-top:1px solid rgba(200,162,74,.16)}
 .page{background:var(--parch);color:var(--parch-ink)} /* parchment reading page */
 .page{
   background-image:
@@ -305,7 +306,7 @@ section{position:relative}
 .premise-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
 
 /* --- The World: split plate w/ portrait + quote --- */
-.world{background:linear-gradient(180deg,var(--ink),#181310)}
+.world{background:linear-gradient(180deg,var(--ink),#181310);border-top:1px solid rgba(200,162,74,.16)}
 .world-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
 .portrait{position:relative}
 .portrait img{width:100%;border:1px solid rgba(200,162,74,.4);box-shadow:0 24px 60px rgba(0,0,0,.6)}
@@ -319,7 +320,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
   letter-spacing:.04em;color:inherit;margin-top:.9rem}
 
 /* --- Factions --- */
-.factions{background:var(--parch);color:var(--parch-ink)}
+.factions{background:var(--parch);color:var(--parch-ink);border-top:1px solid rgba(200,162,74,.16)}
 .factions-banner{position:relative;margin:2.6rem 0 3rem;border:1px solid rgba(90,74,56,.35)}
 .factions-banner img{width:100%;height:clamp(160px,26vw,340px);object-fit:cover;object-position:center 40%;filter:sepia(.18) saturate(.9)}
 .factions-intro{font-size:1rem;color:var(--parch-ink-2);margin:.2rem 0 0;max-width:62ch}
@@ -365,6 +366,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
 .prints + .prints{padding-top:0}
+#prints{border-top:1px solid rgba(200,162,74,.16)}
 .prints-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,5vw,4rem);align-items:center}
 .prints-art{margin:0;position:relative;min-width:0;width:100%;aspect-ratio:1;overflow:hidden;cursor:pointer}
 .prints-art img{width:100%;height:auto;object-fit:cover;object-position:center}
@@ -387,7 +389,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .btn-outline-dark:hover{color:var(--crimson);border-color:var(--crimson)}
 
 /* --- Contribute / Join --- */
-.join{background:linear-gradient(180deg,#181310,var(--ink))}
+.join{background:linear-gradient(180deg,#181310,var(--ink));border-top:1px solid rgba(200,162,74,.16)}
 .join-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,5vw,4rem);align-items:center}
 .join-actions{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem}
 .backer-carousel{min-width:0;max-width:520px;margin-inline:auto}
@@ -404,14 +406,14 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .backer-slide:focus-visible{outline:3px solid var(--gold);outline-offset:-4px}
 
 /* --- About KCC (dark plate w/ tavern art) --- */
-.about{position:relative;isolation:isolate;overflow:hidden;background:#4a4039}
+.about{position:relative;isolation:isolate;overflow:hidden;background:#4a4039;border-top:1px solid rgba(200,162,74,.16)}
 .about-bg{position:absolute;inset:0;z-index:-2}
 .about-bg img{width:100%;height:100%;object-fit:cover;object-position:center 48%;opacity:.62;filter:grayscale(.72) sepia(.08)}
 .about::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(45,34,29,.88) 0%,rgba(45,34,29,.74) 42%,rgba(45,34,29,.36) 72%,rgba(45,34,29,.18) 100%)}
 .about .inner{max-width:60ch}
 
 /* --- Explore more cards --- */
-.explore{background:var(--parch);color:var(--parch-ink)}
+.explore{background:var(--parch);color:var(--parch-ink);border-top:1px solid rgba(200,162,74,.16)}
 .explore-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.6rem;margin-top:2.6rem}
 .ex-card{border:1px solid rgba(90,74,56,.3);overflow:hidden;background:#f4ecda;display:flex;flex-direction:column}
 .ex-card .ex-img{aspect-ratio:16/9;overflow:hidden}
@@ -424,7 +426,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .ex-body .btn{margin-top:auto;align-self:flex-start}
 
 /* --- Connect --- */
-.connect{background:linear-gradient(180deg,var(--ink),var(--ink-3))}
+.connect{background:linear-gradient(180deg,var(--ink),var(--ink-3));border-top:1px solid rgba(200,162,74,.16)}
 .connect .lead{color:var(--cream-dim)}
 .connect-photo{max-width:820px;margin:2.4rem auto 2rem;position:relative}
 .connect-photo img{width:100%;border:1px solid rgba(200,162,74,.4);box-shadow:0 24px 60px rgba(0,0,0,.6)}
@@ -489,7 +491,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 /* --- reveal --- */
 
 /* ============================ MEET THE TEAM (carousel) ============================ */
-.team{background:linear-gradient(180deg,var(--ink-3),var(--ink))}
+.team{background:linear-gradient(180deg,var(--ink-3),var(--ink));border-top:1px solid rgba(200,162,74,.16)}
 .team-head{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
 .team-controls{display:flex;gap:.6rem;flex:none}
 .tc-btn{width:46px;height:46px;flex:none;border:1px solid rgba(200,162,74,.4);background:transparent;color:var(--gold);
