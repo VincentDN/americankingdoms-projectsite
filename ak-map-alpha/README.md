@@ -86,6 +86,10 @@ No DNS changes or production deployment have been made by this groundwork change
   (`ne_50m_land.geojson`, `ne_50m_lakes.geojson`, `ne_50m_rivers_lake_centerlines.geojson`).
   Downloaded 6 September 2026, stored locally. Natural Earth data is public domain:
   https://www.naturalearthdata.com/about/terms-of-use/
+- Natural Earth 1:50m admin-1 states/provinces (`ne_50m_admin_1_states_provinces.geojson`),
+  same upstream directory and licensing as above. Downloaded 7 September 2026 and used
+  only for the real-world state-line placeholders described below; the fictional
+  canon and provisional layers are unaffected.
 - Existing American Kingdoms logo, colours, Cinzel / Ysabeau / EB Garamond typography.
   Fonts are requested from Google Fonts, with local serif/sans fallbacks.
 
@@ -132,3 +136,33 @@ HydroBASINS data, surveyed catchments, or established American Kingdoms canon.
 River courses are from the existing public-domain Natural Earth source. Mountain
 guides and connecting passes are inferred and editable. The pipeline checks
 coverage, overlap, validity and lake exclusion before publication.
+
+## Real-state placeholder borders (7 September 2026)
+
+Run `python ak-map-alpha/scripts/apply-real-state-placeholders.py` after
+`refine-territories.py` to replace the interior river/mountain provisional
+regions, for every continental US state outside the 13 colonies and Florida,
+with a placeholder shaped like that state's real-world boundary. This is a
+visual stand-in requested to roughly resemble published "natural state
+borders" redraws, not new canon: names, colours and summaries stay
+provisional pending real lore and borders.
+
+Source geometry is `sources/natural-earth-admin1-states.geojson`, Natural
+Earth 1:50m admin-1 states/provinces (public domain), downloaded 7 September
+2026 from the same upstream GeoJSON directory cited above. Each of the 32
+target states is clipped to land and to the existing canon footprint (which
+is never modified); Maine and Vermont are skipped by name because their land
+is already part of the canon Massachusetts/New Hampshire shapes, per the
+canon note above. Alaska, Hawaii, DC and the 14 real states already covered
+by canon geometry are also skipped. Whatever land the old provisional mesh
+still covers outside the new placeholders -- Canada, Mexico, Central America,
+Alaska -- is kept, trimmed to the new seams.
+
+Because each placeholder is clipped independently rather than built from one
+shared polygonized mesh, seams are numerically but not always vertex-exact,
+so this pipeline step validates against a coarser (1-5 km²) tolerance than
+`refine-territories.py`'s exact-mesh check; this is still trivial at
+continental scale and was checked visually along several borders. A later
+pass could re-node the full coverage into one mesh to simplify vertex
+density at the new seams, the way `refine-territories.py` already does for
+its own regions.
