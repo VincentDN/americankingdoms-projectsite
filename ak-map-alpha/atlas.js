@@ -44,6 +44,10 @@
   const colorOf = feature => /^#[0-9a-f]{6}$/i.test(feature.properties.color) ? feature.properties.color : '#a59670';
   const borderOf = feature => '#' + colorOf(feature).slice(1).match(/../g).map(c=>Math.round(parseInt(c,16)*.58).toString(16).padStart(2,'0')).join('');
   const style = feature => ({color:borderOf(feature),weight:feature.properties.canon?1.7:1,fillColor:colorOf(feature),fillOpacity:feature.properties.canon?.72:.48,dashArray:null});
+  // Hover and keyboard focus each open a tooltip independently, so crossing
+  // straight from one territory into another (a shared border, or tabbing
+  // while the mouse still rests elsewhere) can leave more than one open.
+  const closeOtherTooltips = current => Object.values(groups).forEach(g => g.eachLayer(l => { if (l !== current) l.closeTooltip(); }));
 
   function tooltip(feature) {
     const node=document.createElement('div'), title=document.createElement('strong');
@@ -59,10 +63,10 @@
   function wire(layer,feature,sample=false) {
     layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';layer.setStyle(style(feature));
     layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});
-    layer.on('mouseover',()=>layer.setStyle({weight:3,fillOpacity:.9}));
+    layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,fillOpacity:.9});});
     layer.on('mouseout',()=>layer.setStyle(style(layer.feature)));
     layer.on('click',()=>select(layer));
-    layer.on('add',()=>{const path=layer.getElement();if(path){path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',layer.feature.properties.name);path.onfocus=()=>layer.openTooltip();path.onblur=()=>layer.closeTooltip();path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(layer);}};}});
+    layer.on('add',()=>{const path=layer.getElement();if(path){path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',layer.feature.properties.name);path.onfocus=()=>{closeOtherTooltips(layer);layer.openTooltip();};path.onblur=()=>layer.closeTooltip();path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(layer);}};}});
     layer.on('pm:edit',markDirty);
     groups[sample?'sample':feature.properties.kind==='region'?'region':'country'].addLayer(layer);
   }
