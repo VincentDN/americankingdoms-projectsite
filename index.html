@@ -246,12 +246,12 @@ header{
 .nav{display:flex;flex-direction:column;align-items:center;gap:clamp(1.25rem,3vw,2rem)}
 .brand{display:block;text-decoration:none}
 .brand img{height:clamp(105px,13vw,168px);width:auto;margin-inline:auto}
-.menu-box{width:min(100%,860px);background:rgba(78,61,54,.96);border:1px solid rgba(245,241,220,.1);padding:.78rem 1.3rem}
-.nav-links{display:flex;align-items:center;justify-content:center;gap:0;list-style:none;margin:0;padding:0}
+.menu-box{width:min(100%,960px);background:rgba(78,61,54,.96);border:1px solid rgba(245,241,220,.1);padding:.78rem 1.3rem}
+.nav-links{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.35rem 0;list-style:none;margin:0;padding:0}
 .nav-links li{display:flex;align-items:center}
 .nav-links li+li::before{content:"|";color:rgba(245,241,220,.38);margin-inline:clamp(.65rem,1.5vw,1.2rem);font-family:var(--sans);font-weight:500}
 .nav-links a{
-  text-decoration:none;font-family:var(--sans);font-weight:600;
+  text-decoration:none;font-family:var(--sans);font-weight:600;white-space:nowrap;
   font-size:1rem;letter-spacing:.01em;color:var(--cream);
   padding:.18rem .1rem .25rem;border-bottom:1px solid transparent;
 }
@@ -628,6 +628,7 @@ body.newsletter-open{overflow:hidden}
         <li><a href="#gallery">Gallery</a></li>
         <li><a href="#explore">Projects</a></li>
         <li><a href="#connect">Connect</a></li>
+        <li><a href="/ak-map-alpha/">World Map (Alpha)</a></li>
         <li><a href="https://kaisercatcinema.com/patreon">Patreon</a></li>
         <li><a href="#prints">Merchandise</a></li>
       </ul>
