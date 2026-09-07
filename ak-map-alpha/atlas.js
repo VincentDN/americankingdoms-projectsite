@@ -20,7 +20,8 @@
     $('editor').hidden = !editMode || mode !== 'details';
     $('panel-title').textContent = mode === 'key' ? 'Map key' : editMode ? 'Edit territory' : 'Territory details';
     $('panel-toggle').setAttribute('aria-expanded',String(open && mode === 'key'));
-    map.closeTooltip();
+    // Leaflet's map.closeTooltip requires an actual tooltip instance.
+    map.eachLayer(layer => { if (layer instanceof L.Tooltip) map.closeTooltip(layer); });
     map.getPane('tooltipPane').style.display = open && matchMedia('(max-width:700px)').matches ? 'none' : '';
     $('panel').querySelector('.panel-body').scrollTop = 0;
   }
