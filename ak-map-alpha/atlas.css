@@ -7,3 +7,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:1rem;pa
 [hidden]{display:none!important}
 
 .territory-swatch{display:inline-block;width:16px;height:16px;border:1px solid #2c211880;margin-right:9px;vertical-align:middle}#territory-list details{margin-top:16px;border-top:1px solid #9d865e;padding-top:12px}#territory-list summary{cursor:pointer;font:600 1rem var(--sans);padding:8px 0}.territory-tooltip strong{margin-bottom:5px}
+
+/* A bounded panel with one purpose at a time; its contents scroll independently. */
+#panel{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;padding:12px 16px;border-bottom:1px solid #9d865e;background:var(--parch)}
+.panel-heading h2{margin:0;font-size:1.2rem}.panel-heading button{flex:none;padding:0;width:44px;font-size:1.6rem;line-height:1;border:0;background:transparent}
+.panel-body{padding:16px;overflow-y:auto;overscroll-behavior:contain;min-height:0;scrollbar-gutter:stable}
+#details{margin:0;padding:0;border:0}#detail-name{font-size:1.25rem}#detail-description{margin-bottom:.5rem}
+@media(max-width:700px){
+ #panel{top:auto;bottom:26px;left:12px;right:12px;width:auto;max-height:min(45%,22rem);padding:0}
+ .panel-body{font-size:16px;padding:12px 16px}
+ .panel-heading{padding:6px 12px}.panel-heading h2{font-size:1.1rem}
+ #status{font-size:14px}#key-content>p:first-child{display:none}
+}
+@media(hover:none){.territory-tooltip{display:none!important}}

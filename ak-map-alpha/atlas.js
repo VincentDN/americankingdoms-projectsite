@@ -11,8 +11,28 @@
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
   const home = () => map.fitBounds([[7,-168],[73,-52]], {padding:[20,20],animate:false});
   home(); $('reset').onclick = home;
-  $('panel-toggle').onclick = () => { $('panel').hidden = !$('panel').hidden; $('panel-toggle').setAttribute('aria-expanded',String(!$('panel').hidden)); };
-  if (matchMedia('(max-width:700px)').matches) $('panel-toggle').click();
+  let panelMode = 'key';
+  function setPanel(open, mode = panelMode) {
+    panelMode = mode;
+    $('panel').hidden = !open;
+    $('key-content').hidden = mode !== 'key';
+    $('details').hidden = mode !== 'details';
+    $('editor').hidden = !editMode || mode !== 'details';
+    $('panel-title').textContent = mode === 'key' ? 'Map key' : editMode ? 'Edit territory' : 'Territory details';
+    $('panel-toggle').setAttribute('aria-expanded',String(open && mode === 'key'));
+    map.closeTooltip();
+    map.getPane('tooltipPane').style.display = open && matchMedia('(max-width:700px)').matches ? 'none' : '';
+    $('panel').querySelector('.panel-body').scrollTop = 0;
+  }
+  $('panel-toggle').onclick = () => {
+    const open = $('panel').hidden || panelMode !== 'key';
+    setPanel(open, 'key');
+    if (open) $('panel-close').focus({preventScroll:true});
+  };
+  const closePanel = () => { setPanel(false); $('panel-toggle').focus({preventScroll:true}); };
+  $('panel-close').onclick = closePanel;
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); });
+  setPanel(!matchMedia('(max-width:700px)').matches, 'key');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
   const rivers = L.featureGroup().addTo(map);
@@ -30,7 +50,7 @@
     const desc=document.createElement('span');desc.textContent=feature.properties.summary || feature.properties.kind || 'Territory';node.append(desc);return node;
   }
   function select(layer) {
-    selected=layer; if($('panel').hidden)$('panel-toggle').click(); const p=layer.feature.properties;
+    selected=layer; setPanel(true, 'details'); layer.closeTooltip(); const p=layer.feature.properties;
     $('details').hidden=false;$('detail-name').textContent=p.name;$('detail-description').textContent=p.summary || '';
     const url=safeURL(p.wiki);$('detail-link').hidden=!url;if(url)$('detail-link').href=url;
     if(editMode) { $('edit-name').value=p.name || ''; $('edit-kind').value=p.kind==='region'?'region':'country';$('edit-color').value=p.color || '#b31f34';$('edit-description').value=p.summary || '';$('edit-wiki').value=url || ''; }
@@ -81,8 +101,8 @@
     // The editor is loaded lazily after the map and its territory layers exist.
     L.PM.reInitLayer(map);
     Object.values(groups).forEach(group=>L.PM.reInitLayer(group));
-    $('editor').hidden=false;
-    if($('panel').hidden)$('panel-toggle').click();
+    setPanel(true, 'details');
+    $('details').hidden = !selected;
     map.pm.addControls({position:'topright',drawMarker:false,drawCircleMarker:false,drawPolyline:false,drawRectangle:false,drawCircle:false,drawText:false,cutPolygon:false,rotateMode:false,dragMode:false});
     map.pm.setGlobalOptions({snappable:true,allowSelfIntersection:false});
     map.on('pm:create',e=>{const f=e.layer.toGeoJSON();f.properties={id:'territory-'+Date.now(),name:'New territory',kind:'country',color:'#b31f34',summary:'',wiki:'',canon:false};wire(e.layer,f);select(e.layer);refreshList();markDirty();});

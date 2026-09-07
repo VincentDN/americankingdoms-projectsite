@@ -22,8 +22,11 @@
   </header>
   <main>
     <div id="map" aria-label="Interactive North America map. Use arrow keys to pan and plus or minus to zoom."></div>
-    <aside id="panel">
-      <h2>The known world</h2>
+    <aside id="panel" aria-labelledby="panel-title">
+      <div class="panel-heading"><h2 id="panel-title">Map key</h2><button id="panel-close" type="button" aria-label="Close map panel">×</button></div>
+      <div class="panel-body">
+      <section id="details" hidden aria-live="polite"><h2 id="detail-name"></h2><p id="detail-description"></p><a id="detail-link" hidden>Read in the wiki</a></section>
+      <div id="key-content">
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
       <fieldset><legend>Show on the map</legend>
         <label><input id="countries" type="checkbox" checked> Canonical states</label>
@@ -33,7 +36,8 @@
       </fieldset>
       <p id="status" role="status">Unrolling the atlas…</p>
       <div id="territory-list" aria-label="Territories"></div>
-      <section id="details" hidden aria-live="polite"><h2 id="detail-name"></h2><p id="detail-description"></p><a id="detail-link" hidden>Read in the wiki</a></section>
+      <a class="wiki" href="https://wiki.american-kingdoms.com/">American Kingdoms Wiki</a>
+      </div>
       <section id="editor" hidden>
         <h2>Chart a territory</h2>
         <p>Draw a polygon, then select it to name it. Export your work before leaving this page.</p>
@@ -48,7 +52,7 @@
         <button id="export" type="button">Export territories</button>
         <p id="editor-status" role="status"></p>
       </section>
-      <a class="wiki" href="https://wiki.american-kingdoms.com/">American Kingdoms Wiki</a>
+      </div>
     </aside>
     <div class="atlas-caption">North America <span>American Kingdoms</span></div>
   </main>
