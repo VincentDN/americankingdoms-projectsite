@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="atlas.css?v=4">
+  <link rel="stylesheet" href="atlas.css?v=5">
   <script defer src="vendor/leaflet.js"></script>
   <script defer src="atlas.js?v=6"></script>
 </head>
@@ -34,8 +34,18 @@
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
       <fieldset><legend>Map mode</legend>
         <p class="mode-hint">Sort territories via their…</p>
-        <label><input type="radio" name="mapmode" value="realms" checked> Realms <span class="mode-desc">(Alliances and Federations)</span></label>
-        <label><input type="radio" name="mapmode" value="cultures"> Cultures <span class="mode-desc">(Heritage and Origins)</span></label>
+        <div class="mode-options">
+          <label class="mode-option">
+            <input type="radio" name="mapmode" value="realms" checked>
+            <span class="mode-option-title">Realms</span>
+            <span class="mode-option-desc">Alliances and Federations</span>
+          </label>
+          <label class="mode-option">
+            <input type="radio" name="mapmode" value="cultures">
+            <span class="mode-option-title">Cultures</span>
+            <span class="mode-option-desc">Heritage and Origins</span>
+          </label>
+        </div>
       </fieldset>
       <fieldset><legend>Show on the map</legend>
         <label><input id="countries" type="checkbox" checked> Canonical states</label>
