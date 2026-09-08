@@ -448,7 +448,9 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 
 /* --- Footer --- */
 footer{background:var(--ink-3);border-top:1px solid rgba(200,162,74,.45);text-align:center;padding:3.4rem var(--pad) 2.6rem}
-footer .crest{width:46px;margin:0 auto 1rem;opacity:.9}
+footer .crest-button{display:block;margin:0 auto 1rem;padding:0;border:0;background:transparent;cursor:pointer}
+footer .crest{width:46px;margin:0;opacity:.9;transition:opacity .2s}
+footer .crest-button:hover .crest,footer .crest-button:focus-visible .crest{opacity:1}
 footer .motto{font-family:var(--display);letter-spacing:.24em;text-transform:uppercase;font-size:.8rem;color:var(--gold);margin-bottom:.7rem}
 footer .fine{font-size:.82rem;color:var(--cream-dim);line-height:1.7}
 footer a{color:var(--cream-dim);text-underline-offset:3px}
@@ -1176,7 +1178,9 @@ body.newsletter-open{overflow:hidden}
 
 <!-- ============================ FOOTER ============================ -->
 <footer>
-  <img class="crest" src="assets/eagle-gold.png" alt="">
+  <button type="button" class="crest-button" id="footerNewsletterTrigger" aria-label="Open newsletter signup">
+    <img class="crest" src="assets/eagle-gold.png" alt="">
+  </button>
   <p class="motto">Luctor Et Emergo</p>
   <p class="fine">
     © 2026 All rights reserved · Kaiser Cat Collective / Atelier Vincent De Nil BV<br>
@@ -1272,9 +1276,6 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
   const storageKey='ak-newsletter-dismissed';
   const cooldown=14*24*60*60*1000;
   let previousFocus=null;
-  let dismissedAt=0;
-  try{dismissedAt=Number(localStorage.getItem(storageKey)||0)}catch(e){}
-  if(Date.now()-dismissedAt<cooldown) return;
 
   const focusable=()=>[...modal.querySelectorAll('a[href],button:not([disabled])')];
   const close=()=>{
@@ -1306,7 +1307,15 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
   modal.querySelectorAll('[data-newsletter-close]').forEach(button=>button.addEventListener('click',close));
   const join=document.getElementById('newsletterJoin');
   if(join) join.addEventListener('click',()=>{try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}});
-  window.setTimeout(open,40000);
+
+  // Footer eagle: a quiet manual trigger, always available regardless of
+  // whether the timed popup below was already dismissed.
+  const trigger=document.getElementById('footerNewsletterTrigger');
+  if(trigger) trigger.addEventListener('click',open);
+
+  let dismissedAt=0;
+  try{dismissedAt=Number(localStorage.getItem(storageKey)||0)}catch(e){}
+  if(Date.now()-dismissedAt>=cooldown) window.setTimeout(open,40000);
 })();
 
 /* Newsletter signup: posts to /api/subscribe (a Cloudflare Pages Function),
