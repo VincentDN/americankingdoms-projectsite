@@ -5,11 +5,39 @@
   const editMode = new URLSearchParams(location.search).get('edit') === '1';
   const status = $('status');
   if (!window.L) { status.textContent = 'The map could not load. Please reload the page.'; return; }
-  const map = L.map('map', {zoomControl:false,minZoom:2,maxZoom:9,maxBounds:[[7,-179],[83,-40]],maxBoundsViscosity:1,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false});
+  // Azimuthal equidistant, centred on the North Pole rather than Leaflet's
+  // default Web Mercator. There is no tile layer here (every layer is
+  // vector GeoJSON), so a custom CRS only has to get project/unproject
+  // right; nothing depends on a 256px tile pyramid. lon0 picks which
+  // meridian points "up" from the pole -- roughly through central Canada,
+  // so North America reads upright rather than rotated.
+  const R = 6371000, D2R = Math.PI / 180, R2D = 180 / Math.PI, lon0 = -100 * D2R;
+  const PolarAzimuthal = {
+    R,
+    project(latlng) {
+      const rho = R * (Math.PI / 2 - latlng.lat * D2R);
+      const theta = latlng.lng * D2R - lon0;
+      return L.point(rho * Math.sin(theta), -rho * Math.cos(theta));
+    },
+    unproject(point) {
+      const rho = Math.sqrt(point.x * point.x + point.y * point.y);
+      const lat = 90 - rho / R * R2D;
+      const lon = (((lon0 + Math.atan2(point.x, -point.y)) * R2D + 540) % 360) - 180;
+      return L.latLng(lat, lon);
+    },
+    bounds: L.bounds([-R * Math.PI, -R * Math.PI], [R * Math.PI, R * Math.PI]),
+  };
+  const polarScale = 0.5 / (Math.PI * R);
+  L.CRS.PolarAzimuthal = L.extend({}, L.CRS.Earth, {
+    code: 'AK:polar-azimuthal',
+    projection: PolarAzimuthal,
+    transformation: new L.Transformation(polarScale, 0.5, -polarScale, 0.5),
+  });
+  const map = L.map('map', {crs:L.CRS.PolarAzimuthal,zoomControl:false,minZoom:2,maxZoom:9,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false});
   L.control.zoom({position:'topright'}).addTo(map);
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
-  const home = () => map.fitBounds([[14,-125],[55,-58]], {padding:[20,20],animate:false});
+  const home = () => map.setView([48,-100], 4, {animate:false});
   home(); $('reset').onclick = home;
   let panelMode = 'key';
   function setPanel(open, mode = panelMode) {
@@ -92,9 +120,30 @@
 
   for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) $(''+id).onchange=e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);refreshList();};
   async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path);return response.json();}
+  // A ring/line whose raw longitudes cross +/-180 (Alaska, the Aleutians)
+  // would jump ~360 degrees between two adjacent points once projected,
+  // tearing the shape into a wedge. Shifting each ring's own longitudes by
+  // whatever multiple of 360 keeps consecutive points close together fixes
+  // this -- sin/cos are periodic, so the shift doesn't change where any
+  // individual ring ends up, only that it stays continuous with itself.
+  function unwrapAntimeridian(coords) {
+    if (Array.isArray(coords[0]) && typeof coords[0][0] === 'number') {
+      let offset = 0;
+      for (let i = 1; i < coords.length; i++) {
+        const delta = coords[i][0] - coords[i - 1][0];
+        if (delta > 180) offset -= 360; else if (delta < -180) offset += 360;
+        coords[i][0] += offset;
+      }
+    } else coords.forEach(unwrapAntimeridian);
+    return coords;
+  }
+  function unwrapFeatures(fc) {
+    fc.features.forEach(f => { if (f.geometry) unwrapAntimeridian(f.geometry.coordinates); });
+    return fc;
+  }
   async function init() {
     try {
-      const [land,lakes,riverData,territories,samples]=await Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson')));
+      const [land,lakes,riverData,territories,samples]=(await Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson')))).map(unwrapFeatures);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);

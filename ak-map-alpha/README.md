@@ -96,8 +96,9 @@ No DNS changes or production deployment have been made by this groundwork change
 
 The 1:50m base is suitable for the first continental view, not detailed fief boundaries
 or navigational accuracy. Upgrade to 1:10m geography, spatially clipped and simplified
-at multiple zoom levels, when closer-scale canon is available. The current renderer
-uses Mercator; a custom continental projection is a later cartographic decision.
+at multiple zoom levels, when closer-scale canon is available. The renderer uses a
+custom polar azimuthal-equidistant projection rather than Leaflet's default Mercator;
+see "Polar projection" below.
 
 ## Verification
 
@@ -186,3 +187,37 @@ flag is a hand-drawn SVG placeholder at
 `assets/flags/sidennic-league.svg` -- seven golden apples (one per Sister
 City) on a green field, 3:5 ratio -- not sourced from any established
 in-world heraldry.
+
+## Polar projection (8 September 2026)
+
+The renderer now uses a custom Leaflet CRS, `L.CRS.PolarAzimuthal`, defined
+in `atlas.js`: an azimuthal-equidistant projection centred on the North
+Pole, replacing Leaflet's default Web Mercator. This is only practical
+because every layer here is vector GeoJSON with no tile layer -- a custom
+CRS only has to implement `project`/`unproject`, with nothing depending on
+a 256px tile pyramid. The central meridian (`lon0`, currently -100 degrees)
+runs up through central Canada so North America reads upright rather than
+rotated; the projection math and scale factor are otherwise ordinary
+(the same world-diameter-to-unit-square convention Leaflet's own EPSG3857
+uses, reusing `L.CRS.Earth` for `wrapLng`/`distance`).
+
+Two things needed fixing beyond the projection math itself:
+- Any ring crossing +/-180 degrees longitude (Alaska, the Aleutians) would
+  jump ~360 degrees between two adjacent points once projected, tearing
+  into a wedge. `unwrapFeatures`/`unwrapAntimeridian` in `atlas.js` shift
+  each ring's own longitudes by whatever multiple of 360 keeps consecutive
+  points close together before the ring is projected; sin/cos are
+  periodic, so this changes nothing about where any individual ring ends
+  up, only that it stays continuous with itself.
+- The old Mercator-era `maxBounds` (a lat/lng rectangle meant to keep
+  panning within North America) reinterpreted under the new projection
+  clamped the initial view to the wrong location entirely. It has been
+  removed rather than reworked; panning is currently unrestricted aside
+  from `minZoom`. A proper replacement (bounds expressed in the projected
+  plane, or a smaller/differently-shaped lat/lng region) is a reasonable
+  follow-up if unrestricted panning proves annoying in practice.
+
+Verified in-browser: pan/zoom, territory hover/selection/tooltips, the
+details panel (including the flag and wiki-author additions above), the
+`?edit=1` polygon editor (Leaflet-Geoman draw/select still lands exactly
+where clicked), and mobile touch panning/tap-select.
