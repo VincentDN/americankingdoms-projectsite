@@ -15,6 +15,7 @@
   <script defer src="atlas.js"></script>
 </head>
 <body>
+  <div id="alpha-banner" role="status">Map is currently in alpha state! Expect shenanigans, shekanery and tomfoolery - Vincent</div>
   <header>
     <a href="https://american-kingdoms.com/" aria-label="American Kingdoms home"><img src="assets/ak-logo.svg" alt="American Kingdoms"></a>
     <div class="atlas-title">
@@ -31,6 +32,9 @@
       <section id="details" hidden aria-live="polite"><img id="detail-flag" hidden alt=""><h2 id="detail-name"></h2><p id="detail-author" hidden></p><p id="detail-description"></p><a id="detail-link" hidden>Read the Wiki Article <span aria-hidden="true">↗</span></a></section>
       <div id="key-content">
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
+      <fieldset><legend>Colour scheme</legend>
+        <label><input id="realms" type="checkbox" checked> Realms (colour by alliance)</label>
+      </fieldset>
       <fieldset><legend>Show on the map</legend>
         <label><input id="countries" type="checkbox" checked> Canonical states</label>
         <label><input id="regions" type="checkbox" checked> Provisional territories</label>

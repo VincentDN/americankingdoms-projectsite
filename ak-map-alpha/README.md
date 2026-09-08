@@ -34,6 +34,7 @@ in `[longitude, latitude]` order. Each Polygon or MultiPolygon has properties:
 | summary | Plain-text hover and details copy |
 | wiki | Optional HTTPS lore URL |
 | flag | Optional path to a small flag image, shown in the details panel |
+| alliance | Optional: `union` (the 13 rebelling colonies) or `crown` (English Canada). Drives the Realms colouring described below. |
 
 Names and descriptions are rendered as text, not injected HTML.
 Political geometry is traced from `sources/east-coast-canon.png` (authoritative)
@@ -221,3 +222,26 @@ Verified in-browser: pan/zoom, territory hover/selection/tooltips, the
 details panel (including the flag and wiki-author additions above), the
 `?edit=1` polygon editor (Leaflet-Geoman draw/select still lands exactly
 where clicked), and mobile touch panning/tap-select.
+
+## Alpha banner and Realms colouring (8 September 2026)
+
+The page now opens with a red banner above the header flagging the map as
+alpha and pointing shenanigans, shekanery and tomfoolery at Vincent. It's a
+plain flex child of `body`, styled in `atlas.css` (`#alpha-banner`); remove
+it and its `<div>` in `index.html` once the atlas leaves alpha.
+
+The map also now opens in **Realms** view by default: instead of colouring
+each canon territory individually, the 13 rebelling colonies (`alliance:
+"union"` in `territories.geojson`) shade from pale to deep blue
+north-to-south, and English Canada (`alliance: "crown"`) is a single red --
+the two sides of the Revolutionary War the atlas' subtitle describes. Every
+other provisional (non-canon) territory is recoloured to a near-parchment
+pale so the alliance colours read clearly against the pale interior; canon
+territories outside both alliances (Florida, Smokey March, the Sidennic
+League) keep their own individual colours in Realms view. The "Colour
+scheme" checkbox in the map key (`#realms` in `atlas.js`) toggles back to
+the original per-territory colours; toggling re-styles every layer, its
+tooltip, and the territory list swatches in place, without reloading data.
+The shades themselves are generated at runtime via a small HSL-to-hex
+helper rather than stored per feature, so adding or reordering `union`
+states only means editing the `UNION_ORDER` list in `atlas.js`.

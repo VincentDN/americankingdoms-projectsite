@@ -69,9 +69,47 @@
   const markDirty = () => { dirty=true; $('editor-status').textContent='Changes are in this tab only. Export before closing.'; };
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
   const safeURL = value => { try { const url=new URL(value); return url.protocol==='https:' ? url.href : null; } catch { return null; } };
-  const colorOf = feature => /^#[0-9a-f]{6}$/i.test(feature.properties.color) ? feature.properties.color : '#a59670';
+  const baseColorOf = feature => /^#[0-9a-f]{6}$/i.test(feature.properties.color) ? feature.properties.color : '#a59670';
+  // Realms view recolours the map by alliance rather than by individual
+  // territory: the 13 rebelling colonies (properties.alliance === 'union')
+  // shade from pale to deep blue north-to-south, the crown they're
+  // rebelling against (alliance === 'crown') gets a single red, and every
+  // other provisional (non-canon) territory fades to near-parchment so the
+  // alliances read clearly at a glance. Canon territories outside either
+  // alliance (Florida, Smokey March, the Sidennic League) keep their own
+  // colours in both views.
+  let realmsView = true;
+  const hslToHex = (h,s,l) => {
+    s/=100; l/=100;
+    const k = n => (n + h/30) % 12;
+    const a = s * Math.min(l, 1-l);
+    const f = n => l - a*Math.max(-1, Math.min(k(n)-3, Math.min(9-k(n), 1)));
+    const toHex = x => Math.round(255*x).toString(16).padStart(2,'0');
+    return '#' + toHex(f(0)) + toHex(f(8)) + toHex(f(4));
+  };
+  const UNION_ORDER = ['Massachusetts','New Hampshire','Connecticut','Rhode Island','New York','Pennsylvania','New Jersey','Delaware','Maryland','Virginia','North Carolina','South Carolina','Georgia'];
+  const unionShade = name => {
+    const i = UNION_ORDER.indexOf(name);
+    const t = i < 0 ? .5 : i / (UNION_ORDER.length - 1);
+    return hslToHex(212, 62, 70 - t * 42);
+  };
+  const CROWN_SHADE = hslToHex(354, 58, 34);
+  const PROVISIONAL_PALE = '#efe6cf';
+  const isProvisional = feature => !feature.properties.canon;
+  const colorOf = feature => {
+    if (realmsView) {
+      const alliance = feature.properties.alliance;
+      if (alliance === 'union') return unionShade(feature.properties.name);
+      if (alliance === 'crown') return CROWN_SHADE;
+      if (isProvisional(feature)) return PROVISIONAL_PALE;
+    }
+    return baseColorOf(feature);
+  };
   const borderOf = feature => '#' + colorOf(feature).slice(1).match(/../g).map(c=>Math.round(parseInt(c,16)*.58).toString(16).padStart(2,'0')).join('');
-  const style = feature => ({color:borderOf(feature),weight:feature.properties.canon?1.7:1,fillColor:colorOf(feature),fillOpacity:feature.properties.canon?.72:.48,dashArray:null});
+  const style = feature => {
+    const canon = feature.properties.canon, pale = realmsView && isProvisional(feature) && !feature.properties.alliance;
+    return {color:borderOf(feature),weight:canon?1.7:(pale?.6:1),fillColor:colorOf(feature),fillOpacity:canon?.72:(pale?.25:.48),dashArray:null};
+  };
   // Hover and keyboard focus each open a tooltip independently, so crossing
   // straight from one territory into another (a shared border, or tabbing
   // while the mouse still rests elsewhere) can leave more than one open.
@@ -119,6 +157,11 @@
   }
 
   for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) $(''+id).onchange=e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);refreshList();};
+  $('realms').onchange=e=>{
+    realmsView=e.target.checked;
+    Object.values(groups).forEach(group=>group.eachLayer(layer=>{layer.setStyle(style(layer.feature));layer.setTooltipContent(tooltip(layer.feature));}));
+    refreshList();
+  };
   async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path);return response.json();}
   // A ring/line whose raw longitudes cross +/-180 (Alaska, the Aleutians)
   // would jump ~360 degrees between two adjacent points once projected,
