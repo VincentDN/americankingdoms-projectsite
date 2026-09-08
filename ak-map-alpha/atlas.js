@@ -79,11 +79,14 @@
   // its own layer group added/removed from the map as the zoom crosses
   // its threshold, rather than hiding individual markers, so zoomed-out
   // views stay uncluttered and the DOM only carries what's on screen.
+  // A single brass diamond glyph for every tier; only size and opacity
+  // step down the hierarchy, kept small and faint so the glyphs read as a
+  // quiet map convention rather than competing with the territory fills.
   const CITY_TIERS = {
-    capital:  {minZoom:2, radius:7, weight:1.8, stroke:'#2c2118', fill:'#a58232', fillOpacity:.95},
-    province: {minZoom:4, radius:5, weight:1.3, stroke:'#ece0c8', fill:'#2c2118', fillOpacity:.9},
-    metro:    {minZoom:5, radius:4, weight:1,   stroke:'#ece0c8', fill:'#2c2118', fillOpacity:.85},
-    city:     {minZoom:6, radius:3, weight:.8,  stroke:'#ece0c8', fill:'#5a4a38', fillOpacity:.8},
+    capital:  {minZoom:2, size:7, opacity:.8},
+    province: {minZoom:4, size:5, opacity:.65},
+    metro:    {minZoom:5, size:4, opacity:.55},
+    city:     {minZoom:6, size:3, opacity:.45},
   };
   const cityTierGroups = {capital:L.layerGroup(),province:L.layerGroup(),metro:L.layerGroup(),city:L.layerGroup()};
   let citiesEnabled = true;
@@ -179,19 +182,27 @@
   }
   function cityTooltip(feature) {
     const p=feature.properties, node=document.createElement('div'), title=document.createElement('strong');
-    title.textContent=p.name;title.style.borderLeft='5px solid '+CITY_TIERS[p.tier].fill;title.style.paddingLeft='8px';node.append(title);
+    title.textContent=p.name;title.style.borderLeft='5px solid #8a6d35';title.style.paddingLeft='8px';node.append(title);
     const place=[p.admin1,p.country].filter(Boolean).join(', ');
     const desc=document.createElement('span');
     desc.textContent = p.tier==='capital' ? 'National capital of '+p.country : p.tier==='province' ? 'Capital of '+place : place;
     node.append(desc);return node;
+  }
+  function cityIcon(cfg) {
+    return L.divIcon({
+      className:'city-marker',
+      html:`<span class="city-diamond" style="width:${cfg.size}px;height:${cfg.size}px;opacity:${cfg.opacity}"></span>`,
+      iconSize:[cfg.size,cfg.size],
+      iconAnchor:[cfg.size/2,cfg.size/2],
+    });
   }
   function addCities(data) {
     for (const feature of data.features) {
       const cfg=CITY_TIERS[feature.properties.tier];
       if (!cfg) continue;
       const [lon,lat]=feature.geometry.coordinates;
-      const marker=L.circleMarker([lat,lon],{radius:cfg.radius,weight:cfg.weight,color:cfg.stroke,fillColor:cfg.fill,fillOpacity:cfg.fillOpacity});
-      marker.bindTooltip(cityTooltip(feature),{className:'territory-tooltip',direction:'top',offset:[0,-cfg.radius]});
+      const marker=L.marker([lat,lon],{icon:cityIcon(cfg),keyboard:false});
+      marker.bindTooltip(cityTooltip(feature),{className:'territory-tooltip',direction:'top',offset:[0,-cfg.size]});
       cityTierGroups[feature.properties.tier].addLayer(marker);
     }
   }

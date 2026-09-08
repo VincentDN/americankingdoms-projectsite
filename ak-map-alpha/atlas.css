@@ -23,3 +23,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:1rem;pa
  #status{font-size:14px}#key-content>p:first-child{display:none}
 }
 @media(hover:none){.territory-tooltip{display:none!important}}
+
+/* Brass diamond city glyphs: quiet map furniture, not another data layer
+   competing with the territory fills. Leaflet's default .leaflet-div-icon
+   box (white fill, grey border) is reset so only the diamond itself shows. */
+.leaflet-div-icon.city-marker{background:transparent;border:0}
+.city-diamond{display:block;background:#8a6d35;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)}
