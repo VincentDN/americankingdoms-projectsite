@@ -2,6 +2,13 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
+  // Binds an optional control without risking the whole script: if the
+  // page and this script ever drift (a stale cached copy of one served
+  // alongside a fresh copy of the other -- exactly what a plain, unversioned
+  // <script src="atlas.js"> invites), a missing element here only disables
+  // that one control instead of throwing and aborting before the map data
+  // ever loads.
+  const on = (id, event, handler) => { const el = $(id); if (el) el[event] = handler; else console.error('Atlas: expected #'+id+' in the page'); };
   const editMode = new URLSearchParams(location.search).get('edit') === '1';
   const status = $('status');
   const showStatus = text => { status.hidden = false; status.textContent = text; };
@@ -48,19 +55,19 @@
     $('details').hidden = mode !== 'details';
     $('editor').hidden = !editMode || mode !== 'details';
     $('panel-title').textContent = mode === 'key' ? 'Map key' : editMode ? 'Edit territory' : 'Territory details';
-    $('panel-toggle').setAttribute('aria-expanded',String(open && mode === 'key'));
+    $('panel-toggle')?.setAttribute('aria-expanded',String(open && mode === 'key'));
     // Leaflet's map.closeTooltip requires an actual tooltip instance.
     map.eachLayer(layer => { if (layer instanceof L.Tooltip) map.closeTooltip(layer); });
     map.getPane('tooltipPane').style.display = open && matchMedia('(max-width:700px)').matches ? 'none' : '';
     $('panel').querySelector('.panel-body').scrollTop = 0;
   }
-  $('panel-toggle').onclick = () => {
+  on('panel-toggle','onclick', () => {
     const open = $('panel').hidden || panelMode !== 'key';
     setPanel(open, 'key');
-    if (open) $('panel-close').focus({preventScroll:true});
-  };
-  const closePanel = () => { setPanel(false); $('panel-toggle').focus({preventScroll:true}); };
-  $('panel-close').onclick = closePanel;
+    if (open) $('panel-close')?.focus({preventScroll:true});
+  });
+  const closePanel = () => { setPanel(false); $('panel-toggle')?.focus({preventScroll:true}); };
+  on('panel-close','onclick', closePanel);
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); });
   setPanel(!matchMedia('(max-width:700px)').matches, 'key');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
@@ -114,7 +121,7 @@
     const canon = feature.properties.canon;
     return canon
       ? {color:borderOf(feature),weight:1.7,opacity:1,fillColor:colorOf(feature),fillOpacity:.72,dashArray:null}
-      : {color:borderOf(feature),weight:.4,opacity:.35,fillColor:colorOf(feature),fillOpacity:.1,dashArray:null};
+      : {color:borderOf(feature),weight:.6,opacity:.55,fillColor:colorOf(feature),fillOpacity:.22,dashArray:null};
   };
   // Hover and keyboard focus each open a tooltip independently, so crossing
   // straight from one territory into another (a shared border, or tabbing
@@ -148,7 +155,7 @@
   function addFeatures(data,sample=false) {
     L.geoJSON(data,{pane:'countries',pmIgnore:sample,onEachFeature:(f,l)=>wire(l,f,sample)});
   }
-  for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) $(''+id).onchange=e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);};
+  for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) on(id,'onchange', e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);});
   document.querySelectorAll('input[name=mapmode]').forEach(radio=>radio.onchange=e=>{
     if(!e.target.checked)return;
     mapMode=e.target.value;
@@ -198,13 +205,13 @@
     map.pm.setGlobalOptions({snappable:true,allowSelfIntersection:false});
     map.on('pm:create',e=>{const f=e.layer.toGeoJSON();f.properties={id:'territory-'+Date.now(),name:'New territory',kind:'country',color:'#b31f34',summary:'',wiki:'',canon:false};wire(e.layer,f);select(e.layer);markDirty();});
     map.on('pm:remove',e=>{Object.values(groups).forEach(g=>g.removeLayer(e.layer));if(selected===e.layer){selected=null;$('details').hidden=true;}markDirty();});
-    $('edit-form').onsubmit=e=>{e.preventDefault();if(!selected||selected.sample){$('editor-status').textContent='Draw or select a country or region first.';return;}
+    on('edit-form','onsubmit', e=>{e.preventDefault();if(!selected||selected.sample){$('editor-status').textContent='Draw or select a country or region first.';return;}
       const oldKind=selected.feature.properties.kind;
       Object.assign(selected.feature.properties,{name:$('edit-name').value.trim(),kind:$('edit-kind').value,color:$('edit-color').value,summary:$('edit-description').value,wiki:safeURL($('edit-wiki').value)||''});
       if(oldKind!==selected.feature.properties.kind){groups[oldKind].removeLayer(selected);groups[selected.feature.properties.kind].addLayer(selected);}
       selected.setStyle(style(selected.feature));selected.setTooltipContent(tooltip(selected.feature));selected.getElement()?.setAttribute('aria-label',selected.feature.properties.name);select(selected);markDirty();
-    };
-    $('export').onclick=()=>{const features=[];for(const kind of ['country','region'])groups[kind].eachLayer(l=>features.push(l.toGeoJSON()));const blob=new Blob([JSON.stringify({type:'FeatureCollection',features},null,2)],{type:'application/geo+json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='territories.geojson';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);dirty=false;$('editor-status').textContent='Export requested. Keep the downloaded file; publishing is a separate step.';};
+    });
+    on('export','onclick', ()=>{const features=[];for(const kind of ['country','region'])groups[kind].eachLayer(l=>features.push(l.toGeoJSON()));const blob=new Blob([JSON.stringify({type:'FeatureCollection',features},null,2)],{type:'application/geo+json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='territories.geojson';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);dirty=false;$('editor-status').textContent='Export requested. Keep the downloaded file; publishing is a separate step.';});
   }
   init();
 })();

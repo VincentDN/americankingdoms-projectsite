@@ -238,10 +238,43 @@ the two sides of the Revolutionary War the atlas' subtitle describes. Every
 other provisional (non-canon) territory is recoloured to a near-parchment
 pale so the alliance colours read clearly against the pale interior; canon
 territories outside both alliances (Florida, Smokey March, the Sidennic
-League) keep their own individual colours in Realms view. The "Colour
-scheme" checkbox in the map key (`#realms` in `atlas.js`) toggles back to
-the original per-territory colours; toggling re-styles every layer, its
-tooltip, and the territory list swatches in place, without reloading data.
-The shades themselves are generated at runtime via a small HSL-to-hex
-helper rather than stored per feature, so adding or reordering `union`
-states only means editing the `UNION_ORDER` list in `atlas.js`.
+League) keep their own individual colours in Realms view. The shades
+themselves are generated at runtime via a small HSL-to-hex helper rather
+than stored per feature, so adding or reordering `union` states only means
+editing the `UNION_ORDER` list in `atlas.js`.
+
+The "Map mode" radio group in the map key (`input[name=mapmode]` in
+`atlas.js`) switches between **Realms** (the alliance colouring above) and
+**Cultures**, which shows each canon territory's own reference colour
+instead -- how heritage and origin were already encoded when the map was
+first traced. Switching modes re-styles every layer and its tooltip in
+place, without reloading data. Provisional territories are always shown
+almost blank (very low fill and stroke opacity against the near-parchment
+pale) regardless of mode.
+
+## Fixed a stale-cache blank-map bug (8 September 2026)
+
+Shortly after the mode-selector change above shipped, the live atlas loaded
+with the header and map key intact but a completely blank map area -- no
+land, borders or rivers at all. The cause: `index.html` and `atlas.js` are
+two separate cacheable requests, referenced by plain filename with no
+version or hash. A visitor (or an intermediate cache) can end up with a
+fresh copy of one and a stale copy of the other. In this case, an old
+`atlas.js` still ran `$('reset').onclick = home` for the "Full map" button
+that a newer `index.html` had already removed; `$('reset')` was `null`,
+the assignment threw, and since that line ran near the top of the script's
+single synchronous pass, everything after it -- including the call to
+`init()` that fetches and renders the map data -- never ran.
+
+Two changes fix this:
+- `index.html` now loads `atlas.css?v=3` and `atlas.js?v=3`. Bump that
+  query string whenever either file changes so caches can't pair a stale
+  copy of one with a fresh copy of the other.
+- `atlas.js` now binds its optional controls (the panel toggle/close
+  buttons, the layer checkboxes, the editor form and export button)
+  through a small `on(id, event, handler)` helper that checks the element
+  exists first. A missing element now logs a console error and disables
+  just that one control instead of throwing and aborting the whole script
+  before the map data ever loads. Core structural lookups (`#map`,
+  `#panel`, `#details`, and the like) are unchanged, since if those are
+  missing the page has bigger problems than a script error.
