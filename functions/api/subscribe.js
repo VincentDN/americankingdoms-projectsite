@@ -1,7 +1,8 @@
 // Cloudflare Pages Function: POST /api/subscribe
 // Subscribes an email to Shopify Mail (marketing consent on the Shopify customer record)
 // via the Shopify Admin GraphQL API, so the newsletter form can live on this static site
-// while KCC keeps sending from Shopify.
+// while KCC keeps sending from Shopify. Also tags the customer with which site they
+// signed up from, so subscribers can be filtered/segmented by source in Shopify.
 //
 // Since January 1, 2026 Shopify custom apps (created via the Dev Dashboard) no longer
 // hand out a permanent Admin API token. Instead we exchange a Client ID + Client Secret
@@ -13,7 +14,10 @@
 //   SHOPIFY_CLIENT_ID        Client ID from the app's API credentials page
 //   SHOPIFY_CLIENT_SECRET    Client secret from the app's API credentials page
 //                            (the app needs the `write_customers` and `read_customers`
-//                            Admin API scopes configured)
+//                            Admin API scopes)
+//   SHOPIFY_SOURCE_TAG       e.g. "source:ak_projectsite" or "source:tds_projectsite"
+//                            (plain text, not secret) — applied to every subscriber
+//                            via this site. Optional: tagging is skipped if unset.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SHOPIFY_API_VERSION = '2024-10';
@@ -57,7 +61,7 @@ export async function onRequestPost({ request, env }) {
 
   try {
     const token = await getAccessToken(shop, clientId, clientSecret);
-    await subscribeCustomer(shop, token, email);
+    await subscribeCustomer(shop, token, email, env.SHOPIFY_SOURCE_TAG);
     return jsonResponse({ ok: true });
   } catch (err) {
     return jsonResponse({ ok: false, error: 'Something went wrong. Please try again later.' }, 502);
@@ -103,7 +107,9 @@ async function shopifyGraphQL(shop, token, query, variables) {
 
 // Shopify has no "upsert" customer mutation, so look the email up first and
 // either update its marketing consent or create a new customer with it.
-async function subscribeCustomer(shop, token, email) {
+// Tagging is applied afterwards via tagsAdd, which merges into the existing
+// tag set instead of replacing it (unlike passing `tags` on customerUpdate).
+async function subscribeCustomer(shop, token, email, sourceTag) {
   const findQuery = `
     query FindCustomer($query: String!) {
       customers(first: 1, query: $query) {
@@ -115,6 +121,7 @@ async function subscribeCustomer(shop, token, email) {
   const existingId = found.customers.edges[0]?.node?.id;
 
   const consent = { marketingState: 'SUBSCRIBED', marketingOptInLevel: 'SINGLE_OPT_IN' };
+  let customerId = existingId;
 
   if (existingId) {
     const updateMutation = `
@@ -130,21 +137,39 @@ async function subscribeCustomer(shop, token, email) {
     if (result.customerUpdate.userErrors.length) {
       throw new Error(JSON.stringify(result.customerUpdate.userErrors));
     }
-    return;
+  } else {
+    const createMutation = `
+      mutation CreateCustomer($input: CustomerInput!) {
+        customerCreate(input: $input) {
+          customer { id }
+          userErrors { field message }
+        }
+      }
+    `;
+    const result = await shopifyGraphQL(shop, token, createMutation, {
+      input: { email, emailMarketingConsent: consent },
+    });
+    if (result.customerCreate.userErrors.length) {
+      throw new Error(JSON.stringify(result.customerCreate.userErrors));
+    }
+    customerId = result.customerCreate.customer.id;
   }
 
-  const createMutation = `
-    mutation CreateCustomer($input: CustomerInput!) {
-      customerCreate(input: $input) {
-        userErrors { field message }
+  if (sourceTag && customerId) {
+    const tagsAddMutation = `
+      mutation AddSourceTag($id: ID!, $tags: [String!]!) {
+        tagsAdd(id: $id, tags: $tags) {
+          userErrors { field message }
+        }
       }
+    `;
+    const result = await shopifyGraphQL(shop, token, tagsAddMutation, {
+      id: customerId,
+      tags: [sourceTag],
+    });
+    if (result.tagsAdd.userErrors.length) {
+      throw new Error(JSON.stringify(result.tagsAdd.userErrors));
     }
-  `;
-  const result = await shopifyGraphQL(shop, token, createMutation, {
-    input: { email, emailMarketingConsent: consent },
-  });
-  if (result.customerCreate.userErrors.length) {
-    throw new Error(JSON.stringify(result.customerCreate.userErrors));
   }
 }
 

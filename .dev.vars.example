@@ -10,3 +10,4 @@
 SHOPIFY_STORE_DOMAIN=kaisercatcinema.myshopify.com
 SHOPIFY_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 SHOPIFY_CLIENT_SECRET=shpss_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SHOPIFY_SOURCE_TAG=source:ak_projectsite
