@@ -83,8 +83,8 @@
   // step down the hierarchy, kept small and faint so the glyphs read as a
   // quiet map convention rather than competing with the territory fills.
   const CITY_TIERS = {
-    capital:  {minZoom:2, size:7, opacity:.8},
-    province: {minZoom:4, size:5, opacity:.65},
+    capital:  {minZoom:2, size:9, opacity:.85, outline:'#3d2f14'},
+    province: {minZoom:4, size:8, opacity:.8,  outline:'#3d2f14'},
     metro:    {minZoom:5, size:4, opacity:.55},
     city:     {minZoom:6, size:3, opacity:.45},
   };
@@ -130,7 +130,7 @@
     return hslToHex(212, 62, 70 - t * 42);
   };
   const CROWN_SHADE = hslToHex(354, 58, 34);
-  const PROVISIONAL_PALE = '#f0e6cd';
+  const PROVISIONAL_PALE = '#d9b979';
   const isProvisional = feature => !feature.properties.canon;
   const colorOf = feature => {
     if (isProvisional(feature)) return PROVISIONAL_PALE;
@@ -146,7 +146,7 @@
     const canon = feature.properties.canon;
     return canon
       ? {color:borderOf(feature),weight:1.7,opacity:1,fillColor:colorOf(feature),fillOpacity:.72,dashArray:null}
-      : {color:borderOf(feature),weight:.6,opacity:.55,fillColor:colorOf(feature),fillOpacity:.22,dashArray:null};
+      : {color:borderOf(feature),weight:.8,opacity:.7,fillColor:colorOf(feature),fillOpacity:.38,dashArray:null};
   };
   // Hover and keyboard focus each open a tooltip independently, so crossing
   // straight from one territory into another (a shared border, or tabbing
@@ -189,9 +189,14 @@
     node.append(desc);return node;
   }
   function cityIcon(cfg) {
+    // A capital's outline is a pair of drop-shadows rather than a border:
+    // borders on a clip-path diamond render as a rectangle (the clip
+    // applies to the box, not retroactively to the border stroke), while
+    // a drop-shadow follows the shape's actual alpha silhouette.
+    const outline = cfg.outline ? `filter:drop-shadow(0 0 1px ${cfg.outline}) drop-shadow(0 0 .5px ${cfg.outline});` : '';
     return L.divIcon({
       className:'city-marker',
-      html:`<span class="city-diamond" style="width:${cfg.size}px;height:${cfg.size}px;opacity:${cfg.opacity}"></span>`,
+      html:`<span class="city-diamond" style="width:${cfg.size}px;height:${cfg.size}px;opacity:${cfg.opacity};${outline}"></span>`,
       iconSize:[cfg.size,cfg.size],
       iconAnchor:[cfg.size/2,cfg.size/2],
     });
