@@ -73,6 +73,28 @@
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
   const rivers = L.featureGroup().addTo(map);
+  // Cities are placeholder real-world data (state/province/national
+  // capitals plus population-banded regional cities), the same way the
+  // real-state border placeholders are: not in-world canon. Each tier is
+  // its own layer group added/removed from the map as the zoom crosses
+  // its threshold, rather than hiding individual markers, so zoomed-out
+  // views stay uncluttered and the DOM only carries what's on screen.
+  const CITY_TIERS = {
+    capital:  {minZoom:2, radius:7, weight:1.8, stroke:'#2c2118', fill:'#a58232', fillOpacity:.95},
+    province: {minZoom:4, radius:5, weight:1.3, stroke:'#ece0c8', fill:'#2c2118', fillOpacity:.9},
+    metro:    {minZoom:5, radius:4, weight:1,   stroke:'#ece0c8', fill:'#2c2118', fillOpacity:.85},
+    city:     {minZoom:6, radius:3, weight:.8,  stroke:'#ece0c8', fill:'#5a4a38', fillOpacity:.8},
+  };
+  const cityTierGroups = {capital:L.layerGroup(),province:L.layerGroup(),metro:L.layerGroup(),city:L.layerGroup()};
+  let citiesEnabled = true;
+  function updateCityTiers() {
+    const zoom = map.getZoom();
+    for (const [tier,group] of Object.entries(cityTierGroups)) {
+      const should = citiesEnabled && zoom >= CITY_TIERS[tier].minZoom, has = map.hasLayer(group);
+      if (should && !has) group.addTo(map); else if (!should && has) map.removeLayer(group);
+    }
+  }
+  map.on('zoomend', updateCityTiers);
   let selected = null, dirty = false;
   const markDirty = () => { dirty=true; $('editor-status').textContent='Changes are in this tab only. Export before closing.'; };
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
@@ -155,7 +177,26 @@
   function addFeatures(data,sample=false) {
     L.geoJSON(data,{pane:'countries',pmIgnore:sample,onEachFeature:(f,l)=>wire(l,f,sample)});
   }
+  function cityTooltip(feature) {
+    const p=feature.properties, node=document.createElement('div'), title=document.createElement('strong');
+    title.textContent=p.name;title.style.borderLeft='5px solid '+CITY_TIERS[p.tier].fill;title.style.paddingLeft='8px';node.append(title);
+    const place=[p.admin1,p.country].filter(Boolean).join(', ');
+    const desc=document.createElement('span');
+    desc.textContent = p.tier==='capital' ? 'National capital of '+p.country : p.tier==='province' ? 'Capital of '+place : place;
+    node.append(desc);return node;
+  }
+  function addCities(data) {
+    for (const feature of data.features) {
+      const cfg=CITY_TIERS[feature.properties.tier];
+      if (!cfg) continue;
+      const [lon,lat]=feature.geometry.coordinates;
+      const marker=L.circleMarker([lat,lon],{radius:cfg.radius,weight:cfg.weight,color:cfg.stroke,fillColor:cfg.fill,fillOpacity:cfg.fillOpacity});
+      marker.bindTooltip(cityTooltip(feature),{className:'territory-tooltip',direction:'top',offset:[0,-cfg.radius]});
+      cityTierGroups[feature.properties.tier].addLayer(marker);
+    }
+  }
   for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) on(id,'onchange', e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);});
+  on('cities','onchange', e=>{citiesEnabled=e.target.checked;updateCityTiers();});
   document.querySelectorAll('input[name=mapmode]').forEach(radio=>radio.onchange=e=>{
     if(!e.target.checked)return;
     mapMode=e.target.value;
@@ -185,11 +226,18 @@
   }
   async function init() {
     try {
-      const [land,lakes,riverData,territories,samples]=(await Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson')))).map(unwrapFeatures);
+      // Cities are Point features -- no ring to keep continuous across the
+      // antimeridian -- so they skip unwrapFeatures and are fetched
+      // alongside, not through, the polygon/line batch that needs it.
+      const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
+        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'))).then(fcs=>fcs.map(unwrapFeatures)),
+        read('data/cities.geojson'),
+      ]);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
       addFeatures(territories);addFeatures(samples,true);
+      addCities(cities);updateCityTiers();
       if(editMode) await enableEditor();
     } catch(error) { showStatus('Part of the atlas could not load. Reload to try again.');console.error(error); }
   }

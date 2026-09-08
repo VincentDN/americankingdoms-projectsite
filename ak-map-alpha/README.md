@@ -92,6 +92,11 @@ No DNS changes or production deployment have been made by this groundwork change
   same upstream directory and licensing as above. Downloaded 7 September 2026 and used
   only for the real-world state-line placeholders described below; the fictional
   canon and provisional layers are unaffected.
+- Natural Earth 1:10m populated places (`ne_10m_populated_places.geojson`), same
+  upstream directory and licensing as above. Downloaded 8 September 2026, filtered
+  to `ISO_A2` `US`/`CA`/`MX` before committing (see "City markers" below), and used
+  only for the placeholder city layer; the fictional canon and provisional layers
+  are unaffected.
 - Existing American Kingdoms logo, colours, Cinzel / Ysabeau / EB Garamond typography.
   Fonts are requested from Google Fonts, with local serif/sans fallbacks.
 
@@ -278,3 +283,43 @@ Two changes fix this:
   before the map data ever loads. Core structural lookups (`#map`,
   `#panel`, `#details`, and the like) are unchanged, since if those are
   missing the page has bigger problems than a script error.
+
+## City markers (8 September 2026)
+
+The atlas now plots national capitals, state/province/admin-1 capitals,
+and two population bands of other cities across the US, Canada and
+Mexico -- the same real-world-placeholder approach as the real-state
+border placeholders: locations and names are real, standing in until
+in-world capitals and settlements are canon.
+
+`scripts/extract-cities.py` reads `sources/natural-earth-populated-places.geojson`
+(Natural Earth 1:10m populated places, pre-filtered to the three
+countries) and writes `data/cities.geojson`, a `FeatureCollection` of
+`Point`s. Each feature's `properties` are `name`, `tier`
+(`capital`/`province`/`metro`/`city`), `country`, `admin1` (state/province
+name, `null` for national capitals) and `population`. `tier` comes from
+Natural Earth's `FEATURECLA` (`Admin-0 capital`, `Admin-1 capital`) for
+the two capital tiers; the remaining `Populated place` records split into
+`metro` (population >= 500,000) and `city` (150,000-500,000) -- smaller
+places are left out to keep the closest zoom readable rather than solid
+with dots. Re-run the script after editing the thresholds or source data;
+it's idempotent and safe to run repeatedly.
+
+In `atlas.js`, `CITY_TIERS` maps each tier to a `minZoom`, a marker radius
+and a stroke/fill colour -- capitals are a larger gold dot, the other
+three tiers step down in size through the ink/parchment palette. Each
+tier lives in its own `L.layerGroup` (`cityTierGroups`), added to or
+removed from the map as `map.getZoom()` crosses that tier's `minZoom` (on
+`zoomend`, via `updateCityTiers()`) -- national capitals always show,
+state/province capitals appear at the default zoom, and the two city
+bands reveal only once zoomed in further. This add/remove-the-whole-group
+approach (the same one already used for the countries/regions/rivers
+checkboxes) keeps the DOM light when zoomed out rather than creating all
+~330 markers up front and toggling per-marker visibility. The "Cities"
+checkbox in the map key (`#cities`) turns the whole layer off regardless
+of zoom. Markers use Leaflet's default marker pane, which already renders
+above the `countries`/`regions` panes, so no new pane was needed. Hovering
+a marker opens a tooltip reusing the `.territory-tooltip` styling (name,
+then "National capital of `<country>`", "Capital of `<admin1>`,
+`<country>`", or just "`<admin1>`, `<country>`" for the two city bands);
+cities aren't otherwise selectable and don't open the details panel.
