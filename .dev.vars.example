@@ -1,6 +1,12 @@
 # Copy to .dev.vars for local `wrangler pages dev` testing (never commit .dev.vars).
 # In production these are set as encrypted secrets on the Cloudflare Pages project:
 # Pages project -> Settings -> Environment variables.
+#
+# As of Jan 1, 2026, Shopify custom apps (built via the Dev Dashboard) no longer
+# hand out a permanent shpat_ token. Use the app's Client ID and Client Secret
+# from its API credentials page instead; the Function exchanges them for a
+# short-lived access token on each request.
 
 SHOPIFY_STORE_DOMAIN=kaisercatcinema.myshopify.com
-SHOPIFY_ADMIN_API_TOKEN=shpat_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SHOPIFY_CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+SHOPIFY_CLIENT_SECRET=shpss_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx

@@ -3,10 +3,17 @@
 // via the Shopify Admin GraphQL API, so the newsletter form can live on this static site
 // while KCC keeps sending from Shopify.
 //
+// Since January 1, 2026 Shopify custom apps (created via the Dev Dashboard) no longer
+// hand out a permanent Admin API token. Instead we exchange a Client ID + Client Secret
+// for a short-lived (~24h) access token on every request, via the client_credentials
+// OAuth grant.
+//
 // Required Pages project environment variables (set as secrets, not committed):
 //   SHOPIFY_STORE_DOMAIN     e.g. "kaisercatcinema.myshopify.com"
-//   SHOPIFY_ADMIN_API_TOKEN  Admin API access token from a custom app with the
-//                            `write_customers` and `read_customers` scopes.
+//   SHOPIFY_CLIENT_ID        Client ID from the app's API credentials page
+//   SHOPIFY_CLIENT_SECRET    Client secret from the app's API credentials page
+//                            (the app needs the `write_customers` and `read_customers`
+//                            Admin API scopes configured)
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SHOPIFY_API_VERSION = '2024-10';
@@ -42,17 +49,40 @@ export async function onRequestPost({ request, env }) {
   }
 
   const shop = env.SHOPIFY_STORE_DOMAIN;
-  const token = env.SHOPIFY_ADMIN_API_TOKEN;
-  if (!shop || !token) {
+  const clientId = env.SHOPIFY_CLIENT_ID;
+  const clientSecret = env.SHOPIFY_CLIENT_SECRET;
+  if (!shop || !clientId || !clientSecret) {
     return jsonResponse({ ok: false, error: 'Newsletter signup is not configured yet.' }, 500);
   }
 
   try {
+    const token = await getAccessToken(shop, clientId, clientSecret);
     await subscribeCustomer(shop, token, email);
     return jsonResponse({ ok: true });
   } catch (err) {
     return jsonResponse({ ok: false, error: 'Something went wrong. Please try again later.' }, 502);
   }
+}
+
+// Client credentials grant: exchange the app's Client ID + Secret for a
+// short-lived Admin API access token. Tokens are valid ~24h; at this
+// signup volume it's simplest to fetch a fresh one on every request
+// rather than cache it.
+async function getAccessToken(shop, clientId, clientSecret) {
+  const res = await fetch(`https://${shop}/admin/oauth/access_token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok || !data.access_token) {
+    throw new Error('Failed to obtain Shopify access token: ' + JSON.stringify(data));
+  }
+  return data.access_token;
 }
 
 async function shopifyGraphQL(shop, token, query, variables) {
