@@ -1,0 +1,6 @@
+# Copy to .dev.vars for local `wrangler pages dev` testing (never commit .dev.vars).
+# In production these are set as encrypted secrets on the Cloudflare Pages project:
+# Pages project -> Settings -> Environment variables.
+
+SHOPIFY_STORE_DOMAIN=kaisercatcinema.myshopify.com
+SHOPIFY_ADMIN_API_TOKEN=shpat_xxxxxxxxxxxxxxxxxxxxxxxxxxxx

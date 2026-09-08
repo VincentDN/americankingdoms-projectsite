@@ -596,6 +596,19 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 .newsletter-close span{display:block;line-height:1;transform:translateY(-.04em)}
 .newsletter-close:hover,.newsletter-close:focus-visible{background:var(--red,#7c2924);outline:2px solid var(--gold,#c69b49);outline-offset:2px}
 body.newsletter-open{overflow:hidden}
+
+/* ============================ NEWSLETTER FORM ============================ */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.newsletter-form-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;max-width:26rem;margin:0 auto}
+.newsletter-form-row input[type=email]{flex:1;min-width:12rem;padding:.92em 1.1em;border:1px solid rgba(200,162,74,.4);background:var(--cream);color:var(--parch-ink);font:400 1rem/1.4 var(--sans)}
+.newsletter-form-row input[type=email]::placeholder{color:var(--parch-ink-2)}
+.newsletter-form .btn{flex:none}
+.newsletter-form button:disabled{opacity:.6;cursor:default}
+.newsletter-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.newsletter-error{margin:.9rem 0 0;color:#e2a5a5;font-size:.92rem}
+.newsletter-success-title{margin:0 0 .4rem;color:var(--cream);font-family:var(--display);font-size:1.4rem}
+.newsletter-success-copy{margin:0;color:var(--cream-dim);font-size:.98rem}
+@media(max-width:560px){.newsletter-form-row{flex-direction:column}}
 @media (max-width:720px){
   .newsletter-modal{padding:.75rem}
   .newsletter-card{grid-template-columns:1fr;max-height:calc(100vh - 1.5rem)}
@@ -1123,10 +1136,21 @@ body.newsletter-open{overflow:hidden}
     </figure>
 
     <div style="text-align:center;max-width:64ch;margin:0 auto">
-      <p class="lead" style="margin-inline:auto">American Kingdoms is built by the <a href="https://kaisercatcinema.com/about" style="color:var(--gold)">Kaiser Cat Collective</a>, an international team of alt-history worldbuilders, artists and developers. Connect with us across every social channel, or sign up for our newsletter at <a href="https://kaisercatcinema.com/newsletter" style="color:var(--gold)">kaisercatcinema.com</a>: a monthly digest called <em>State of the Cinema</em>, with behind-the-scenes content, project updates, and exclusive webshop sales.</p>
+      <p class="lead" style="margin-inline:auto">American Kingdoms is built by the <a href="https://kaisercatcinema.com/about" style="color:var(--gold)">Kaiser Cat Collective</a>, an international team of alt-history worldbuilders, artists and developers. Connect with us across every social channel, or join our newsletter below: a monthly digest called <em>State of the Cinema</em>, with behind-the-scenes content, project updates, and exclusive webshop sales.</p>
+
+      <div class="newsletter-widget" id="newsletterWidget" style="max-width:26rem;margin:1.8rem auto">
+        <form class="newsletter-form" id="newsletterForm" novalidate>
+          <div class="newsletter-form-row">
+            <label class="sr-only" for="newsletterEmail">Email address</label>
+            <input type="email" id="newsletterEmail" name="email" placeholder="Your email" autocomplete="email" required>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+          <input type="text" name="company" class="newsletter-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="newsletter-error" role="alert" hidden></p>
+        </form>
+      </div>
 
       <div class="connect-actions" style="justify-content:center">
-        <a class="btn btn-primary" href="https://kaisercatcinema.com/newsletter">Sign up to the KCC Newsletter</a>
         <a class="btn btn-ghost" href="https://kaisercatcinema.com/discord">Join the Discord</a>
       </div>
 
@@ -1283,6 +1307,46 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
   const join=document.getElementById('newsletterJoin');
   if(join) join.addEventListener('click',()=>{try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}});
   window.setTimeout(open,40000);
+})();
+
+/* Newsletter signup: posts to /api/subscribe (a Cloudflare Pages Function),
+   which adds the email to Shopify Mail via the Shopify Admin API. */
+(()=>{
+  const form=document.getElementById('newsletterForm');
+  if(!form) return;
+  const widget=document.getElementById('newsletterWidget');
+  const emailInput=document.getElementById('newsletterEmail');
+  const honeypot=form.querySelector('.newsletter-hp');
+  const errorMsg=form.querySelector('.newsletter-error');
+  const submitBtn=form.querySelector('button[type=submit]');
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(honeypot.value) return;
+    const email=emailInput.value.trim();
+    if(!email) return;
+    submitBtn.disabled=true;
+    errorMsg.hidden=true;
+    const originalLabel=submitBtn.textContent;
+    submitBtn.textContent='Signing Up…';
+    try{
+      const res=await fetch('/api/subscribe',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,company:honeypot.value})});
+      const data=await res.json().catch(()=>({}));
+      if(res.ok&&data.ok){
+        widget.innerHTML='<div class="newsletter-success"><p class="newsletter-success-title">Thanks for subscribing!</p><p class="newsletter-success-copy">You will receive an email confirmation shortly.</p></div>';
+      }else{
+        errorMsg.textContent=data.error||'Something went wrong. Please try again.';
+        errorMsg.hidden=false;
+      }
+    }catch(err){
+      errorMsg.textContent='Something went wrong. Please try again.';
+      errorMsg.hidden=false;
+    }finally{
+      if(document.body.contains(submitBtn)){
+        submitBtn.disabled=false;
+        submitBtn.textContent=originalLabel;
+      }
+    }
+  });
 })();
 </script>
 <script type="application/ld+json">
