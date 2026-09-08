@@ -4,7 +4,8 @@
   const $ = id => document.getElementById(id);
   const editMode = new URLSearchParams(location.search).get('edit') === '1';
   const status = $('status');
-  if (!window.L) { status.textContent = 'The map could not load. Please reload the page.'; return; }
+  const showStatus = text => { status.hidden = false; status.textContent = text; };
+  if (!window.L) { showStatus('The map could not load. Please reload the page.'); return; }
   // Azimuthal equidistant, centred on the North Pole rather than Leaflet's
   // default Web Mercator. There is no tile layer here (every layer is
   // vector GeoJSON), so a custom CRS only has to get project/unproject
@@ -38,7 +39,7 @@
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
   const home = () => map.setView([48,-100], 4, {animate:false});
-  home(); $('reset').onclick = home;
+  home();
   let panelMode = 'key';
   function setPanel(open, mode = panelMode) {
     panelMode = mode;
@@ -70,15 +71,18 @@
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
   const safeURL = value => { try { const url=new URL(value); return url.protocol==='https:' ? url.href : null; } catch { return null; } };
   const baseColorOf = feature => /^#[0-9a-f]{6}$/i.test(feature.properties.color) ? feature.properties.color : '#a59670';
-  // Realms view recolours the map by alliance rather than by individual
-  // territory: the 13 rebelling colonies (properties.alliance === 'union')
-  // shade from pale to deep blue north-to-south, the crown they're
-  // rebelling against (alliance === 'crown') gets a single red, and every
-  // other provisional (non-canon) territory fades to near-parchment so the
-  // alliances read clearly at a glance. Canon territories outside either
-  // alliance (Florida, Smokey March, the Sidennic League) keep their own
-  // colours in both views.
-  let realmsView = true;
+  // Map mode recolours canon territories two ways: Realms groups the 13
+  // rebelling colonies (properties.alliance === 'union') into a
+  // north-to-south blue shade and the crown they're rebelling against
+  // (alliance === 'crown') into a single red; Cultures shows each
+  // territory's own reference colour (baseColorOf), which is how heritage
+  // and origin were already encoded when the map was first traced. Canon
+  // territories outside both alliances (Florida, Smokey March, the
+  // Sidennic League) always show their own colour, since neither mode has
+  // anything else to say about them. Provisional (non-canon) territories
+  // are always shown almost blank, regardless of mode, so the lore-backed
+  // canon territories stand out.
+  let mapMode = 'realms';
   const hslToHex = (h,s,l) => {
     s/=100; l/=100;
     const k = n => (n + h/30) % 12;
@@ -94,21 +98,23 @@
     return hslToHex(212, 62, 70 - t * 42);
   };
   const CROWN_SHADE = hslToHex(354, 58, 34);
-  const PROVISIONAL_PALE = '#efe6cf';
+  const PROVISIONAL_PALE = '#f0e6cd';
   const isProvisional = feature => !feature.properties.canon;
   const colorOf = feature => {
-    if (realmsView) {
+    if (isProvisional(feature)) return PROVISIONAL_PALE;
+    if (mapMode === 'realms') {
       const alliance = feature.properties.alliance;
       if (alliance === 'union') return unionShade(feature.properties.name);
       if (alliance === 'crown') return CROWN_SHADE;
-      if (isProvisional(feature)) return PROVISIONAL_PALE;
     }
     return baseColorOf(feature);
   };
   const borderOf = feature => '#' + colorOf(feature).slice(1).match(/../g).map(c=>Math.round(parseInt(c,16)*.58).toString(16).padStart(2,'0')).join('');
   const style = feature => {
-    const canon = feature.properties.canon, pale = realmsView && isProvisional(feature) && !feature.properties.alliance;
-    return {color:borderOf(feature),weight:canon?1.7:(pale?.6:1),fillColor:colorOf(feature),fillOpacity:canon?.72:(pale?.25:.48),dashArray:null};
+    const canon = feature.properties.canon;
+    return canon
+      ? {color:borderOf(feature),weight:1.7,opacity:1,fillColor:colorOf(feature),fillOpacity:.72,dashArray:null}
+      : {color:borderOf(feature),weight:.4,opacity:.35,fillColor:colorOf(feature),fillOpacity:.1,dashArray:null};
   };
   // Hover and keyboard focus each open a tooltip independently, so crossing
   // straight from one territory into another (a shared border, or tabbing
@@ -132,7 +138,7 @@
   function wire(layer,feature,sample=false) {
     layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';layer.setStyle(style(feature));
     layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});
-    layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,fillOpacity:.9});});
+    layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,opacity:1,fillOpacity:.9});});
     layer.on('mouseout',()=>layer.setStyle(style(layer.feature)));
     layer.on('click',()=>select(layer));
     layer.on('add',()=>{const path=layer.getElement();if(path){path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',layer.feature.properties.name);path.onfocus=()=>{closeOtherTooltips(layer);layer.openTooltip();};path.onblur=()=>layer.closeTooltip();path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(layer);}};}});
@@ -142,26 +148,12 @@
   function addFeatures(data,sample=false) {
     L.geoJSON(data,{pane:'countries',pmIgnore:sample,onEachFeature:(f,l)=>wire(l,f,sample)});
   }
-  function refreshList() {
-    const list=$('territory-list');list.replaceChildren();
-    const provisional=document.createElement('details'),summary=document.createElement('summary');
-    summary.textContent='Provisional territories';provisional.append(summary);
-    Object.values(groups).forEach(group=>{if(map.hasLayer(group))group.eachLayer(layer=>{
-      const button=document.createElement('button'),swatch=document.createElement('span');
-      swatch.className='territory-swatch';swatch.style.background=colorOf(layer.feature);swatch.setAttribute('aria-hidden','true');
-      button.append(swatch,document.createTextNode(layer.feature.properties.name));
-      button.onclick=()=>{map.fitBounds(layer.getBounds(),{maxZoom:6,animate:false,padding:[30,30]});select(layer);};
-      (layer.feature.properties.canon?list:provisional).append(button);
-    });});
-    if(provisional.children.length>1)list.append(provisional);
-  }
-
-  for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) $(''+id).onchange=e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);refreshList();};
-  $('realms').onchange=e=>{
-    realmsView=e.target.checked;
+  for(const [id,group] of [['countries',groups.country],['regions',groups.region],['samples',groups.sample],['rivers',rivers]]) $(''+id).onchange=e=>{if(e.target.checked)group.addTo(map);else map.removeLayer(group);};
+  document.querySelectorAll('input[name=mapmode]').forEach(radio=>radio.onchange=e=>{
+    if(!e.target.checked)return;
+    mapMode=e.target.value;
     Object.values(groups).forEach(group=>group.eachLayer(layer=>{layer.setStyle(style(layer.feature));layer.setTooltipContent(tooltip(layer.feature));}));
-    refreshList();
-  };
+  });
   async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path);return response.json();}
   // A ring/line whose raw longitudes cross +/-180 (Alaska, the Aleutians)
   // would jump ~360 degrees between two adjacent points once projected,
@@ -190,10 +182,9 @@
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
-      addFeatures(territories);addFeatures(samples,true);refreshList();
-      status.textContent='East Coast realms follow the canonical reference. Interior borders follow rivers and inferred mountain divides; their names and lore remain provisional.';
+      addFeatures(territories);addFeatures(samples,true);
       if(editMode) await enableEditor();
-    } catch(error) { status.textContent='Part of the atlas could not load. Reload to try again.';console.error(error); }
+    } catch(error) { showStatus('Part of the atlas could not load. Reload to try again.');console.error(error); }
   }
   async function enableEditor() {
     const css=document.createElement('link');css.rel='stylesheet';css.href='vendor/geoman.css';document.head.append(css);
@@ -205,13 +196,13 @@
     $('details').hidden = !selected;
     map.pm.addControls({position:'topright',drawMarker:false,drawCircleMarker:false,drawPolyline:false,drawRectangle:false,drawCircle:false,drawText:false,cutPolygon:false,rotateMode:false,dragMode:false});
     map.pm.setGlobalOptions({snappable:true,allowSelfIntersection:false});
-    map.on('pm:create',e=>{const f=e.layer.toGeoJSON();f.properties={id:'territory-'+Date.now(),name:'New territory',kind:'country',color:'#b31f34',summary:'',wiki:'',canon:false};wire(e.layer,f);select(e.layer);refreshList();markDirty();});
-    map.on('pm:remove',e=>{Object.values(groups).forEach(g=>g.removeLayer(e.layer));if(selected===e.layer){selected=null;$('details').hidden=true;}refreshList();markDirty();});
+    map.on('pm:create',e=>{const f=e.layer.toGeoJSON();f.properties={id:'territory-'+Date.now(),name:'New territory',kind:'country',color:'#b31f34',summary:'',wiki:'',canon:false};wire(e.layer,f);select(e.layer);markDirty();});
+    map.on('pm:remove',e=>{Object.values(groups).forEach(g=>g.removeLayer(e.layer));if(selected===e.layer){selected=null;$('details').hidden=true;}markDirty();});
     $('edit-form').onsubmit=e=>{e.preventDefault();if(!selected||selected.sample){$('editor-status').textContent='Draw or select a country or region first.';return;}
       const oldKind=selected.feature.properties.kind;
       Object.assign(selected.feature.properties,{name:$('edit-name').value.trim(),kind:$('edit-kind').value,color:$('edit-color').value,summary:$('edit-description').value,wiki:safeURL($('edit-wiki').value)||''});
       if(oldKind!==selected.feature.properties.kind){groups[oldKind].removeLayer(selected);groups[selected.feature.properties.kind].addLayer(selected);}
-      selected.setStyle(style(selected.feature));selected.setTooltipContent(tooltip(selected.feature));selected.getElement()?.setAttribute('aria-label',selected.feature.properties.name);select(selected);refreshList();markDirty();
+      selected.setStyle(style(selected.feature));selected.setTooltipContent(tooltip(selected.feature));selected.getElement()?.setAttribute('aria-label',selected.feature.properties.name);select(selected);markDirty();
     };
     $('export').onclick=()=>{const features=[];for(const kind of ['country','region'])groups[kind].eachLayer(l=>features.push(l.toGeoJSON()));const blob=new Blob([JSON.stringify({type:'FeatureCollection',features},null,2)],{type:'application/geo+json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='territories.geojson';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);dirty=false;$('editor-status').textContent='Export requested. Keep the downloaded file; publishing is a separate step.';};
   }

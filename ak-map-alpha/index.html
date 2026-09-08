@@ -20,9 +20,9 @@
     <a href="https://american-kingdoms.com/" aria-label="American Kingdoms home"><img src="assets/ak-logo.svg" alt="American Kingdoms"></a>
     <div class="atlas-title">
       <h1>The New World in 1377 A.D.</h1>
-      <p>13 dukes rise against their Anglo-Saxon overlords — Start of the American Revolutionary War</p>
+      <p>13 dukes rise against their Anglo-Saxon overlords: The American Revolutionary War has begun</p>
     </div>
-    <nav aria-label="Atlas controls"><button id="reset" type="button">Full map</button><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button></nav>
+    <nav aria-label="Atlas controls"><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button></nav>
   </header>
   <main>
     <div id="map" aria-label="Interactive North America map. Use arrow keys to pan and plus or minus to zoom."></div>
@@ -32,8 +32,10 @@
       <section id="details" hidden aria-live="polite"><img id="detail-flag" hidden alt=""><h2 id="detail-name"></h2><p id="detail-author" hidden></p><p id="detail-description"></p><a id="detail-link" hidden>Read the Wiki Article <span aria-hidden="true">↗</span></a></section>
       <div id="key-content">
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
-      <fieldset><legend>Colour scheme</legend>
-        <label><input id="realms" type="checkbox" checked> Realms (colour by alliance)</label>
+      <fieldset><legend>Map mode</legend>
+        <p class="mode-hint">Sort territories via their…</p>
+        <label><input type="radio" name="mapmode" value="realms" checked> Realms <span class="mode-desc">(Alliances and Federations)</span></label>
+        <label><input type="radio" name="mapmode" value="cultures"> Cultures <span class="mode-desc">(Heritage and Origins)</span></label>
       </fieldset>
       <fieldset><legend>Show on the map</legend>
         <label><input id="countries" type="checkbox" checked> Canonical states</label>
@@ -41,8 +43,7 @@
         <label><input id="rivers" type="checkbox" checked> Rivers</label>
         <label hidden><input id="samples" type="checkbox"> Sample territory</label>
       </fieldset>
-      <p id="status" role="status">Unrolling the atlas…</p>
-      <div id="territory-list" aria-label="Territories"></div>
+      <p id="status" role="status" hidden></p>
       <a class="wiki" href="https://wiki.american-kingdoms.com/">American Kingdoms Wiki</a>
       </div>
       <section id="editor" hidden>
