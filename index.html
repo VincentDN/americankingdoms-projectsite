@@ -602,6 +602,7 @@ body.newsletter-open{overflow:hidden}
 /* ============================ NEWSLETTER FORM ============================ */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 .newsletter-form-row{display:flex;flex-wrap:wrap;justify-content:center;gap:.7rem;max-width:26rem;margin:0 auto}
+.newsletter-copy .newsletter-form-row{justify-content:flex-start;margin:0}
 .newsletter-form-row input[type=email]{flex:1;min-width:12rem;padding:.92em 1.1em;border:1px solid rgba(200,162,74,.4);background:var(--cream);color:var(--parch-ink);font:400 1rem/1.4 var(--sans)}
 .newsletter-form-row input[type=email]::placeholder{color:var(--parch-ink-2)}
 .newsletter-form .btn{flex:none}
@@ -1203,7 +1204,17 @@ body.newsletter-open{overflow:hidden}
     <div class="newsletter-copy">
       <h2 id="newsletterTitle">Support American Kingdoms and join the newsletter!</h2>
       <p id="newsletterDescription">If you’d like to support the project, join the Kaiser Cat Collective newsletter and get access to our monthly newsletter, hidden sales, and more.</p>
-      <a class="btn btn-primary" id="newsletterJoin" href="https://kaisercatcinema.com/newsletter">Join the KCC Newsletter</a>
+      <div class="newsletter-widget">
+        <form class="newsletter-form" novalidate>
+          <div class="newsletter-form-row">
+            <label class="sr-only" for="newsletterModalEmail">Email address</label>
+            <input type="email" id="newsletterModalEmail" name="email" placeholder="Your email" autocomplete="email" required>
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+          </div>
+          <input type="text" name="company" class="newsletter-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <p class="newsletter-error" role="alert" hidden></p>
+        </form>
+      </div>
     </div>
   </div>
 </div>
@@ -1305,8 +1316,6 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
   };
 
   modal.querySelectorAll('[data-newsletter-close]').forEach(button=>button.addEventListener('click',close));
-  const join=document.getElementById('newsletterJoin');
-  if(join) join.addEventListener('click',()=>{try{localStorage.setItem(storageKey,String(Date.now()))}catch(e){}});
 
   // Footer eagle: a quiet manual trigger, always available regardless of
   // whether the timed popup below was already dismissed.
@@ -1319,12 +1328,11 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
 })();
 
 /* Newsletter signup: posts to /api/subscribe (a Cloudflare Pages Function),
-   which adds the email to Shopify Mail via the Shopify Admin API. */
-(()=>{
-  const form=document.getElementById('newsletterForm');
-  if(!form) return;
-  const widget=document.getElementById('newsletterWidget');
-  const emailInput=document.getElementById('newsletterEmail');
+   which adds the email to Shopify Mail via the Shopify Admin API. Wires up
+   every .newsletter-form on the page (the Connect section and the modal). */
+document.querySelectorAll('.newsletter-form').forEach(form=>{
+  const widget=form.closest('.newsletter-widget');
+  const emailInput=form.querySelector('input[type=email]');
   const honeypot=form.querySelector('.newsletter-hp');
   const errorMsg=form.querySelector('.newsletter-error');
   const submitBtn=form.querySelector('button[type=submit]');
@@ -1342,6 +1350,7 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
       const data=await res.json().catch(()=>({}));
       if(res.ok&&data.ok){
         widget.innerHTML='<div class="newsletter-success"><p class="newsletter-success-title">Thanks for subscribing!</p><p class="newsletter-success-copy">You will receive an email confirmation shortly.</p></div>';
+        try{localStorage.setItem('ak-newsletter-dismissed',String(Date.now()))}catch(err){}
       }else{
         errorMsg.textContent=data.error||'Something went wrong. Please try again.';
         errorMsg.hidden=false;
@@ -1356,7 +1365,7 @@ initCarousel('shortsTrack','shortsPrev','shortsNext','.short-card');
       }
     }
   });
-})();
+});
 </script>
 <script type="application/ld+json">
 {
