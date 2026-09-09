@@ -1,5 +1,9 @@
 # American Kingdoms — Changelog
 
+## 1.24.0 — 2026-09-09
+- Discover More now has six cards: moved Interactive World Map first and re-cropped its preview tighter on the thirteen East Coast colonies, split Dev Diaries & Newsletter into a standalone Dev Diaries card and a new State of the Cinema Newsletter card, and added a new Discord Community card.
+- Added a `.ex-photo` filter so a real photograph (used for the new Newsletter card) reads in the same warm, desaturated tone as the section's illustrated cards instead of clashing in full colour.
+
 ## 1.23.1 — 2026-09-09
 - Added a root `_redirects` file so the old `/ak-map-alpha` links 301 to `/medieval-america-map/`.
 

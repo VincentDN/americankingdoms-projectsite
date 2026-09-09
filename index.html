@@ -4,7 +4,7 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.23.1
+  VERSION : 1.24.0
   BUILD   : 2026-09-09
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
@@ -113,6 +113,10 @@
            and dropped "Alpha" from its nav and Discover More labels.
     1.23.1 Added a _redirects file so old /ak-map-alpha links 301 to the
            renamed atlas path.
+    1.24.0 Discover More is now six cards: World Map moved first with a
+           tighter East Coast crop, Dev Diaries & Newsletter split into
+           standalone Dev Diaries and Newsletter cards, plus a new Discord
+           Community card.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -123,7 +127,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" href="assets/favicon.png">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.23.1">
+<meta name="version" content="1.24.0">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -424,6 +428,7 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .ex-card{border:1px solid rgba(90,74,56,.3);overflow:hidden;background:#f4ecda;display:flex;flex-direction:column}
 .ex-card .ex-img{aspect-ratio:16/9;overflow:hidden}
 .ex-card .ex-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(.1)}
+.ex-card .ex-img img.ex-photo{filter:grayscale(.85) sepia(.2) contrast(1.05)}
 .ex-body{padding:1.6rem 1.6rem 1.8rem;display:flex;flex-direction:column;flex:1}
 .ex-body h3{font-size:1.28rem;margin-bottom:.6rem}
 .ex-body p{font-size:.98rem;color:var(--parch-ink-2);margin-bottom:1.3rem}
@@ -1112,6 +1117,14 @@ body.newsletter-open{overflow:hidden}
     <div class="section-head reveal"><h2>Discover more American Kingdoms:</h2></div>
     <div class="explore-grid">
       <article class="ex-card reveal">
+        <div class="ex-img"><img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., focused on the thirteen East Coast colonies coloured by realm" loading="lazy"></div>
+        <div class="ex-body">
+          <h3>Interactive World Map</h3>
+          <p>Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between realms and cultures, and read up on each faction straight from the atlas.</p>
+          <a class="btn btn-dark" href="/medieval-america-map/">Explore the Map</a>
+        </div>
+      </article>
+      <article class="ex-card reveal">
         <div class="ex-img"><img src="assets/editorial/explore-wiki.webp" alt="Crusader and Native knights clash during the Siege of Mount Rushmore" loading="lazy"></div>
         <div class="ex-body">
           <h3>American Kingdoms Wiki</h3>
@@ -1130,17 +1143,25 @@ body.newsletter-open{overflow:hidden}
       <article class="ex-card reveal">
         <div class="ex-img"><img src="assets/editorial/explore-dev-diaries.webp" alt="American Kingdoms development storyboards and concept sketches" loading="lazy"></div>
         <div class="ex-body">
-          <h3>Dev Diaries &amp; Newsletter</h3>
-          <p>KCC founder <a href="https://kaisercatcinema.com/pages/about-vincent">Vincent De Nil</a> builds the world of American Kingdoms in public through his dev diaries and worldbuilding posts. Follow the creative process and receive new entries through the KCC newsletter.</p>
-          <a class="btn btn-dark" href="https://kaisercatcinema.com/newsletter">Join the Newsletter</a>
+          <h3>Dev Diaries</h3>
+          <p>KCC founder <a href="https://kaisercatcinema.com/pages/about-vincent">Vincent De Nil</a> builds the world of American Kingdoms in public through his dev diaries and worldbuilding posts, sharing the creative process behind every faction and territory.</p>
+          <a class="btn btn-dark" href="https://kaisercatcinema.com/blogs/dev-diaries">Read the Dev Diaries</a>
         </div>
       </article>
       <article class="ex-card reveal">
-        <div class="ex-img"><img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., with the thirteen colonies coloured by realm" loading="lazy"></div>
+        <div class="ex-img"><img src="assets/tavern.jpg" alt="American Kingdoms characters gathered around a tavern table, laughing and playing cards" loading="lazy"></div>
         <div class="ex-body">
-          <h3>Interactive World Map</h3>
-          <p>Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between realms and cultures, and read up on each faction straight from the atlas.</p>
-          <a class="btn btn-dark" href="/medieval-america-map/">Explore the Map</a>
+          <h3>Discord Community</h3>
+          <p>Chat with fellow worldbuilders in real time, share your own fiefdoms and characters, and get an early look at new lore and artwork alongside the rest of the American Kingdoms community.</p>
+          <a class="btn btn-dark" href="https://kaisercatcinema.com/discord">Join the Discord</a>
+        </div>
+      </article>
+      <article class="ex-card reveal">
+        <div class="ex-img"><img class="ex-photo" src="assets/kcc-crew-photo.webp" alt="The Kaiser Cat Collective team gathered in front of a vintage truck" loading="lazy"></div>
+        <div class="ex-body">
+          <h3>State of the Cinema Newsletter</h3>
+          <p>A monthly digest from the Kaiser Cat Collective: dev diary highlights, behind-the-scenes updates and exclusive webshop sales, delivered straight to your inbox.</p>
+          <a class="btn btn-dark" href="https://kaisercatcinema.com/connect">Join the Newsletter</a>
         </div>
       </article>
     </div>
