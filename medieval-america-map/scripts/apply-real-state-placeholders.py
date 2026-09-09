@@ -23,7 +23,7 @@ from shapely.geometry import shape, mapping
 from shapely.ops import unary_union, transform
 from shapely.strtree import STRtree
 
-ROOT = Path('ak-map-alpha')
+ROOT = Path('medieval-america-map')
 to = Transformer.from_crs(4326, '+proj=laea +lat_0=45 +lon_0=-100 +datum=WGS84 +units=m', always_xy=True).transform
 back = Transformer.from_crs('+proj=laea +lat_0=45 +lon_0=-100 +datum=WGS84 +units=m', 4326, always_xy=True).transform
 

@@ -8,8 +8,8 @@ by atlas.js to show or hide them by zoom level. Real-world names and
 locations are a visual placeholder, the same way the real-state border
 placeholders are -- not in-world canon.
 
-Usage: python3 ak-map-alpha/scripts/extract-cities.py
-Input:  ak-map-alpha/sources/natural-earth-populated-places.geojson -- the US,
+Usage: python3 medieval-america-map/scripts/extract-cities.py
+Input:  medieval-america-map/sources/natural-earth-populated-places.geojson -- the US,
         Canada and Mexico features (ISO_A2 US/CA/MX) from Natural Earth 1:10m
         populated places (ne_10m_populated_places.geojson), downloaded from
         https://github.com/nvkelso/natural-earth-vector/tree/master/geojson
@@ -18,7 +18,7 @@ Input:  ak-map-alpha/sources/natural-earth-populated-places.geojson -- the US,
         file. Re-filter with e.g.
         `jq '.features |= map(select(.properties.ISO_A2 as $c | ["US","CA","MX"] | index($c)))'`
         if the full file is ever needed again.
-Output: ak-map-alpha/data/cities.geojson
+Output: medieval-america-map/data/cities.geojson
 """
 import json
 import pathlib

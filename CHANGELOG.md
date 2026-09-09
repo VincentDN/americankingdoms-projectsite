@@ -1,8 +1,13 @@
 # American Kingdoms — Changelog
 
+## 1.23.0 — 2026-09-09
+- Renamed the atlas from `ak-map-alpha/` to `medieval-america-map/`, updating its canonical/Open Graph URLs and every internal script path to match.
+- Dropped "Alpha" from the nav link and Discover More card labels; the on-page alpha banner is unchanged.
+- Restyled the atlas's text-selection highlight to match the main site's red instead of the browser default blue.
+
 ## 1.22.0 — 2026-09-09
 - Fixed the Patreon section so the backer character carousel appears above the copy on mobile instead of below it.
-- Added an Interactive World Map card to the Discover More section, linking to the atlas at `/ak-map-alpha/`.
+- Added an Interactive World Map card to the Discover More section, linking to the atlas at `/medieval-america-map/`.
 
 ## 1.21.1 — 2026-09-03
 - Removed the italic Making Of development-diary quotation from the poster section, retaining its Making Of button.

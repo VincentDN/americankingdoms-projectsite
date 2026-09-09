@@ -16,7 +16,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from pyproj import Transformer
-ROOT=Path('ak-map-alpha')
+ROOT=Path('medieval-america-map')
 merc=Transformer.from_crs(4326,3857,always_xy=True)
 back=Transformer.from_crs(3857,4326,always_xy=True)
 def warp(points):

@@ -1,15 +1,15 @@
 # American Kingdoms atlas groundwork
 
 Based on the existing project site's `main` at `f22b95f` (5 September 2026).
-This is a standalone static page under `ak-map-alpha/`; the landing page is unchanged.
+This is a standalone static page under `medieval-america-map/`; the landing page is unchanged.
 
 ## Open and edit
 
-Serve the repository with any static HTTP server and open `/ak-map-alpha/`.
-Open `/ak-map-alpha/?edit=1` to draw polygons and edit their vertices using Leaflet-Geoman.
+Serve the repository with any static HTTP server and open `/medieval-america-map/`.
+Open `/medieval-america-map/?edit=1` to draw polygons and edit their vertices using Leaflet-Geoman.
 Select a polygon to change its name, colour, country/region layer, description and wiki URL.
 Export before leaving: edits live only in the current tab, with an unload warning.
-Replace `ak-map-alpha/data/territories.geojson` with the exported file and commit to publish an update.
+Replace `medieval-america-map/data/territories.geojson` with the exported file and commit to publish an update.
 The editor does not write to the server and is not an authenticated admin system.
 The sample territory is hidden, excluded from exports, and explicitly non-canonical.
 The atlas now opens with coloured territories from Vincent's two supplied references.
@@ -53,7 +53,7 @@ reproduction script are preserved under `sources/` and `scripts/`.
 To regenerate, install the Python dependencies listed at the top of
 `scripts/trace-references.py`, download Natural Earth's
 `ne_50m_admin_0_countries.geojson` from the same upstream GeoJSON directory cited
-below, then run `python ak-map-alpha/scripts/trace-references.py /path/to/ne_50m_admin_0_countries.geojson`
+below, then run `python medieval-america-map/scripts/trace-references.py /path/to/ne_50m_admin_0_countries.geojson`
 from the repository root. This overwrites the generated map data; export and preserve
 any later hand edits first. Admin-0 geometry is used only to clip the physical extent
 to North America through Panama, not as the fictional political boundaries.
@@ -66,9 +66,9 @@ The physical base has no modern political borders or city labels.
 
 ## Hosting at map.american-kingdoms.com
 
-Deploy the **contents of `ak-map-alpha/`** as the root of a separate static hosting project.
+Deploy the **contents of `medieval-america-map/`** as the root of a separate static hosting project.
 No build command, API key, paid tile provider, or backend is required.
-Relative asset paths work both at `/ak-map-alpha/` and at the subdomain root.
+Relative asset paths work both at `/medieval-america-map/` and at the subdomain root.
 In that project's hosting dashboard, add `map.american-kingdoms.com` as its custom
 domain, then use the provider's exact DNS target and finish TLS verification.
 The repository does not establish which provider currently controls deployment or DNS;
@@ -116,13 +116,13 @@ drawing/editing/deletion, export-and-reload, and rendering at the subdomain root
 
 ## Cloudflare Pages live alpha
 
-The alpha is served at `/ak-map-alpha/` by the existing production Pages project
+The alpha is served at `/medieval-america-map/` by the existing production Pages project
 through its GitHub integration. Publication uses the existing `main` branch; no
 DNS change, separate Pages project or new domain is needed.
 
 ## Shared-border and interior-region update (7 September 2026)
 
-Run `python ak-map-alpha/scripts/refine-territories.py` after the initial trace
+Run `python medieval-america-map/scripts/refine-territories.py` after the initial trace
 to reproduce the current map. It uses the frozen 16-state canonical input in
 `sources/canonical-territories.geojson`, the existing physical land/lake mask,
 Natural Earth river courses and the inferred guide lines saved in
@@ -145,7 +145,7 @@ coverage, overlap, validity and lake exclusion before publication.
 
 ## Real-state placeholder borders (7 September 2026)
 
-Run `python ak-map-alpha/scripts/apply-real-state-placeholders.py` after
+Run `python medieval-america-map/scripts/apply-real-state-placeholders.py` after
 `refine-territories.py` to replace the interior river/mountain provisional
 regions, for every continental US state outside the 13 colonies and Florida,
 with a placeholder shaped like that state's real-world boundary. This is a
@@ -335,3 +335,20 @@ the earlier notes in this file about keeping `noindex` no longer apply.
 The details panel's "Purchase a flag on Flagmaker & Print" link was also
 pointed at the current `https://flagmaker-print.com/collections/alt-history-flags`
 collection URL (it previously used a stale `-kcc` suffixed URL).
+
+## Renamed to medieval-america-map, and selection colour (9 September 2026)
+
+The directory (and its served path) moved from `ak-map-alpha/` to
+`medieval-america-map/`, so the page is now published at
+`https://american-kingdoms.com/medieval-america-map/`; the `canonical` and
+`og:url` tags, the main site's nav link and its new Discover More card, and
+every script's `ROOT`/docstring path were updated to match. "Alpha" was
+dropped from every user-facing label this touched (the nav link now just
+reads "World Map"), but the `#alpha-banner` element and its "Map is
+currently in alpha state" text are unchanged -- the map is still alpha
+software, just no longer labelled that way in the URL or navigation.
+
+Text selection on the page defaulted to the browser's blue highlight since
+nothing here set `::selection`. `atlas.css` now styles it with the same
+`var(--red)` on cream (`#f5f1dc`) used by the main site's `::selection`
+rule, and its cache-busting query string was bumped to `atlas.css?v=7`.
