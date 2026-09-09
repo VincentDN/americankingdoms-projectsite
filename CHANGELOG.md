@@ -1,5 +1,9 @@
 # American Kingdoms — Changelog
 
+## 1.22.0 — 2026-09-09
+- Fixed the Patreon section so the backer character carousel appears above the copy on mobile instead of below it.
+- Added an Interactive World Map card to the Discover More section, linking to the atlas at `/ak-map-alpha/`.
+
 ## 1.21.1 — 2026-09-03
 - Removed the italic Making Of development-diary quotation from the poster section, retaining its Making Of button.
 - Changed the flag section heading to **Buy the Flag of the American Kingdoms**.

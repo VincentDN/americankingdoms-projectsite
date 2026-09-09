@@ -4,8 +4,8 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.21.1
-  BUILD   : 2026-09-03
+  VERSION : 1.22.0
+  BUILD   : 2026-09-09
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
            Simply Static export. Hero, World, Factions, Gallery, Join,
@@ -107,6 +107,8 @@
     1.21.0 Brought both merchandise sections into the shared page container,
            with normal section typography and contained square product images.
     1.21.1 Removed the Making Of quotation and updated the flag purchase heading.
+    1.22.0 Fixed the Patreon backer carousel to appear above the copy on mobile,
+           and added an Interactive World Map card to the Discover More section.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -117,7 +119,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" href="assets/favicon.png">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.21.1">
+<meta name="version" content="1.22.0">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -549,6 +551,7 @@ footer a{color:var(--cream-dim);text-underline-offset:3px}
 /* ============================ RESPONSIVE ============================ */
 @media (max-width:900px){
   .world-grid,.join-grid{grid-template-columns:1fr}
+  .join-grid .backer-carousel{order:-1}
   .prints-grid{grid-template-columns:1fr}
   .prints--reverse .prints-art,.prints--reverse .prints-copy{grid-column:auto;grid-row:auto}
   .hero-inner{grid-template-columns:minmax(0,.7fr) minmax(340px,1.3fr)}
@@ -1126,6 +1129,14 @@ body.newsletter-open{overflow:hidden}
           <h3>Dev Diaries &amp; Newsletter</h3>
           <p>KCC founder <a href="https://kaisercatcinema.com/pages/about-vincent">Vincent De Nil</a> builds the world of American Kingdoms in public through his dev diaries and worldbuilding posts. Follow the creative process and receive new entries through the KCC newsletter.</p>
           <a class="btn btn-dark" href="https://kaisercatcinema.com/newsletter">Join the Newsletter</a>
+        </div>
+      </article>
+      <article class="ex-card reveal">
+        <div class="ex-img"><img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., with the thirteen colonies coloured by realm" loading="lazy"></div>
+        <div class="ex-body">
+          <h3>Interactive World Map</h3>
+          <p>Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between realms and cultures, and read up on each faction straight from the atlas.</p>
+          <a class="btn btn-dark" href="/ak-map-alpha/">Explore the Map</a>
         </div>
       </article>
     </div>

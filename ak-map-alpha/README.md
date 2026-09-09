@@ -73,7 +73,6 @@ In that project's hosting dashboard, add `map.american-kingdoms.com` as its cust
 domain, then use the provider's exact DNS target and finish TLS verification.
 The repository does not establish which provider currently controls deployment or DNS;
 do not guess a CNAME target or change the existing apex domain configuration.
-Keep the current `noindex` metadata until approved canonical content is ready.
 No DNS changes or production deployment have been made by this groundwork change.
 
 ## Sources and dependencies
@@ -118,9 +117,8 @@ drawing/editing/deletion, export-and-reload, and rendering at the subdomain root
 ## Cloudflare Pages live alpha
 
 The alpha is served at `/ak-map-alpha/` by the existing production Pages project
-through its GitHub integration. It has no navigation link on the main site and
-retains `noindex` metadata. Publication uses the existing `main` branch; no DNS
-change, separate Pages project or new domain is needed.
+through its GitHub integration. Publication uses the existing `main` branch; no
+DNS change, separate Pages project or new domain is needed.
 
 ## Shared-border and interior-region update (7 September 2026)
 
@@ -323,3 +321,17 @@ a marker opens a tooltip reusing the `.territory-tooltip` styling (name,
 then "National capital of `<country>`", "Capital of `<admin1>`,
 `<country>`", or just "`<admin1>`, `<country>`" for the two city bands);
 cities aren't otherwise selectable and don't open the details panel.
+
+## SEO metadata and flag link fix (9 September 2026)
+
+The page now ships a real title (`American Kingdoms Alt-History Map | A
+Medieval America in 1377 A.D.`), a description, a canonical link and Open
+Graph/Twitter tags in `index.html`, reusing the main site's
+`washington-throne.jpg` for the social preview image since the atlas has no
+dedicated hero art of its own. `robots` was changed from `noindex` to
+`index, follow` to make the page discoverable now that it has real metadata;
+the earlier notes in this file about keeping `noindex` no longer apply.
+
+The details panel's "Purchase a flag on Flagmaker & Print" link was also
+pointed at the current `https://flagmaker-print.com/collections/alt-history-flags`
+collection URL (it previously used a stale `-kcc` suffixed URL).
