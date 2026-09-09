@@ -1,5 +1,8 @@
 # American Kingdoms — Changelog
 
+## 1.23.1 — 2026-09-09
+- Added a root `_redirects` file so the old `/ak-map-alpha` links 301 to `/medieval-america-map/`.
+
 ## 1.23.0 — 2026-09-09
 - Renamed the atlas from `ak-map-alpha/` to `medieval-america-map/`, updating its canonical/Open Graph URLs and every internal script path to match.
 - Dropped "Alpha" from the nav link and Discover More card labels; the on-page alpha banner is unchanged.

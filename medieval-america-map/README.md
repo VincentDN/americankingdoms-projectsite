@@ -348,6 +348,11 @@ reads "World Map"), but the `#alpha-banner` element and its "Map is
 currently in alpha state" text are unchanged -- the map is still alpha
 software, just no longer labelled that way in the URL or navigation.
 
+A root-level `_redirects` file (Cloudflare Pages' Netlify-style redirects
+config) 301s the old `/ak-map-alpha` and `/ak-map-alpha/*` paths to
+`/medieval-america-map/` and `/medieval-america-map/:splat` respectively,
+so old links and bookmarks keep working.
+
 Text selection on the page defaulted to the browser's blue highlight since
 nothing here set `::selection`. `atlas.css` now styles it with the same
 `var(--red)` on cream (`#f5f1dc`) used by the main site's `::selection`
