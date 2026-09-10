@@ -13,6 +13,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:1rem;pa
 [hidden]{display:none!important}
 
 .territory-tooltip strong{margin-bottom:5px}
+.territory-preview{width:210px;max-width:100%}
+.territory-preview-flag{display:block;width:72px;height:44px;object-fit:contain;object-position:left center;margin-bottom:8px}
+.territory-preview-summary{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:16px}
 
 /* A bounded panel with one purpose at a time; its contents scroll independently. */
 #panel{display:flex;flex-direction:column;padding:0;overflow:hidden}

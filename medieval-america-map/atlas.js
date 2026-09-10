@@ -170,9 +170,17 @@
   const closeOtherTooltips = current => Object.values(groups).forEach(g => g.eachLayer(l => { if (l !== current) l.closeTooltip(); }));
 
   function tooltip(feature) {
-    const node=document.createElement('div'), title=document.createElement('strong');
-    title.textContent=feature.properties.name || 'Unnamed territory';title.style.borderLeft='5px solid '+colorOf(feature);title.style.paddingLeft='8px';node.append(title);
-    const desc=document.createElement('span');desc.textContent=feature.properties.summary || feature.properties.kind || 'Territory';node.append(desc);return node;
+    const p=feature.properties, node=document.createElement('div'), title=document.createElement('strong');
+    node.className='territory-preview';
+    if(p.flag){
+      const flag=document.createElement('img');flag.className='territory-preview-flag';
+      flag.src=p.flag;flag.alt='Flag of '+(p.name || 'this territory');node.append(flag);
+    }
+    title.textContent=p.name || 'Unnamed territory';title.style.borderLeft='5px solid '+colorOf(feature);title.style.paddingLeft='8px';node.append(title);
+    const desc=document.createElement('span');desc.className='territory-preview-summary';
+    const summary=(p.summary || p.kind || 'Territory').replace(/\s+/g,' ').trim();
+    const excerpt=summary.length>64 ? summary.slice(0,65).replace(/\s+\S*$/,'') : summary;
+    desc.textContent=excerpt.replace(/[.\u2026\s]+$/,'')+'…';node.append(desc);return node;
   }
   function select(layer) {
     selected=layer; setPanel(true, 'details'); layer.closeTooltip(); const p=layer.feature.properties;
