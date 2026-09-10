@@ -3,6 +3,6 @@ window.ATLAS_SUBMAPS = Object.freeze({
   massachusetts: Object.freeze({
     name: 'Massachusetts',
     href: '/world-map/massachusetts/',
-    data: '/medieval-america-map/data/submaps/massachusetts.geojson?v=1',
+    data: '/medieval-america-map/data/submaps/massachusetts.geojson?v=2',
   }),
 });

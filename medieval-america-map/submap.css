@@ -14,7 +14,7 @@
 .county-author{font-style:italic;color:var(--muted);margin-bottom:12px}.county-author a{font-weight:600}
 #county-region{font:600 .875rem var(--sans);color:var(--muted);margin-bottom:12px}
 .submap #map{background:#c8d0c3}
-.county-map-label{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2}
+.county-map-label{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2;max-width:140px;white-space:normal;text-align:center}
 .county-map-label img{display:block;filter:drop-shadow(0 1px 2px #2c21184d)}
 .submap .atlas-title{flex:1;min-width:0}.submap h1{font-size:clamp(1rem,1.6vw,1.5rem)}
 .county-label{background:transparent;border:0;box-shadow:none;color:#231b15;font:800 14px var(--sans);text-shadow:0 1px 2px #fff,1px 0 2px #fff,-1px 0 2px #fff;pointer-events:none}

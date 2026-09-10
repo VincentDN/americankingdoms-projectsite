@@ -25,6 +25,7 @@
     if(event.key==='Escape' && !$('county-details').hidden){event.preventDefault();closeDetails();}
   });
   const region = $('region');
+  const nameOf = p => p.displayName || p.name;
   const baseStyle = f => ({color:'#534432',weight:1.3,fillColor:f.properties.color,fillOpacity:.72});
   function refresh() {
     entries.forEach(({layer,button},id) => {
@@ -50,9 +51,9 @@
     selected=id;
     const p=entry.layer.feature.properties;
     $('county-details').hidden=false;
-    $('county-name').textContent=p.name+' County';
+    $('county-name').textContent=nameOf(p);
     $('county-region').textContent=p.region;
-    $('county-flag').alt='Placeholder flag of '+p.name+' County';
+    $('county-flag').alt='Placeholder flag of '+nameOf(p);
     returnFocus=entry.button;
     $('county-details-title').focus({preventScroll:true});
     $('county-details').querySelector('.panel-body').scrollTop=0;
@@ -89,16 +90,16 @@
         const p=f.properties, button=document.createElement('button');
         button.type='button';button.className='county-button';button.setAttribute('aria-pressed','false');
         const swatch=document.createElement('span');swatch.className='county-swatch';swatch.style.backgroundColor=p.color;swatch.setAttribute('aria-hidden','true');
-        button.append(swatch,document.createTextNode(p.name));button.onclick=()=>select(p.id);$('county-list').append(button);
+        button.append(swatch,document.createTextNode(nameOf(p)));button.onclick=()=>select(p.id);$('county-list').append(button);
         const label=document.createElement('span');label.className='county-map-label';
         const shield=document.createElement('img');shield.src='/medieval-america-map/assets/placeholder-arms.svg';shield.alt='';shield.width=24;shield.height=29;
-        label.append(shield,document.createTextNode(p.name));
+        label.append(shield,document.createTextNode(nameOf(p)));
         layer.bindTooltip(label,{permanent:true,direction:'center',className:'county-label'});
         layer.on('tooltipopen',()=>layer.getTooltip().setLatLng([p.label[1],p.label[0]]));
         layer.on('click',()=>select(p.id));
         layer.on('add',()=>{
           const path=layer.getElement();if(!path)return;
-          path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',p.name+' County');
+          path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',nameOf(p));
           path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(p.id);}};
         });
         entries.set(p.id,{layer,button});

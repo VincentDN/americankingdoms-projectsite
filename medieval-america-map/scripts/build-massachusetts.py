@@ -12,6 +12,7 @@ root = Path(__file__).resolve().parents[2]
 atlas = root / 'medieval-america-map'
 source = json.loads((atlas / 'sources/census-ma-counties-2024.geojson').read_text(encoding='utf-8'))
 assert len(source['features']) == 14
+titles = json.loads((atlas / 'sources/massachusetts-titles.json').read_text(encoding='utf-8'))
 to = Transformer.from_crs(4326, 26986, always_xy=True).transform
 back = Transformer.from_crs(26986, 4326, always_xy=True).transform
 def parts(g):
@@ -34,7 +35,7 @@ features = []
 for f,g,color in zip(counties,shapes,palette):
     name = f['properties']['BASENAME']
     p = transform(back, max(parts(g), key=lambda x:x.area).representative_point())
-    features.append({'type':'Feature','properties':{'id':f['properties']['GEOID'],'name':name,'region':next(r for r,names in regions.items() if name in names),'color':color,'label':[p.x,p.y]},'geometry':mapping(transform(back,g))})
+    features.append({'type':'Feature','properties':{'id':f['properties']['GEOID'],'name':name,'displayName':titles[name],'region':next(r for r,names in regions.items() if name in names),'color':color,'label':[p.x,p.y]},'geometry':mapping(transform(back,g))})
 out = atlas / 'data/submaps'
 out.mkdir(parents=True,exist_ok=True)
 submap = {'type':'FeatureCollection','source':'U.S. Census Bureau, Generalized ACS 2024 counties, 1:500,000; simplified together at 65 metres. Modern geographic reference, not canonical duchies.','features':features}

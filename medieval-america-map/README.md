@@ -31,6 +31,12 @@ The panel supports its close button and Escape, returning focus to the county
 list; mobile uses a bottom panel. The shared SVG placeholders are original simple
 geometric stand-ins, not canonical heraldry.
 
+Medieval territory titles are stored in `sources/massachusetts-titles.json`
+and emitted as `displayName` in the county payload. Map labels, county buttons,
+accessible labels, flags' alternative text and infoboxes all use this title.
+The original geographic `name` and stable IDs remain intact for regeneration
+and county deep links. Edit the titles file and rebuild to change names.
+
 Massachusetts now uses its modern outline, as requested. The former northern
 claim becomes provisional Maine; adjacent territory edges are trimmed and
 repaired to avoid overlaps. The rest of those factions' lore is retained.
