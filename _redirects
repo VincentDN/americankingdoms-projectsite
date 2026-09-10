@@ -1,2 +1,6 @@
 /ak-map-alpha       /medieval-america-map/  301
 /ak-map-alpha/*      /medieval-america-map/:splat  301
+/world-map           /medieval-america-map/  301
+/world-map/          /medieval-america-map/  301
+/world-map/massachussets /world-map/massachusetts/ 301
+/world-map/massachussets/ /world-map/massachusetts/ 301

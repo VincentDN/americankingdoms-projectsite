@@ -99,6 +99,22 @@
   }
   map.on('zoomend', updateCityTiers);
   let selected = null, dirty = false;
+  const submapLink = document.createElement('a');
+  submapLink.className = 'map-button map-button-red';
+  submapLink.textContent = 'Load Duchy and County Map';
+  submapLink.hidden = true;
+  $('details').append(submapLink);
+  // Storage is optional (private browsing may disable it). No county data
+  // is prefetched when a territory is selected or the link is hovered.
+  function rememberView() {
+    try { sessionStorage.setItem('ak-world-view', JSON.stringify({
+      center: [map.getCenter().lat, map.getCenter().lng], zoom: map.getZoom(),
+      mode: mapMode, selected: selected?.feature.properties.id,
+      layers: Object.fromEntries(['countries','regions','cities','rivers'].map(id=>[id,$(id).checked])),
+    })); } catch { /* Navigation still works without storage. */ }
+  }
+  submapLink.addEventListener('click', rememberView);
+  window.addEventListener('pagehide', rememberView);
   const markDirty = () => { dirty=true; $('editor-status').textContent='Changes are in this tab only. Export before closing.'; };
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
   const safeURL = value => { try { const url=new URL(value); return url.protocol==='https:' ? url.href : null; } catch { return null; } };
@@ -165,6 +181,10 @@
     $('detail-flag-buy').hidden=!p.flag;
     const url=safeURL(p.wiki);$('detail-link').hidden=!url;if(url)$('detail-link').href=url;
     $('detail-author-name').textContent = (p.claim && p.claim.trim()) ? p.claim.trim() : 'Unclaimed';
+    const submap = window.ATLAS_SUBMAPS?.[p.submap];
+    submapLink.hidden = !submap;
+    if (submap) submapLink.href = submap.href;
+    else submapLink.removeAttribute('href');
     if(editMode) { $('edit-name').value=p.name || ''; $('edit-kind').value=p.kind==='region'?'region':'country';$('edit-color').value=p.color || '#b31f34';$('edit-description').value=p.summary || '';$('edit-wiki').value=url || ''; }
   }
   function wire(layer,feature,sample=false) {
@@ -246,7 +266,7 @@
       // antimeridian -- so they skip unwrapFeatures and are fetched
       // alongside, not through, the polygon/line batch that needs it.
       const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
-        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'))).then(fcs=>fcs.map(unwrapFeatures)),
+        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=8':'')))).then(fcs=>fcs.map(unwrapFeatures)),
         read('data/cities.geojson'),
       ]);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);
@@ -254,6 +274,20 @@
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
       addFeatures(territories);addFeatures(samples,true);
       addCities(cities);updateCityTiers();
+      if (new URLSearchParams(location.search).get('return') === '1' || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem('ak-world-view'));
+          if (saved && Array.isArray(saved.center) && saved.center.length === 2 && saved.center.every(Number.isFinite) && Number.isFinite(saved.zoom)) {
+            map.setView(saved.center, Math.max(2,Math.min(9,saved.zoom)), {animate:false});
+            const radio = document.querySelector('input[name=mapmode][value="'+(saved.mode==='cultures'?'cultures':'realms')+'"]');
+            radio.checked=true; radio.dispatchEvent(new Event('change'));
+            for (const id of ['countries','regions','cities','rivers']) if (typeof saved.layers?.[id] === 'boolean') {
+              $(id).checked=saved.layers[id]; $(id).dispatchEvent(new Event('change'));
+            }
+            Object.values(groups).forEach(group=>group.eachLayer(layer=>{if(layer.feature.properties.id===saved.selected)select(layer);}));
+          }
+        } catch { /* Use the default view if storage is unavailable or invalid. */ }
+      }
       if(editMode) await enableEditor();
     } catch(error) { showStatus('Part of the atlas could not load. Reload to try again.');console.error(error); }
   }

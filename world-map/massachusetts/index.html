@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#2c2118">
+  <title>Massachusetts Duchy and County Map | American Kingdoms</title>
+  <meta name="description" content="Explore Massachusetts’s fourteen counties and geographic subregions in the American Kingdoms atlas.">
+  <link rel="canonical" href="https://american-kingdoms.com/world-map/massachusetts/">
+  <link rel="icon" href="/medieval-america-map/assets/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/medieval-america-map/vendor/leaflet.css">
+  <link rel="stylesheet" href="/medieval-america-map/atlas.css?v=8">
+  <link rel="stylesheet" href="/medieval-america-map/submap.css?v=1">
+  <script defer src="/medieval-america-map/vendor/leaflet.js"></script>
+  <script defer src="/medieval-america-map/submaps.js?v=1"></script>
+  <script defer src="/medieval-america-map/submap.js?v=1"></script>
+</head>
+<body class="submap" data-submap="massachusetts">
+  <header>
+    <a href="/" aria-label="American Kingdoms home"><img src="/medieval-america-map/assets/ak-logo.svg" alt="American Kingdoms"></a>
+    <div class="atlas-title"><h1>Massachusetts</h1><p>Duchy and County Map · 1377 A.D.</p></div>
+    <nav aria-label="Map navigation"><a class="map-button" href="/medieval-america-map/?return=1">Back to World Map</a><button id="reset-map" type="button" disabled>Reset view</button></nav>
+  </header>
+  <main class="submap-layout">
+    <aside class="county-panel" aria-label="Counties and subregions">
+      <h2>Counties &amp; subregions</h2>
+      <p class="reference-note">Modern counties are a geographic reference. Duchy names and borders are yet to be charted.</p>
+      <label for="region">Subregion</label>
+      <select id="region" disabled><option value="">All Massachusetts</option></select>
+      <p id="submap-status" role="status">Loading county map…</p>
+      <button id="retry-map" type="button" hidden>Try again</button>
+      <section id="county-details" aria-live="polite" hidden><h2 id="county-name"></h2><p id="county-region"></p></section>
+      <div id="county-list" aria-label="Select a county"></div>
+      <p class="reference-note">Select a county to explore. Drag to pan; scroll or pinch to zoom.</p>
+    </aside>
+    <div class="submap-canvas"><div id="map" aria-label="Interactive Massachusetts county map. Arrow keys pan; plus and minus zoom."></div></div>
+  </main>
+  <noscript>JavaScript is needed to explore the map. <a href="/medieval-america-map/">Return to the world map</a>.</noscript>
+</body>
+</html>

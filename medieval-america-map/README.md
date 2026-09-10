@@ -1,5 +1,58 @@
 # American Kingdoms atlas groundwork
 
+## Massachusetts submap — 10 September 2026
+
+The world atlas remains at `/medieval-america-map/`; `/world-map/` redirects
+there so existing indexed URLs and bookmarks remain intact. Select Massachusetts
+to reveal the red **Load Duchy and County Map** link. The separate static page at
+`/world-map/massachusetts/` supports direct loading, refresh, county deep links
+(for example `#county=25025`), and a back link that restores the world viewport,
+selected faction, map mode, and layer settings when session storage is available.
+The misspelled `/world-map/massachussets` redirects to the canonical spelling.
+
+Only `submap.js` requests `data/submaps/massachusetts.geojson` (about 159 KiB).
+The world page loads a small metadata registry, `submaps.js`, with no county
+geometry or prefetch. The county page reuses the vendored Leaflet library and
+atlas styles, but never loads the continental land, lakes, rivers, cities, or
+territories. No framework, runtime dependency, or external map service is needed
+by visitors. Normal HTTP caching reuses the library and styles between pages.
+
+All 14 modern counties are selectable through polygons and keyboard-accessible
+buttons. Five explicitly provisional geographic groupings aid navigation; these
+are not assertions of canonical duchy boundaries. The page includes reset,
+loading, timeout, retry, mobile layout, and return navigation.
+
+Massachusetts now uses its modern outline, as requested. The former northern
+claim becomes provisional Maine; adjacent territory edges are trimmed and
+repaired to avoid overlaps. The rest of those factions' lore is retained.
+
+County geometry: [U.S. Census Bureau, Generalized ACS 2024, Counties 500K](https://tigerweb.geo.census.gov/arcgis/rest/services/Generalized_ACS2024/State_County/MapServer/11),
+downloaded 10 September 2026 with `STATE='25'`, `outFields=NAME,GEOID,BASENAME`,
+`outSR=4326`, `returnGeometry=true`, `f=geojson`. The raw response is retained in
+`sources/census-ma-counties-2024.geojson`. Shared county borders are simplified
+together at 65 metres; the dissolved world outline uses 180 metres. The supplied
+reference image informed county coverage; its copyrighted artwork is not shipped.
+
+Rebuild from the repository root with
+`python medieval-america-map/scripts/build-massachusetts.py` after installing
+`shapely>=2.1` and `pyproj`. Review changes before committing: this updates the
+county payload and world territory geometry and can replace manual county edits.
+
+To add a faction, create a static `world-map/<slug>/index.html` from this page,
+set its `data-submap`, title, description and canonical URL; register its name,
+page URL and versioned data URL in `submaps.js`; add its county FeatureCollection;
+and set the world territory's `properties.submap` to the same slug. County
+properties are `id`, `name`, `region`, `color` and an interior `[lon,lat]` `label`.
+Unavailable factions have no detail-map button. Serve the repository root for
+these routes; deploying only the old `medieval-america-map/` directory does not
+include the new `world-map/` pages.
+
+Validation: all 14 county polygons are valid and non-overlapping; Massachusetts
+has no overlaps with neighboring territories; no territory overlap was increased.
+Navigation logic was checked for keyboard selection, regional filtering, reset,
+county-only fetching, and error/retry. Static routes and local assets were checked
+over HTTP. This update retains the site's existing Cloudflare Pages deployment.
+
 Based on the existing project site's `main` at `f22b95f` (5 September 2026).
 This is a standalone static page under `medieval-america-map/`; the landing page is unchanged.
 
@@ -38,8 +91,8 @@ in `[longitude, latitude]` order. Each Polygon or MultiPolygon has properties:
 
 Names and descriptions are rendered as text, not injected HTML.
 Political geometry is traced from `sources/east-coast-canon.png` (authoritative)
-and `sources/continental-outline.jpg` (provisional elsewhere). Massachusetts includes
-the Maine territory shown in the reference; New Hampshire includes the Vermont area;
+and `sources/continental-outline.jpg` (provisional elsewhere). Massachusetts now uses
+its modern outline; the former northern claim is separate provisional Maine. New Hampshire includes the Vermont area;
 Smokey March remains separate. Florida follows the reference's northern territory,
 with the uncoloured southern peninsula retained as provisional land.
 

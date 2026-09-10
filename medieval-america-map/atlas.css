@@ -1,4 +1,8 @@
 :root{--ink:#2c2118;--muted:#5a4a38;--parch:#ece0c8;--parch-2:#e4d5b8;--gold:#a58232;--red:#b31f34;--body:'EB Garamond',Georgia,serif;--sans:'Ysabeau',Arial,sans-serif;--display:'Cinzel',Georgia,serif}
+.map-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 12px;border:1px solid #9d865e;background:var(--parch);color:var(--ink);font:600 1rem/1.3 var(--sans);text-decoration:none;text-align:center}
+.map-button:hover{background:var(--parch-2)}
+.map-button-red{background:var(--red);border-color:#7d1523;color:#fff;margin-top:16px;width:100%}
+.map-button-red:hover{background:#8b1728}
 *{box-sizing:border-box}body{margin:0;color:var(--ink);font:18px/1.4 var(--body);height:100dvh;display:flex;flex-direction:column;background:var(--parch)}
 ::selection{background:var(--red);color:#f5f1dc}
 #alpha-banner{flex:none;background:var(--red);color:#fff;text-align:center;font:600 .85rem/1.4 var(--sans);padding:8px 16px;letter-spacing:.01em;z-index:1001}
