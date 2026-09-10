@@ -170,12 +170,14 @@
   const unionShade = name => {
     const i = UNION_ORDER.indexOf(name);
     const t = i < 0 ? .5 : i / (UNION_ORDER.length - 1);
-    return hslToHex(212, 62, 70 - t * 42);
+    return hslToHex(212 + t * 36, 88, 56 + Math.sin(t * Math.PI) * 7);
   };
   const CROWN_SHADE = hslToHex(354, 58, 34);
   const PROVISIONAL_PALE = '#d9b979';
   const isProvisional = feature => !feature.properties.canon;
   const colorOf = feature => {
+    // Union identity takes priority over unclaimed placeholder styling.
+    if (feature.properties.alliance === 'union') return mapMode === 'realms' ? unionShade(feature.properties.name) : baseColorOf(feature);
     if (/^#[0-9a-f]{6}$/i.test(feature.properties.placeholderColor || '')) return feature.properties.placeholderColor;
     if (isProvisional(feature)) return PROVISIONAL_PALE;
     if (mapMode === 'realms') {
@@ -189,7 +191,7 @@
   const style = feature => {
     const canon = feature.properties.canon;
     return canon
-      ? {color:borderOf(feature),weight:1.7,opacity:1,fillColor:colorOf(feature),fillOpacity:.72,dashArray:null}
+      ? {color:borderOf(feature),weight:1.7,opacity:1,fillColor:colorOf(feature),fillOpacity:feature.properties.alliance==='union'?.88:.72,dashArray:null}
       : {color:borderOf(feature),weight:.8,opacity:.7,fillColor:colorOf(feature),fillOpacity:.38,dashArray:null};
   };
   // Hover and keyboard focus each open a tooltip independently, so crossing
@@ -303,7 +305,7 @@
       // antimeridian -- so they skip unwrapFeatures and are fetched
       // alongside, not through, the polygon/line batch that needs it.
       const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
-        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=12':'')))).then(fcs=>fcs.map(unwrapFeatures)),
+        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=13':'')))).then(fcs=>fcs.map(unwrapFeatures)),
         read('data/cities.geojson'),
       ]);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);

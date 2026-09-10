@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 600" role="img" aria-label="Shield of Massachusetts">
+  <title>Shield of Massachusetts</title>
+  <path d="M20 20H480V285C480 430 380 520 250 580C120 520 20 430 20 285Z" fill="#252d5b"/>
+  <defs>
+    <path id="petal" d="M0 14 C-29 -6 -47 -64 0 -100 C47 -64 29 -6 0 14Z"/>
+  </defs>
+  <g transform="translate(250 270) scale(1.65)">
+    <g fill="#fff">
+      <use href="#petal"/>
+      <use href="#petal" transform="rotate(72)"/>
+      <use href="#petal" transform="rotate(144)"/>
+      <use href="#petal" transform="rotate(216)"/>
+      <use href="#petal" transform="rotate(288)"/>
+    </g>
+    <path d="M0 -30 6 -10.4 26 -15 12 0 26 15 6 10.4 0 30 -6 10.4 -26 15 -12 0 -26 -15 -6 -10.4Z" fill="#d6a23d"/>
+  </g>
+<path d="M20 20H480V285C480 430 380 520 250 580C120 520 20 430 20 285Z" fill="none" stroke="#a78b60" stroke-width="14"/></svg>
