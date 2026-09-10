@@ -1,5 +1,30 @@
 # American Kingdoms atlas groundwork
 
+## Border repair and western expansions — 10 September 2026
+
+After the reference import, `scripts/repair-territory-borders.py PRE_REPAIR_TERRITORIES.geojson`
+closes narrow tracing corridors by assigning their land to the nearest adjacent
+realm boundary. Broad unclaimed interiors remain provisional. New additions are
+clipped to the physical land and lakes, with shared edges rather than overlapping
+buffers. The initial pre-repair snapshot is `e2d6f6c`'s territories file.
+The repair requires NumPy, Shapely >= 2.1 and pyproj.
+Then run `scripts/normalize-territory-topology.py` to dissolve numerical overlay
+seams that would otherwise receive visible SVG border strokes, and reclip the
+provisional layer against the final canonical coverage.
+
+The Dragon Coast (Ming Empire), formerly Land of Torch Trees (Ming), now covers
+Baja California and Baja California Sur and a broader California coastal belt
+with a modest inland reach toward Nevada. The Aztec Empire expands through the
+western mainland Mexican states, excluding existing claimed territory. The
+explicit state list and coastal control points are recorded in the repair script.
+`sources/natural-earth-mexico-states.geojson` contains Mexico's states extracted
+from Natural Earth's public-domain 10m admin-1 GeoJSON in the
+`nvkelso/natural-earth-vector` repository. The existing 50m source lacks Mexico.
+
+The earlier import's exact-geometry preservation applies to that import stage;
+the subsequent user-requested repair adds border slivers to existing realms.
+Massachusetts retains its modern outline and Florida's northern frontier stays fixed.
+
 ## Additional factions and northern South America
 
 The supplied `sources/world-factions-1420-reference.jpg` adds colored factions
