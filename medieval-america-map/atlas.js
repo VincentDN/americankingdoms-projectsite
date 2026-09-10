@@ -47,6 +47,10 @@
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
   const home = () => map.setView([48,-100], 4, {animate:false});
   home();
+  on('southern-coasts','onclick',()=>{
+    setPanel(false);
+    map.fitBounds([[-5,-83],[13,-58]],{padding:[40,40],animate:false});
+  });
   let panelMode = 'key';
   function setPanel(open, mode = panelMode) {
     panelMode = mode;
@@ -305,7 +309,7 @@
       // antimeridian -- so they skip unwrapFeatures and are fetched
       // alongside, not through, the polygon/line batch that needs it.
       const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
-        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=13':'')))).then(fcs=>fcs.map(unwrapFeatures)),
+        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(['land','lakes','rivers','territories'].includes(name)?'?v=14':'')))).then(fcs=>fcs.map(unwrapFeatures)),
         read('data/cities.geojson'),
       ]);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);

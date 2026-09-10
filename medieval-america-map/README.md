@@ -1,5 +1,41 @@
 # American Kingdoms atlas groundwork
 
+## Additional factions and northern South America
+
+The supplied `sources/world-factions-1420-reference.jpg` adds colored factions
+to the existing 1377 atlas. This is an additive interpretation of a circa 1420
+reference: the original 17 canonical entries, including their geometry, names,
+claims, custom flags and shields, are preserved exactly. England, the 13 Kingdoms,
+La Florida and occupied Calusa therefore do not overwrite those established realms.
+New reference factions replace overlapping unclaimed placeholder areas, receive
+floating labels and the standard infobox, and retain explicit `referenceYear`,
+`source` and `boundaryStatus` metadata. Their heraldry and lore remain placeholders.
+
+Land, lakes and rivers now include northern South America to 5° south, covering
+the Colombia/Venezuela Caribbean coastline and Ecuador's Pacific coast. The
+**Southern coasts** control jumps to this area. The source has no complete city
+dataset for the extension, so existing city markers are retained unchanged.
+County submaps remain isolated from the world-page data.
+
+`scripts/import-world-reference.py BASELINE_DATA_DIRECTORY` reproduces the import
+from an exported pre-import `data/` directory (the initial baseline was commit
+`af3ff8b`). It requires Pillow, NumPy, SciPy, Shapely and pyproj. Do not point the
+baseline argument at the output directory. Pixel colors are segmented within
+identified map regions, warped with recorded coastal/lake and approximate inland
+anchors, then clipped to physical land and around existing canonical realms.
+These are approximate illustrated borders, not surveyed lines. Named Hawaiian
+and Bahamian island groups use the available physical coastline because their
+tiny reference marks do not support reliable detailed tracing.
+
+`sources/world-reference-import-report.json` records each legend entry's outcome,
+control points, region masks and island assumptions. Mali Empire, Muromachi Japan,
+Leon and Castille, Al Andalus, Portugal and Scotland have no unambiguous visible
+footprint in this image and are left unplaced pending a location reference.
+
+Validation checks preserve the original canonical entries, require valid added
+polygons, exclude ocean/lake fill and reject newly introduced overlaps. Static
+geographic overviews were inspected in addition to the data checks.
+
 ## World labels and unclaimed territories
 
 Named world territories have floating shield/name labels. Interior anchors and
@@ -149,8 +185,8 @@ to North America through Panama, not as the fictional political boundaries.
 
 `canon`, `claim`, `source` and `boundaryStatus` properties preserve reference provenance.
 Ownership labels describe the supplied reference, not independently verified current claims.
-Lake polygons are excluded from territory fills. South America is removed from all
-displayed background layers, and the viewport is bounded to the setting's extent.
+Lake polygons are excluded from territory fills. The original North America-only
+physical layer is now extended into northern South America as described above.
 The physical base has no modern political borders or city labels.
 
 ## Hosting at map.american-kingdoms.com

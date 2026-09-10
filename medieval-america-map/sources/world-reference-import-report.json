@@ -1,0 +1,784 @@
+{
+  "referenceYear": 1420,
+  "approach": "Preserve existing canonical realms",
+  "southernExtent": [
+    -83,
+    -5,
+    -58,
+    13
+  ],
+  "controlPoints": [
+    [
+      697,
+      558,
+      -80.5,
+      25.15
+    ],
+    [
+      681,
+      496,
+      -81.45,
+      30.7
+    ],
+    [
+      587,
+      509,
+      -89.4,
+      29
+    ],
+    [
+      545,
+      570,
+      -97.2,
+      26
+    ],
+    [
+      367,
+      587,
+      -109.9,
+      22.9
+    ],
+    [
+      253,
+      402,
+      -117.15,
+      32.53
+    ],
+    [
+      214,
+      344,
+      -122.42,
+      37.77
+    ],
+    [
+      200,
+      285,
+      -124.4,
+      42
+    ],
+    [
+      182,
+      235,
+      -123.1,
+      48.5
+    ],
+    [
+      159,
+      214,
+      -127.5,
+      50.5
+    ],
+    [
+      505,
+      594,
+      -99.1,
+      19.4
+    ],
+    [
+      628,
+      607,
+      -86.8,
+      21.5
+    ],
+    [
+      591,
+      702,
+      -88.1,
+      15.8
+    ],
+    [
+      653,
+      723,
+      -83.65,
+      10.95
+    ],
+    [
+      732,
+      777,
+      -77.4,
+      8.6
+    ],
+    [
+      707,
+      750,
+      -79.5,
+      9
+    ],
+    [
+      887,
+      733,
+      -71.6,
+      12.4
+    ],
+    [
+      936,
+      760,
+      -62.0,
+      10.5
+    ],
+    [
+      712,
+      894,
+      -80.75,
+      -0.9
+    ],
+    [
+      701,
+      874,
+      -79.8,
+      1.8
+    ],
+    [
+      857,
+      648,
+      -67.2,
+      18.4
+    ],
+    [
+      806,
+      640,
+      -69.9,
+      18.5
+    ],
+    [
+      752,
+      616,
+      -74.1,
+      20
+    ],
+    [
+      666,
+      595,
+      -82.4,
+      23.1
+    ],
+    [
+      743,
+      333,
+      -79.76,
+      42.27
+    ],
+    [
+      805,
+      322,
+      -74,
+      40.7
+    ],
+    [
+      870,
+      278,
+      -67,
+      45
+    ],
+    [
+      985,
+      229,
+      -53,
+      47
+    ],
+    [
+      966,
+      191,
+      -55.7,
+      51.5
+    ],
+    [
+      748,
+      263,
+      -69.7,
+      47.3
+    ],
+    [
+      711,
+      218,
+      -80,
+      51
+    ],
+    [
+      556,
+      235,
+      -92,
+      46.8
+    ],
+    [
+      578,
+      282,
+      -87.6,
+      46.7
+    ],
+    [
+      639,
+      315,
+      -87,
+      41.8
+    ],
+    [
+      545,
+      159,
+      -97,
+      58.8
+    ],
+    [
+      727,
+      0,
+      -78,
+      72
+    ],
+    [
+      422,
+      0,
+      -110,
+      72
+    ],
+    [
+      341,
+      93,
+      -116,
+      60
+    ],
+    [
+      1070,
+      12,
+      -42,
+      70
+    ],
+    [
+      348,
+      342,
+      -111.6,
+      38.5
+    ],
+    [
+      500,
+      313,
+      -100,
+      45
+    ],
+    [
+      501,
+      423,
+      -98,
+      35.7
+    ],
+    [
+      435,
+      450,
+      -105,
+      33.4
+    ],
+    [
+      516,
+      518,
+      -97.3,
+      28.5
+    ],
+    [
+      690,
+      349,
+      -82,
+      41
+    ],
+    [
+      595,
+      375,
+      -89.1,
+      40.5
+    ],
+    [
+      418,
+      244,
+      -107,
+      46
+    ],
+    [
+      340,
+      225,
+      -112.5,
+      48.5
+    ]
+  ],
+  "pixelRegions": {
+    "Roman Colonies": [
+      [
+        799,
+        679,
+        968,
+        792
+      ],
+      [
+        895,
+        448,
+        924,
+        482
+      ]
+    ],
+    "Pagan Norse Holdouts": [
+      [
+        544,
+        210,
+        772,
+        364
+      ]
+    ],
+    "Kalmar Union": [
+      [
+        493,
+        0,
+        1080,
+        295
+      ]
+    ],
+    "Muslim Settlements": [
+      [
+        810,
+        630,
+        939,
+        753
+      ]
+    ],
+    "Louisiana Territory": [
+      [
+        522,
+        451,
+        623,
+        529
+      ]
+    ],
+    "Corsair Territories (La Florida)": [
+      [
+        695,
+        533,
+        801,
+        641
+      ]
+    ],
+    "Iberian Merchant Republics": [
+      [
+        643,
+        575,
+        781,
+        634
+      ]
+    ],
+    "Aztec Empire": [
+      [
+        415,
+        498,
+        549,
+        697
+      ]
+    ],
+    "Mayan Civilizations": [
+      [
+        540,
+        598,
+        641,
+        708
+      ]
+    ],
+    "Land of Torch Trees (Ming)": [
+      [
+        193,
+        277,
+        377,
+        599
+      ]
+    ],
+    "Illinois Confederation": [
+      [
+        563,
+        320,
+        635,
+        432
+      ]
+    ],
+    "Oceti Sakowin": [
+      [
+        462,
+        246,
+        553,
+        379
+      ]
+    ],
+    "Shawnee": [
+      [
+        623,
+        331,
+        779,
+        429
+      ]
+    ],
+    "Teutonic Ohio": [
+      [
+        666,
+        334,
+        715,
+        376
+      ]
+    ],
+    "Vargas Freehold": [
+      [
+        480,
+        34,
+        582,
+        137
+      ]
+    ],
+    "Aotearoan Settlements (Polynesian)": [
+      [
+        140,
+        187,
+        219,
+        257
+      ],
+      [
+        688,
+        866,
+        735,
+        915
+      ],
+      [
+        695,
+        740,
+        746,
+        772
+      ]
+    ],
+    "Utah Templars": [
+      [
+        311,
+        317,
+        382,
+        368
+      ]
+    ],
+    "Cherokee": [
+      [
+        610,
+        400,
+        693,
+        479
+      ]
+    ],
+    "Yuchi": [
+      [
+        604,
+        396,
+        687,
+        452
+      ]
+    ],
+    "Coushatta": [
+      [
+        599,
+        419,
+        653,
+        470
+      ]
+    ],
+    "Chickasaw": [
+      [
+        574,
+        417,
+        629,
+        479
+      ]
+    ],
+    "Choctaw": [
+      [
+        590,
+        446,
+        665,
+        500
+      ]
+    ],
+    "Caddo": [
+      [
+        486,
+        426,
+        571,
+        500
+      ]
+    ],
+    "Kitsai": [
+      [
+        461,
+        435,
+        524,
+        492
+      ]
+    ],
+    "Apache": [
+      [
+        383,
+        406,
+        490,
+        513
+      ]
+    ],
+    "Wichita": [
+      [
+        460,
+        397,
+        551,
+        448
+      ]
+    ],
+    "Cree Territories": [
+      [
+        275,
+        0,
+        749,
+        297
+      ]
+    ],
+    "Blackfeet": [
+      [
+        282,
+        179,
+        388,
+        280
+      ]
+    ],
+    "Crow": [
+      [
+        356,
+        177,
+        477,
+        306
+      ]
+    ],
+    "Shoshone": [
+      [
+        273,
+        187,
+        417,
+        352
+      ]
+    ],
+    "Texas": [
+      [
+        474,
+        480,
+        550,
+        558
+      ]
+    ],
+    "Cow Nation": [
+      [
+        594,
+        445,
+        679,
+        502
+      ]
+    ]
+  },
+  "islandResolution": "Corsair Territories use Bahamas/Turks and Caicos coastline; Ming & Polynesian Hawaii uses Hawaiian coastline. Internal occupation boundaries are not inferred.",
+  "factions": [
+    {
+      "name": "England",
+      "status": "Existing realms preserved"
+    },
+    {
+      "name": "13 Kingdoms",
+      "status": "Existing realms preserved"
+    },
+    {
+      "name": "Mali Empire",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "La Florida",
+      "status": "Existing realms preserved"
+    },
+    {
+      "name": "Calusa Kingdom (Occupied)",
+      "status": "Existing realms preserved"
+    },
+    {
+      "name": "Muromachi Japan",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "Leon and Castille",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "Al Andalus",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "Portugal",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "Scotland",
+      "status": "Legend entry has no unambiguous visible footprint; not placed"
+    },
+    {
+      "name": "Iberian Merchant Republics",
+      "status": "Added",
+      "areaSquareDegrees": 0.025305111334261707
+    },
+    {
+      "name": "Muslim Settlements",
+      "status": "Added",
+      "areaSquareDegrees": 0.5965728303848787
+    },
+    {
+      "name": "Teutonic Ohio",
+      "status": "Added",
+      "areaSquareDegrees": 1.0177426010919148
+    },
+    {
+      "name": "Corsair Territories (La Florida)",
+      "status": "Added",
+      "areaSquareDegrees": 1.2332058453420027
+    },
+    {
+      "name": "Yuchi",
+      "status": "Added",
+      "areaSquareDegrees": 1.2357087152054838
+    },
+    {
+      "name": "Ming & Polynesian Hawaii",
+      "status": "Added",
+      "areaSquareDegrees": 1.4041903926260153
+    },
+    {
+      "name": "Cherokee",
+      "status": "Added",
+      "areaSquareDegrees": 2.2267301396969423
+    },
+    {
+      "name": "Choctaw",
+      "status": "Added",
+      "areaSquareDegrees": 4.309461712399185
+    },
+    {
+      "name": "Coushatta",
+      "status": "Added",
+      "areaSquareDegrees": 4.4205765094005525
+    },
+    {
+      "name": "Roman Colonies",
+      "status": "Added",
+      "areaSquareDegrees": 4.857539915534591
+    },
+    {
+      "name": "Utah Templars",
+      "status": "Added",
+      "areaSquareDegrees": 5.38699188939296
+    },
+    {
+      "name": "Cow Nation",
+      "status": "Added",
+      "areaSquareDegrees": 5.702376657650049
+    },
+    {
+      "name": "Aotearoan Settlements (Polynesian)",
+      "status": "Added",
+      "areaSquareDegrees": 7.953845260882722
+    },
+    {
+      "name": "Kitsai",
+      "status": "Added",
+      "areaSquareDegrees": 8.73019750586333
+    },
+    {
+      "name": "Chickasaw",
+      "status": "Added",
+      "areaSquareDegrees": 9.365571953093452
+    },
+    {
+      "name": "Louisiana Territory",
+      "status": "Added",
+      "areaSquareDegrees": 15.476417453016863
+    },
+    {
+      "name": "Texas",
+      "status": "Added",
+      "areaSquareDegrees": 16.79137523368698
+    },
+    {
+      "name": "Caddo",
+      "status": "Added",
+      "areaSquareDegrees": 17.56466818245893
+    },
+    {
+      "name": "Mayan Civilizations",
+      "status": "Added",
+      "areaSquareDegrees": 18.236411670779027
+    },
+    {
+      "name": "Shawnee",
+      "status": "Added",
+      "areaSquareDegrees": 18.305696429481273
+    },
+    {
+      "name": "Illinois Confederation",
+      "status": "Added",
+      "areaSquareDegrees": 19.250921209849555
+    },
+    {
+      "name": "Land of Torch Trees (Ming)",
+      "status": "Added",
+      "areaSquareDegrees": 19.350450274492964
+    },
+    {
+      "name": "Wichita",
+      "status": "Added",
+      "areaSquareDegrees": 19.36134730482751
+    },
+    {
+      "name": "Vargas Freehold",
+      "status": "Added",
+      "areaSquareDegrees": 19.406702176804732
+    },
+    {
+      "name": "Oceti Sakowin",
+      "status": "Added",
+      "areaSquareDegrees": 21.558528327777324
+    },
+    {
+      "name": "Blackfeet",
+      "status": "Added",
+      "areaSquareDegrees": 22.931573667565118
+    },
+    {
+      "name": "Aztec Empire",
+      "status": "Added",
+      "areaSquareDegrees": 29.11596918959752
+    },
+    {
+      "name": "Pagan Norse Holdouts",
+      "status": "Added",
+      "areaSquareDegrees": 39.16712598001623
+    },
+    {
+      "name": "Shoshone",
+      "status": "Added",
+      "areaSquareDegrees": 40.53471015951598
+    },
+    {
+      "name": "Apache",
+      "status": "Added",
+      "areaSquareDegrees": 41.09435543713663
+    },
+    {
+      "name": "Crow",
+      "status": "Added",
+      "areaSquareDegrees": 41.137190589862314
+    },
+    {
+      "name": "Kalmar Union",
+      "status": "Added",
+      "areaSquareDegrees": 309.72278121783785
+    },
+    {
+      "name": "Cree Territories",
+      "status": "Added",
+      "areaSquareDegrees": 435.01859922080575
+    }
+  ]
+}
