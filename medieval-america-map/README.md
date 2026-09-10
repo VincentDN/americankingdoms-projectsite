@@ -1,5 +1,33 @@
 # American Kingdoms atlas groundwork
 
+## Lightweight mobile atlas branch
+
+On `codex/mobile-lightweight-map`, phones load `data/mobile/atlas.json` instead
+of the six full geography files. Automatic selection uses a viewport up to 900px,
+coarse pointers up to 1200px, or the browser's Save Data preference. Selection is
+made once on page load so rotation does not download another dataset. `?detail=lite`
+and `?detail=full` override it; the editor always uses full geometry.
+
+The light map uses Leaflet canvas paths, no city markers/rivers/hover previews,
+at most 18 visible heraldic labels, and zoom levels 2–7. The native realm picker
+keeps small countries and keyboard navigation accessible. Flags, descriptions,
+wiki links, alliances and county-submap links remain available. The detail switch
+preserves the viewport through the existing return-state mechanism. Mobile panels
+start closed and open as a bounded, scrollable bottom sheet.
+
+Run `python scripts/build-mobile-map.py` with Shapely >= 2.1 after editing source
+geography. The generator nodes the shared border network before coverage
+simplification, removes minor fragments while retaining every canonical realm,
+and validates exported polygons. It enforces a 900 KB raw data ceiling. The current
+build is 873,038 bytes versus 6,082,825 bytes for the full data (85.6% smaller),
+approximately 295,708 bytes with gzip. Exact figures live in
+`data/mobile/build-stats.json`; these are payload measurements, not device FPS.
+
+Run `node scripts/test-map-loading.mjs` to check automatic/forced data selection,
+canvas settings, realm selection, full-detail switching and offline feedback.
+The test uses lightweight DOM/Leaflet doubles; physical smartphone performance
+and touch behavior still need device testing before merging this branch.
+
 ## Border repair and western expansions — 10 September 2026
 
 After the reference import, `scripts/repair-territory-borders.py PRE_REPAIR_TERRITORIES.geojson`

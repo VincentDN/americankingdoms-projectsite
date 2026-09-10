@@ -69,3 +69,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:1rem;pa
 .mode-option:has(input:checked) .mode-option-desc{color:#f7ecd6}
 .mode-option:has(input:checked) .mode-option-title::before{opacity:1;color:var(--parch)}
 .mode-option:has(input:focus-visible){outline:3px solid var(--gold);outline-offset:2px}
+.map-detail-note{font-size:.9rem;margin:12px 0 6px;color:var(--muted)}
+#realm-finder{min-height:44px;width:100%;font-size:16px}
+#detail-switch{display:inline-block;padding:8px 0;margin-bottom:12px;font-size:1rem}
+.atlas-lite #map::after{box-shadow:none;background:none;border:3px solid #9d865e;}
+.atlas-lite .state-map-label{text-shadow:none;font-size:12px}
+.atlas-lite .state-map-label img{filter:none;width:20px;height:24px}
+.atlas-lite #panel{box-shadow:none}
+@media(max-width:700px){
+ .atlas-lite header{padding:6px 12px}.atlas-lite header img{width:85px;height:36px}
+ .atlas-lite #alpha-banner{font-size:.65rem;padding:4px 8px}
+ .atlas-lite #panel{bottom:max(12px,env(safe-area-inset-bottom));max-height:48%;}
+ .atlas-lite .flag-buy{width:auto;font-size:.85rem}
+ .atlas-lite .leaflet-control-attribution{max-width:80vw;font-size:9px}
+}
