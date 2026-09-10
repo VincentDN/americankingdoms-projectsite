@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 390" role="img" aria-labelledby="title">
+  <title id="title">Betsy Ross flag</title>
+  <defs><path id="star" d="M0-10 2.94-4.05 9.51-3.09 4.76 1.55 5.88 8.09 0 5 -5.88 8.09 -4.76 1.55 -9.51-3.09 -2.94-4.05Z" fill="#fff"/></defs>
+  <path fill="#fff" d="M0 0H650V390H0Z"/>
+  <path stroke="#b22234" stroke-width="30" d="M0 15H650M0 75H650M0 135H650M0 195H650M0 255H650M0 315H650M0 375H650"/>
+  <path fill="#25366b" d="M0 0H260V210H0Z"/>
+  <g transform="translate(130 105)">
+    <use href="#star" x="0" y="-72"/>
+    <use href="#star" x="33.46" y="-63.75"/>
+    <use href="#star" x="59.25" y="-40.90"/>
+    <use href="#star" x="71.48" y="-8.68"/>
+    <use href="#star" x="67.32" y="25.53"/>
+    <use href="#star" x="47.74" y="53.89"/>
+    <use href="#star" x="17.23" y="69.91"/>
+    <use href="#star" x="-17.23" y="69.91"/>
+    <use href="#star" x="-47.74" y="53.89"/>
+    <use href="#star" x="-67.32" y="25.53"/>
+    <use href="#star" x="-71.48" y="-8.68"/>
+    <use href="#star" x="-59.25" y="-40.90"/>
+    <use href="#star" x="-33.46" y="-63.75"/>
+  </g>
+</svg>

@@ -56,9 +56,10 @@
     panelMode = mode;
     $('panel').hidden = !open;
     $('key-content').hidden = mode !== 'key';
+    $('welcome').hidden = mode !== 'welcome';
     $('details').hidden = mode !== 'details';
     $('editor').hidden = !editMode || mode !== 'details';
-    $('panel-title').textContent = mode === 'key' ? 'Map key' : editMode ? 'Edit territory' : 'Territory details';
+    $('panel-title').textContent = mode === 'welcome' ? 'Welcome to American Kingdoms' : mode === 'key' ? 'Map key' : editMode ? 'Edit territory' : 'Territory details';
     $('panel-toggle')?.setAttribute('aria-expanded',String(open && mode === 'key'));
     // Leaflet's map.closeTooltip requires an actual tooltip instance.
     map.eachLayer(layer => { if (layer instanceof L.Tooltip) map.closeTooltip(layer); });
@@ -73,7 +74,7 @@
   const closePanel = () => { setPanel(false); $('panel-toggle')?.focus({preventScroll:true}); };
   on('panel-close','onclick', closePanel);
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); });
-  setPanel(!matchMedia('(max-width:700px)').matches, 'key');
+  setPanel(!matchMedia('(max-width:700px)').matches, editMode ? 'key' : 'welcome');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
   map.createPane('stateLabels');map.getPane('stateLabels').style.zIndex=500;

@@ -21,10 +21,10 @@
   <meta name="twitter:site" content="@kaisercatcinema">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="atlas.css?v=11">
+  <link rel="stylesheet" href="atlas.css?v=12">
   <script defer src="vendor/leaflet.js"></script>
   <script defer src="submaps.js?v=2"></script>
-  <script defer src="atlas.js?v=15"></script>
+  <script defer src="atlas.js?v=16"></script>
 </head>
 <body>
   <div id="alpha-banner" role="status">Map is currently in alpha state! Expect shenanigans, shekanery and tomfoolery - Vincent</div>
@@ -41,6 +41,13 @@
     <aside id="panel" aria-labelledby="panel-title">
       <div class="panel-heading"><h2 id="panel-title">Map key</h2><button id="panel-close" type="button" aria-label="Close map panel">×</button></div>
       <div class="panel-body">
+      <section id="welcome" hidden aria-labelledby="welcome-title">
+        <img class="welcome-flag" src="assets/betsy-ross-flag.svg" width="110" height="66" alt="Betsy Ross flag: thirteen white stars in a circle on a blue canton, with thirteen red and white stripes">
+        <h2 id="welcome-title">The New World in 1377 A.D.</h2>
+        <p>Roman explorers reached America around the dawn of the first millennium, opening sea routes that would bind distant worlds together. The voyagers have faded into myth, yet their long shadow endures in the laws, faiths and rivalries of the realms they left behind.</p>
+        <p>Thirteen centuries later, merchant republics guard their ancient privileges, kingdoms vie for trade and dominion, and thirteen dukes rise against their Anglo-Saxon overlords. In this New World, the American Revolutionary War has begun.</p>
+        <a href="https://wiki.american-kingdoms.com/">Explore the American Kingdoms Wiki <span aria-hidden="true">↗</span></a>
+      </section>
       <section id="details" hidden aria-live="polite"><img id="detail-flag" hidden alt=""><a id="detail-flag-buy" class="flag-buy" href="https://flagmaker-print.com/collections/alt-history-flags" target="_blank" rel="noopener" hidden>Purchase a flag on Flagmaker &amp; Print <span aria-hidden="true">↗</span></a><h2 id="detail-name"></h2><p id="detail-author">Patreon Lord: <a id="detail-author-name" href="https://kaisercatcinema.com/patreon" target="_blank" rel="noopener"></a></p><p id="detail-description"></p><a id="detail-link" hidden>Read the Wiki Article <span aria-hidden="true">↗</span></a></section>
       <div id="key-content">
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
