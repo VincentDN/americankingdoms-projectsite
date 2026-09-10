@@ -108,8 +108,12 @@ Names and descriptions are rendered as text, not injected HTML.
 Political geometry is traced from `sources/east-coast-canon.png` (authoritative)
 and `sources/continental-outline.jpg` (provisional elsewhere). Massachusetts now uses
 its modern outline; the former northern claim is separate provisional Maine. New Hampshire includes the Vermont area;
-Smokey March remains separate. Florida follows the reference's northern territory,
-with the uncoloured southern peninsula retained as provisional land.
+Smokey March remains separate. Florida retains its existing northern border and
+now fills the entire peninsula and coastal islands to the physical coastline,
+with lake areas excluded. `scripts/fill-florida.py` reproduces this repair using
+the local Natural Earth physical and admin-1 sources (requires Shapely). It checks
+that the northern edge is retained and removes overlapping provisional fragments
+from the newly filled land.
 
 The source images are rough, differently projected raster maps. Their pixel colours
 were segmented and georeferenced using manually paired landmarks. The resulting
