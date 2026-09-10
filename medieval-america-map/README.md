@@ -22,6 +22,15 @@ buttons. Five explicitly provisional geographic groupings aid navigation; these
 are not assertions of canonical duchy boundaries. The page includes reset,
 loading, timeout, retry, mobile layout, and return navigation.
 
+Submap headings and browser titles use **The Kingdom of [StateName] in 1377 A.D.**,
+with the name taken from the registry. County labels carry a small shared
+placeholder heraldic shield. Selecting a county opens a parchment details panel
+with a placeholder flag, county name, Patreon Lord link, lorem ipsum, the same
+flag-shop link as the world atlas, and a wiki link to the main wiki homepage.
+The panel supports its close button and Escape, returning focus to the county
+list; mobile uses a bottom panel. The shared SVG placeholders are original simple
+geometric stand-ins, not canonical heraldry.
+
 Massachusetts now uses its modern outline, as requested. The former northern
 claim becomes provisional Maine; adjacent territory edges are trimmed and
 repaired to avoid overlaps. The rest of those factions' lore is retained.

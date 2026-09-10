@@ -5,6 +5,8 @@
   const config = window.ATLAS_SUBMAPS?.[document.body.dataset.submap];
   const status = $('submap-status');
   if (!window.L || !config) { status.textContent='This map is unavailable. Please return to the world map or reload.'; return; }
+  const title='The Kingdom of '+config.name+' in 1377 A.D.';
+  $('kingdom-title').textContent=title;document.title=title;
   const map = L.map('map',{zoomControl:false,minZoom:6,maxZoom:13,zoomSnap:.25});
   L.control.zoom({position:'topright'}).addTo(map);
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
@@ -12,6 +14,16 @@
   map.setView([42.2,-71.8],7);
   const entries = new Map();
   let counties, selected = null;
+  let returnFocus = null;
+  function closeDetails() {
+    $('county-details').hidden=true;selected=null;refresh();
+    history.replaceState(null,'',location.pathname+location.search);
+    returnFocus?.focus({preventScroll:true});
+  }
+  $('county-close').onclick=closeDetails;
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape' && !$('county-details').hidden){event.preventDefault();closeDetails();}
+  });
   const region = $('region');
   const baseStyle = f => ({color:'#534432',weight:1.3,fillColor:f.properties.color,fillOpacity:.72});
   function refresh() {
@@ -40,6 +52,10 @@
     $('county-details').hidden=false;
     $('county-name').textContent=p.name+' County';
     $('county-region').textContent=p.region;
+    $('county-flag').alt='Placeholder flag of '+p.name+' County';
+    returnFocus=entry.button;
+    $('county-details-title').focus({preventScroll:true});
+    $('county-details').querySelector('.panel-body').scrollTop=0;
     entry.layer.bringToFront();
     if(zoom)fit(entry.layer.getBounds());
     refresh();
@@ -74,7 +90,9 @@
         button.type='button';button.className='county-button';button.setAttribute('aria-pressed','false');
         const swatch=document.createElement('span');swatch.className='county-swatch';swatch.style.backgroundColor=p.color;swatch.setAttribute('aria-hidden','true');
         button.append(swatch,document.createTextNode(p.name));button.onclick=()=>select(p.id);$('county-list').append(button);
-        const label=document.createElement('span');label.textContent=p.name;
+        const label=document.createElement('span');label.className='county-map-label';
+        const shield=document.createElement('img');shield.src='/medieval-america-map/assets/placeholder-arms.svg';shield.alt='';shield.width=24;shield.height=29;
+        label.append(shield,document.createTextNode(p.name));
         layer.bindTooltip(label,{permanent:true,direction:'center',className:'county-label'});
         layer.on('tooltipopen',()=>layer.getTooltip().setLatLng([p.label[1],p.label[0]]));
         layer.on('click',()=>select(p.id));
