@@ -72,6 +72,33 @@
   setPanel(!matchMedia('(max-width:700px)').matches, 'key');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
+  map.createPane('stateLabels');map.getPane('stateLabels').style.zIndex=500;
+  map.getPane('stateLabels').style.pointerEvents='none';
+  const stateLabels=new Map();
+  function updateStateLabels() {
+    const occupied=[],size=map.getSize();
+    const entries=[...stateLabels.values()].sort((a,b)=>Number(!!b.layer.feature.properties.canon)-Number(!!a.layer.feature.properties.canon) || a.minZoom-b.minZoom);
+    for(const entry of entries){
+      const {layer,marker,minZoom}=entry;
+      const point=map.latLngToContainerPoint(marker.getLatLng());
+      const rect={left:point.x-72,right:point.x+72,top:point.y-36,bottom:point.y+36};
+      const visible=map.hasLayer(layer) && map.getZoom()>=minZoom && point.x>=0 && point.x<=size.x && point.y>=0 && point.y<=size.y && !occupied.some(r=>rect.left<r.right && rect.right>r.left && rect.top<r.bottom && rect.bottom>r.top);
+      if(visible){occupied.push(rect);if(!map.hasLayer(marker))marker.addTo(map);}
+      else if(map.hasLayer(marker))map.removeLayer(marker);
+    }
+  }
+  function addStateLabel(layer,feature,sample){
+    if(sample || !feature.properties.label)return;
+    const p=feature.properties,node=document.createElement('div'),shield=document.createElement('img'),name=document.createElement('span');
+    node.className='state-map-label';node.setAttribute('aria-hidden','true');
+    shield.src=p.shield || 'assets/placeholder-arms.svg';shield.alt='';shield.width=24;shield.height=29;
+    name.textContent=p.name;node.append(shield,name);
+    const marker=L.marker([p.label[1],p.label[0]],{pane:'stateLabels',interactive:false,keyboard:false,pmIgnore:true,icon:L.divIcon({className:'state-label-marker',html:node,iconSize:[140,68],iconAnchor:[70,34]})});
+    stateLabels.set(layer,{layer,marker,minZoom:p.labelMinZoom || 4});
+    layer.on('add remove',updateStateLabels);
+    layer.on('pm:edit',()=>{if(map.hasLayer(marker))map.removeLayer(marker);stateLabels.delete(layer);});
+  }
+  map.on('zoomend moveend resize',updateStateLabels);
   const rivers = L.featureGroup().addTo(map);
   // Cities are placeholder real-world data (state/province/national
   // capitals plus population-banded regional cities), the same way the
@@ -83,8 +110,8 @@
   // step down the hierarchy, kept small and faint so the glyphs read as a
   // quiet map convention rather than competing with the territory fills.
   const CITY_TIERS = {
-    capital:  {minZoom:2, size:9, opacity:.85, outline:'#3d2f14'},
-    province: {minZoom:4, size:8, opacity:.8,  outline:'#3d2f14'},
+    capital:  {minZoom:2, size:9, opacity:.85, outline:'#a78b60'},
+    province: {minZoom:4, size:8, opacity:.8,  outline:'#a78b60'},
     metro:    {minZoom:5, size:4, opacity:.55},
     city:     {minZoom:6, size:3, opacity:.45},
   };
@@ -149,6 +176,7 @@
   const PROVISIONAL_PALE = '#d9b979';
   const isProvisional = feature => !feature.properties.canon;
   const colorOf = feature => {
+    if (/^#[0-9a-f]{6}$/i.test(feature.properties.placeholderColor || '')) return feature.properties.placeholderColor;
     if (isProvisional(feature)) return PROVISIONAL_PALE;
     if (mapMode === 'realms') {
       const alliance = feature.properties.alliance;
@@ -197,6 +225,7 @@
   }
   function wire(layer,feature,sample=false) {
     layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';layer.setStyle(style(feature));
+    addStateLabel(layer,feature,sample);
     layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});
     layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,opacity:1,fillOpacity:.9});});
     layer.on('mouseout',()=>layer.setStyle(style(layer.feature)));
@@ -274,13 +303,14 @@
       // antimeridian -- so they skip unwrapFeatures and are fetched
       // alongside, not through, the polygon/line batch that needs it.
       const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
-        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=10':'')))).then(fcs=>fcs.map(unwrapFeatures)),
+        Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(name==='territories'?'?v=12':'')))).then(fcs=>fcs.map(unwrapFeatures)),
         read('data/cities.geojson'),
       ]);
       L.geoJSON(land,{pane:'land',interactive:false,pmIgnore:true,style:{color:'#796747',weight:1.2,fillColor:'#f0e5cd',fillOpacity:1}}).addTo(map);
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
       addFeatures(territories);addFeatures(samples,true);
+      updateStateLabels();
       addCities(cities);updateCityTiers();
       if (new URLSearchParams(location.search).get('return') === '1' || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
         try {

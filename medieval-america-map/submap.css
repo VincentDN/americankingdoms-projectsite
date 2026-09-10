@@ -8,16 +8,16 @@
 .county-button{width:100%;text-align:left;display:flex;align-items:center;gap:10px}
 .county-button[aria-pressed=true]{background:var(--red);color:#fff;border-color:#7d1523}
 .county-swatch{width:12px;height:12px;border:1px solid #2c211860;flex:none}
-#county-details{position:absolute;z-index:800;left:16px;top:16px;width:268px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(120deg,#f5edda,#e4d5b8);border:1px solid #9d865e;box-shadow:0 4px 20px #2c211826}
-#county-flag{display:block;width:150px;height:90px;object-fit:cover;margin:0 0 12px;border:1px solid var(--gold);box-shadow:0 2px 8px #2c211840}
+#county-details{position:absolute;z-index:800;left:16px;top:16px;width:268px;max-width:calc(100% - 32px);max-height:calc(100% - 32px);display:flex;flex-direction:column;overflow:hidden;background:linear-gradient(120deg,#f5edda,#e4d5b8);border:1px solid #9d865e;box-shadow:0 4px 20px #a78b6038}
+#county-flag{display:block;width:150px;height:90px;object-fit:cover;margin:0 0 12px;border:1px solid var(--gold);box-shadow:0 2px 8px #a78b6059}
 #county-details .flag-buy{width:auto;font-size:.875rem;line-height:1.4;margin-bottom:16px}
 .county-author{font-style:italic;color:var(--muted);margin-bottom:12px}.county-author a{font-weight:600}
 #county-region{font:600 .875rem var(--sans);color:var(--muted);margin-bottom:12px}
 .submap #map{background:#c8d0c3}
 .county-map-label{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.2;max-width:140px;white-space:normal;text-align:center}
-.county-map-label img{display:block;filter:drop-shadow(0 1px 2px #2c21184d)}
+.county-map-label img{display:block;filter:drop-shadow(0 1px 2px #a78b6073)}
 .submap .atlas-title{flex:1;min-width:0}.submap h1{font-size:clamp(1rem,1.6vw,1.5rem)}
-.county-label{background:transparent;border:0;box-shadow:none;color:#231b15;font:800 14px var(--sans);text-shadow:0 1px 2px #fff,1px 0 2px #fff,-1px 0 2px #fff;pointer-events:none}
+.county-label{background:transparent;border:0;box-shadow:none;color:#231b15;font:800 14px var(--sans);text-shadow:0 1px 2px #d8c29d,1px 0 2px #d8c29d,-1px 0 2px #d8c29d;pointer-events:none}
 .county-label::before{display:none}.submap nav{flex-wrap:wrap}
 @media(max-width:800px){.submap-layout{grid-template-columns:1fr;grid-template-rows:minmax(220px,1fr) minmax(140px,32%)}.submap-canvas{grid-row:1}.county-panel{grid-row:2;padding:14px 16px;border-right:0;border-top:1px solid #9d865e}#county-list{grid-template-columns:repeat(2,minmax(0,1fr))}.submap header{flex-wrap:wrap;padding:8px 12px}.submap header img{width:100px;height:43px}.submap nav{width:100%;justify-content:flex-end}.county-label{font-size:14px}}
 @media(prefers-reduced-motion:reduce){.submap *{scroll-behavior:auto!important}}
