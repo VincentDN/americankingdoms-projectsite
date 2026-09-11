@@ -10,6 +10,9 @@
   // ever loads.
   const on = (id, event, handler) => { const el = $(id); if (el) el[event] = handler; else console.error('Atlas: expected #'+id+' in the page'); };
   const editMode = new URLSearchParams(location.search).get('edit') === '1';
+  const requestedDetail = new URLSearchParams(location.search).get('detail');
+  const liteMode = !editMode && requestedDetail !== 'full' && (requestedDetail === 'lite' || matchMedia('(max-width:900px)').matches || (matchMedia('(pointer:coarse)').matches && matchMedia('(max-width:1200px)').matches) || navigator.connection?.saveData === true);
+  document.documentElement.classList.toggle('atlas-lite', liteMode);
   const status = $('status');
   const showStatus = text => { status.hidden = false; status.textContent = text; };
   if (!window.L) { showStatus('The map could not load. Please reload the page.'); return; }
@@ -41,7 +44,7 @@
     projection: PolarAzimuthal,
     transformation: new L.Transformation(polarScale, 0.5, -polarScale, 0.5),
   });
-  const map = L.map('map', {crs:L.CRS.PolarAzimuthal,zoomControl:false,minZoom:2,maxZoom:9,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false});
+  const map = L.map('map', {crs:L.CRS.PolarAzimuthal,preferCanvas:liteMode,zoomControl:false,minZoom:2,maxZoom:liteMode?7:9,zoomAnimation:false,fadeAnimation:false,markerZoomAnimation:false});
   L.control.zoom({position:'topright'}).addTo(map);
   map.attributionControl.setPrefix('<a href="https://leafletjs.com/">Leaflet</a>');
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
@@ -74,7 +77,7 @@
   const closePanel = () => { setPanel(false); $('panel-toggle')?.focus({preventScroll:true}); };
   on('panel-close','onclick', closePanel);
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); });
-  setPanel(!matchMedia('(max-width:700px)').matches, editMode ? 'key' : 'welcome');
+  setPanel(!liteMode && !matchMedia('(max-width:700px)').matches, editMode ? 'key' : 'welcome');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
   map.createPane('stateLabels');map.getPane('stateLabels').style.zIndex=500;
@@ -87,13 +90,13 @@
       const {layer,marker,minZoom}=entry;
       const point=map.latLngToContainerPoint(marker.getLatLng());
       const rect={left:point.x-72,right:point.x+72,top:point.y-36,bottom:point.y+36};
-      const visible=map.hasLayer(layer) && map.getZoom()>=minZoom && point.x>=0 && point.x<=size.x && point.y>=0 && point.y<=size.y && !occupied.some(r=>rect.left<r.right && rect.right>r.left && rect.top<r.bottom && rect.bottom>r.top);
+      const visible=(!liteMode || occupied.length<18) && map.hasLayer(layer) && map.getZoom()>=minZoom && point.x>=0 && point.x<=size.x && point.y>=0 && point.y<=size.y && !occupied.some(r=>rect.left<r.right && rect.right>r.left && rect.top<r.bottom && rect.bottom>r.top);
       if(visible){occupied.push(rect);if(!map.hasLayer(marker))marker.addTo(map);}
       else if(map.hasLayer(marker))map.removeLayer(marker);
     }
   }
   function addStateLabel(layer,feature,sample){
-    if(sample || !feature.properties.label)return;
+    if(sample || !feature.properties.label || (liteMode && !feature.properties.canon))return;
     const p=feature.properties,node=document.createElement('div'),shield=document.createElement('img'),name=document.createElement('span');
     node.className='state-map-label';node.setAttribute('aria-hidden','true');
     shield.src=p.shield || 'assets/placeholder-arms.svg';shield.alt='';shield.width=24;shield.height=29;
@@ -121,7 +124,7 @@
     city:     {minZoom:6, size:3, opacity:.45},
   };
   const cityTierGroups = {capital:L.layerGroup(),province:L.layerGroup(),metro:L.layerGroup(),city:L.layerGroup()};
-  let citiesEnabled = true;
+  let citiesEnabled = !liteMode;
   function updateCityTiers() {
     const zoom = map.getZoom();
     for (const [tier,group] of Object.entries(cityTierGroups)) {
@@ -147,6 +150,15 @@
   }
   submapLink.addEventListener('click', rememberView);
   window.addEventListener('pagehide', rememberView);
+  const detailSwitch = $('detail-switch');
+  if (detailSwitch) {
+    const url = new URL(location.href);
+    url.searchParams.set('detail',liteMode?'full':'lite');url.searchParams.set('return','1');
+    detailSwitch.href=url.href;detailSwitch.textContent=liteMode?'Switch to full detail':'Switch to light map';
+    detailSwitch.addEventListener('click',rememberView);
+  }
+  if ($('map-detail-note')) $('map-detail-note').textContent=liteMode?'Light map: simplified borders for faster browsing. Tap a realm to explore.':'Full map: detailed borders, cities and rivers.';
+  if (liteMode) for (const id of ['cities','rivers']) { $(id).checked=false;$(id).disabled=true;$(id).closest('label').hidden=true; }
   const markDirty = () => { dirty=true; $('editor-status').textContent='Changes are in this tab only. Export before closing.'; };
   window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue='';}});
   const safeURL = value => { try { const url=new URL(value); return url.protocol==='https:' ? url.href : null; } catch { return null; } };
@@ -233,9 +245,11 @@
   function wire(layer,feature,sample=false) {
     layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';layer.setStyle(style(feature));
     addStateLabel(layer,feature,sample);
-    layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});
-    layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,opacity:1,fillOpacity:.9});});
-    layer.on('mouseout',()=>layer.setStyle(style(layer.feature)));
+    if (!liteMode) {
+      layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});
+      layer.on('mouseover',()=>{closeOtherTooltips(layer);layer.setStyle({weight:3,opacity:1,fillOpacity:.9});});
+      layer.on('mouseout',()=>layer.setStyle(style(layer.feature)));
+    }
     layer.on('click',()=>select(layer));
     layer.on('add',()=>{const path=layer.getElement();if(path){path.setAttribute('tabindex','0');path.setAttribute('role','button');path.setAttribute('aria-label',layer.feature.properties.name);path.onfocus=()=>{closeOtherTooltips(layer);layer.openTooltip();};path.onblur=()=>layer.closeTooltip();path.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(layer);}};}});
     layer.on('pm:edit',markDirty);
@@ -280,7 +294,7 @@
   document.querySelectorAll('input[name=mapmode]').forEach(radio=>radio.onchange=e=>{
     if(!e.target.checked)return;
     mapMode=e.target.value;
-    Object.values(groups).forEach(group=>group.eachLayer(layer=>{layer.setStyle(style(layer.feature));layer.setTooltipContent(tooltip(layer.feature));}));
+    Object.values(groups).forEach(group=>group.eachLayer(layer=>{layer.setStyle(style(layer.feature));if(!liteMode)layer.setTooltipContent(tooltip(layer.feature));}));
   });
   async function read(path){const response=await fetch(path);if(!response.ok)throw new Error(path);return response.json();}
   // A ring/line whose raw longitudes cross +/-180 (Alaska, the Aleutians)
@@ -309,7 +323,11 @@
       // Cities are Point features -- no ring to keep continuous across the
       // antimeridian -- so they skip unwrapFeatures and are fetched
       // alongside, not through, the polygon/line batch that needs it.
-      const [[land,lakes,riverData,territories,samples],cities]=await Promise.all([
+      const empty = () => ({type:'FeatureCollection',features:[]});
+      const [[land,lakes,riverData,territories,samples],cities]=liteMode ? await (async()=>{
+        const bundle=await read('data/mobile/atlas.json?v=1');
+        return [[unwrapFeatures(bundle.land),unwrapFeatures(bundle.lakes),empty(),unwrapFeatures(bundle.territories),empty()],empty()];
+      })() : await Promise.all([
         Promise.all(['land','lakes','rivers','territories','samples'].map(name=>read('data/'+name+'.geojson'+(['land','lakes','rivers','territories'].includes(name)?'?v=15':'')))).then(fcs=>fcs.map(unwrapFeatures)),
         read('data/cities.geojson'),
       ]);
@@ -317,16 +335,31 @@
       L.geoJSON(lakes,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:.7,fillColor:'#d6c6a4',fillOpacity:1}}).addTo(map);
       L.geoJSON(riverData,{pane:'water',interactive:false,pmIgnore:true,style:{color:'#9d8961',weight:1,opacity:.65}}).addTo(rivers);
       addFeatures(territories);addFeatures(samples,true);
+      const finder=$('realm-finder'),realmLayers=new Map();
+      Object.values(groups).forEach(group=>group.eachLayer(layer=>{if(layer.feature.properties.name)realmLayers.set(layer.feature.properties.id,layer);}));
+      if(finder){
+        for(const [id,layer] of [...realmLayers].sort((a,b)=>a[1].feature.properties.name.localeCompare(b[1].feature.properties.name))){
+          const option=document.createElement('option');option.value=id;option.textContent=layer.feature.properties.name;finder.append(option);
+        }
+        finder.disabled=false;
+        finder.onchange=()=>{const layer=realmLayers.get(finder.value);if(!layer)return;
+          const id=layer.feature.properties.kind==='region'?'regions':'countries';
+          $(id).checked=true;$(id).dispatchEvent(new Event('change'));
+          map.fitBounds(layer.getBounds(),{padding:[35,35],maxZoom:liteMode?6:7,animate:false});select(layer);
+          $('panel-close')?.focus({preventScroll:true});finder.value='';
+        };
+      }
       updateStateLabels();
       addCities(cities);updateCityTiers();
       if (new URLSearchParams(location.search).get('return') === '1' || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') {
         try {
           const saved = JSON.parse(sessionStorage.getItem('ak-world-view'));
           if (saved && Array.isArray(saved.center) && saved.center.length === 2 && saved.center.every(Number.isFinite) && Number.isFinite(saved.zoom)) {
-            map.setView(saved.center, Math.max(2,Math.min(9,saved.zoom)), {animate:false});
+            map.setView(saved.center, Math.max(2,Math.min(liteMode?7:9,saved.zoom)), {animate:false});
             const radio = document.querySelector('input[name=mapmode][value="'+(saved.mode==='cultures'?'cultures':'realms')+'"]');
             radio.checked=true; radio.dispatchEvent(new Event('change'));
             for (const id of ['countries','regions','cities','rivers']) if (typeof saved.layers?.[id] === 'boolean') {
+              if(liteMode && ['cities','rivers'].includes(id))continue;
               $(id).checked=saved.layers[id]; $(id).dispatchEvent(new Event('change'));
             }
             Object.values(groups).forEach(group=>group.eachLayer(layer=>{if(layer.feature.properties.id===saved.selected)select(layer);}));
@@ -334,7 +367,7 @@
         } catch { /* Use the default view if storage is unavailable or invalid. */ }
       }
       if(editMode) await enableEditor();
-    } catch(error) { showStatus('Part of the atlas could not load. Reload to try again.');console.error(error); }
+    } catch(error) { setPanel(true,'key');showStatus('Part of the atlas could not load. Reload to try again.');console.error(error); }
   }
   async function enableEditor() {
     const css=document.createElement('link');css.rel='stylesheet';css.href='vendor/geoman.css';document.head.append(css);

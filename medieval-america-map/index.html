@@ -21,10 +21,10 @@
   <meta name="twitter:site" content="@kaisercatcinema">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="atlas.css?v=12">
+  <link rel="stylesheet" href="atlas.css?v=13">
   <script defer src="vendor/leaflet.js"></script>
   <script defer src="submaps.js?v=2"></script>
-  <script defer src="atlas.js?v=17"></script>
+  <script defer src="atlas.js?v=18"></script>
 </head>
 <body>
   <div id="alpha-banner" role="status">Map is currently in alpha state! Expect shenanigans, shekanery and tomfoolery - Vincent</div>
@@ -51,6 +51,10 @@
       <section id="details" hidden aria-live="polite"><img id="detail-flag" hidden alt=""><a id="detail-flag-buy" class="flag-buy" href="https://flagmaker-print.com/collections/alt-history-flags" target="_blank" rel="noopener" hidden>Purchase a flag on Flagmaker &amp; Print <span aria-hidden="true">↗</span></a><h2 id="detail-name"></h2><p id="detail-author">Patreon Lord: <a id="detail-author-name" href="https://kaisercatcinema.com/patreon" target="_blank" rel="noopener"></a></p><p id="detail-description"></p><a id="detail-link" hidden>Read the Wiki Article <span aria-hidden="true">↗</span></a></section>
       <div id="key-content">
       <p>Drag to explore. Scroll or pinch to zoom. Select a territory to read more.</p>
+      <label for="realm-finder">Find a realm</label>
+      <select id="realm-finder" disabled><option value="">Choose a realm…</option></select>
+      <p id="map-detail-note" class="map-detail-note"></p>
+      <a id="detail-switch" href="?detail=lite">Switch to light map</a>
       <fieldset><legend>Map mode</legend>
         <p class="mode-hint">Sort territories via their…</p>
         <div class="mode-options">

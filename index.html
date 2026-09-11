@@ -4,8 +4,8 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.24.0
-  BUILD   : 2026-09-09
+  VERSION : 1.25.0
+  BUILD   : 2026-09-11
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
            Simply Static export. Hero, World, Factions, Gallery, Join,
@@ -117,6 +117,9 @@
            tighter East Coast crop, Dev Diaries & Newsletter split into
            standalone Dev Diaries and Newsletter cards, plus a new Discord
            Community card.
+    1.25.0 Added a dedicated Map Promo band between Gallery and Art Prints,
+           pairing an atlas screenshot with a direct call-to-action to the
+           new high-performance mobile map.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -383,6 +386,16 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .g-half{grid-column:span 4;aspect-ratio:1/1}
 .g-third{grid-column:span 4;aspect-ratio:16/10}
 .g-landscape{grid-column:span 6;aspect-ratio:16/9}
+
+/* --- Map promo band --- */
+#map-promo{border-top:1px solid rgba(200,162,74,.45)}
+.map-promo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,5vw,4rem);align-items:center}
+.map-promo-copy p{color:var(--cream-dim)}
+.map-promo-art{display:block;margin:0;position:relative;min-width:0;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid rgba(200,162,74,.35)}
+.map-promo-art img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s ease}
+.map-promo-art:hover img,.map-promo-art:focus-visible img{transform:scale(1.05)}
+.map-promo-art:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media(max-width:760px){.map-promo-grid{grid-template-columns:1fr}.map-promo-art{order:-1;aspect-ratio:16/10}}
 
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
@@ -988,6 +1001,21 @@ body.newsletter-open{overflow:hidden}
         </figure>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ============================ MAP PROMO ============================ -->
+<section class="plate sec-pad map-promo" id="map-promo">
+  <div class="wrap map-promo-grid">
+    <div class="map-promo-copy">
+      <div class="eyebrow">Explore the World</div>
+      <h2>Discover the American Kingdoms Interactive Map</h2>
+      <p class="lead">Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between Realms and Cultures, and read the lore behind each faction, straight from the atlas, now with a fast, mobile-friendly map built for phones.</p>
+      <a class="btn btn-primary" href="/medieval-america-map/">Explore the Interactive Map</a>
+    </div>
+    <a class="map-promo-art" href="/medieval-america-map/" aria-label="Open the American Kingdoms Interactive Map">
+      <img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., focused on the thirteen East Coast colonies coloured by realm" loading="lazy">
+    </a>
   </div>
 </section>
 
