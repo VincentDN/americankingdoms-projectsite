@@ -4,7 +4,7 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.26.0
+  VERSION : 1.27.0
   BUILD   : 2026-09-11
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
@@ -123,6 +123,9 @@
     1.26.0 Refreshed the Map Promo/Discover More atlas screenshot and gave
            the Map Promo image a tilted, 3D "floating screen" treatment
            that flattens on hover/focus.
+    1.27.0 Rebuilt Map Promo as a full-bleed background band (panel-free
+           atlas capture, dark-to-transparent tint), dropped the eyebrow
+           and tilted card, and rewrote its copy.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -212,7 +215,7 @@ p{margin:0 0 1.1em}
   background-size:31px 29px,43px 37px,auto;
   mix-blend-mode:soft-light;opacity:.24;
 }
-.plate > :not(.about-bg){position:relative;z-index:1}
+.plate > :not(.about-bg):not(.map-promo-bg){position:relative;z-index:1}
 
 /* --- eyebrow + heraldic divider (the signature system) --- */
 .eyebrow{
@@ -391,17 +394,14 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 .g-landscape{grid-column:span 6;aspect-ratio:16/9}
 
 /* --- Map promo band --- */
-#map-promo{border-top:1px solid rgba(200,162,74,.45)}
-.map-promo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,5vw,4rem);align-items:center}
-.map-promo-copy p{color:var(--cream-dim)}
-.map-promo-visual{perspective:1700px}
-.map-promo-art{display:block;margin:0;position:relative;min-width:0;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(200,162,74,.5);transform:rotateY(-9deg) rotateX(3deg);box-shadow:28px 34px 54px -20px rgba(0,0,0,.6),0 10px 22px -6px rgba(0,0,0,.35);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s cubic-bezier(.2,.8,.2,1)}
-.map-promo-art::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 32%);pointer-events:none}
-.map-promo-art img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
-.map-promo-visual:hover .map-promo-art,.map-promo-art:focus-visible{transform:rotateY(0) rotateX(0);box-shadow:10px 16px 32px -14px rgba(0,0,0,.45),0 4px 12px -2px rgba(0,0,0,.25)}
-.map-promo-art:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
-@media(max-width:760px){.map-promo-grid{grid-template-columns:1fr}.map-promo-visual{order:-1;perspective:none}.map-promo-art{aspect-ratio:16/10;transform:none;box-shadow:0 14px 28px -10px rgba(0,0,0,.45)}}
-@media(prefers-reduced-motion:reduce){.map-promo-art{transition:none}}
+.map-promo{position:relative;isolation:isolate;overflow:hidden;background:#1d1813;border-top:1px solid rgba(200,162,74,.45)}
+.map-promo-bg{position:absolute;inset:0;z-index:-2}
+.map-promo-bg img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.map-promo::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(17,14,10,.96) 0%,rgba(17,14,10,.88) 34%,rgba(17,14,10,.52) 64%,rgba(17,14,10,.1) 100%)}
+.map-promo .inner{max-width:56ch}
+.map-promo .inner p{color:var(--cream-dim)}
+.map-promo .inner .btn{margin-top:1.6rem}
+@media(max-width:700px){.map-promo::after{background:linear-gradient(180deg,rgba(15,12,9,.95) 0%,rgba(15,12,9,.9) 55%,rgba(15,12,9,.82) 100%)}}
 
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
@@ -1011,18 +1011,13 @@ body.newsletter-open{overflow:hidden}
 </section>
 
 <!-- ============================ MAP PROMO ============================ -->
-<section class="plate sec-pad map-promo" id="map-promo">
-  <div class="wrap map-promo-grid">
-    <div class="map-promo-copy">
-      <div class="eyebrow">Explore the World</div>
-      <h2>Discover the American Kingdoms Interactive Map</h2>
-      <p class="lead">Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between Realms and Cultures, and read the lore behind each faction, straight from the atlas, now with a fast, mobile-friendly map built for phones.</p>
+<section class="plate map-promo sec-pad" id="map-promo">
+  <div class="map-promo-bg"><img src="assets/editorial/map-promo-bg.webp" alt="" loading="lazy"></div>
+  <div class="wrap">
+    <div class="inner reveal">
+      <div class="section-head"><h2>Explore the New World in 1377 A.D.</h2></div>
+      <p class="lead">This interactive map is being continuously updated with submissions from our wiki writers.</p>
       <a class="btn btn-primary" href="/medieval-america-map/">Explore the Interactive Map</a>
-    </div>
-    <div class="map-promo-visual">
-      <a class="map-promo-art" href="/medieval-america-map/" aria-label="Open the American Kingdoms Interactive Map">
-        <img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., showing the coloured realms of North America from the Cree Territories to the Mayan States" loading="lazy">
-      </a>
     </div>
   </div>
 </section>

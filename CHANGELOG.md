@@ -1,5 +1,8 @@
 # American Kingdoms — Changelog
 
+## 1.27.0 — 2026-09-11
+- Redesigned the Map Promo section as a full-bleed background band (a fresh, panel-free atlas capture with a dark-to-transparent tint fading into the map on the right), dropping the eyebrow and tilted-screen card in favour of new copy: "Explore the New World in 1377 A.D. This interactive map is being continuously updated with submissions from our wiki writers."
+
 ## 1.26.0 — 2026-09-11
 - Replaced the Map Promo and Discover More "Interactive World Map" screenshot with a fresh capture of the corrected atlas (South America coastline, Mayan States), and gave the Map Promo image an angled, 3D "floating screen" treatment (CSS perspective/tilt, layered shadow, glass sheen) that flattens on hover/focus; flat and shadowed only on mobile.
 
