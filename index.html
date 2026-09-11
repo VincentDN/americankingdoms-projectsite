@@ -4,7 +4,7 @@
   AMERICAN KINGDOMS  ·  american-kingdoms.com
   Kaiser Cat Collective / Atelier Vincent De Nil BV
   ──────────────────────────────────────────────────────────────────────
-  VERSION : 1.25.0
+  VERSION : 1.26.0
   BUILD   : 2026-09-11
   CHANGELOG
     1.0.0  Full static rebuild (hand-coded) replacing the WordPress/
@@ -120,6 +120,9 @@
     1.25.0 Added a dedicated Map Promo band between Gallery and Art Prints,
            pairing an atlas screenshot with a direct call-to-action to the
            new high-performance mobile map.
+    1.26.0 Refreshed the Map Promo/Discover More atlas screenshot and gave
+           the Map Promo image a tilted, 3D "floating screen" treatment
+           that flattens on hover/focus.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -391,11 +394,14 @@ blockquote.charter cite{display:block;font-family:var(--body);font-style:italic;
 #map-promo{border-top:1px solid rgba(200,162,74,.45)}
 .map-promo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(2rem,5vw,4rem);align-items:center}
 .map-promo-copy p{color:var(--cream-dim)}
-.map-promo-art{display:block;margin:0;position:relative;min-width:0;width:100%;aspect-ratio:4/3;overflow:hidden;border:1px solid rgba(200,162,74,.35)}
-.map-promo-art img{width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .5s ease}
-.map-promo-art:hover img,.map-promo-art:focus-visible img{transform:scale(1.05)}
-.map-promo-art:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media(max-width:760px){.map-promo-grid{grid-template-columns:1fr}.map-promo-art{order:-1;aspect-ratio:16/10}}
+.map-promo-visual{perspective:1700px}
+.map-promo-art{display:block;margin:0;position:relative;min-width:0;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid rgba(200,162,74,.5);transform:rotateY(-9deg) rotateX(3deg);box-shadow:28px 34px 54px -20px rgba(0,0,0,.6),0 10px 22px -6px rgba(0,0,0,.35);transition:transform .6s cubic-bezier(.2,.8,.2,1),box-shadow .6s cubic-bezier(.2,.8,.2,1)}
+.map-promo-art::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 32%);pointer-events:none}
+.map-promo-art img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
+.map-promo-visual:hover .map-promo-art,.map-promo-art:focus-visible{transform:rotateY(0) rotateX(0);box-shadow:10px 16px 32px -14px rgba(0,0,0,.45),0 4px 12px -2px rgba(0,0,0,.25)}
+.map-promo-art:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(max-width:760px){.map-promo-grid{grid-template-columns:1fr}.map-promo-visual{order:-1;perspective:none}.map-promo-art{aspect-ratio:16/10;transform:none;box-shadow:0 14px 28px -10px rgba(0,0,0,.45)}}
+@media(prefers-reduced-motion:reduce){.map-promo-art{transition:none}}
 
 /* --- Art prints feature --- */
 .prints{background:var(--parch);color:var(--parch-ink)}
@@ -1013,9 +1019,11 @@ body.newsletter-open{overflow:hidden}
       <p class="lead">Chart the New World in 1377 A.D. for yourself. Zoom into every duchy, republic and territory, switch between Realms and Cultures, and read the lore behind each faction, straight from the atlas, now with a fast, mobile-friendly map built for phones.</p>
       <a class="btn btn-primary" href="/medieval-america-map/">Explore the Interactive Map</a>
     </div>
-    <a class="map-promo-art" href="/medieval-america-map/" aria-label="Open the American Kingdoms Interactive Map">
-      <img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., focused on the thirteen East Coast colonies coloured by realm" loading="lazy">
-    </a>
+    <div class="map-promo-visual">
+      <a class="map-promo-art" href="/medieval-america-map/" aria-label="Open the American Kingdoms Interactive Map">
+        <img src="assets/editorial/explore-atlas.webp" alt="Interactive alt-history map of the New World in 1377 A.D., showing the coloured realms of North America from the Cree Territories to the Mayan States" loading="lazy">
+      </a>
+    </div>
   </div>
 </section>
 

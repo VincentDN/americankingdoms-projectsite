@@ -1,5 +1,8 @@
 # American Kingdoms — Changelog
 
+## 1.26.0 — 2026-09-11
+- Replaced the Map Promo and Discover More "Interactive World Map" screenshot with a fresh capture of the corrected atlas (South America coastline, Mayan States), and gave the Map Promo image an angled, 3D "floating screen" treatment (CSS perspective/tilt, layered shadow, glass sheen) that flattens on hover/focus; flat and shadowed only on mobile.
+
 ## 1.25.0 — 2026-09-11
 - Added a Map Promo section between Gallery and Art Prints on the homepage, pairing an atlas screenshot with a "Discover the American Kingdoms Interactive Map" call-to-action linking to `/medieval-america-map/`.
 - Merged the lightweight mobile atlas (canvas rendering, simplified `data/mobile/atlas.json`, automatic detail switching by viewport/pointer/Save-Data) into the published map.

@@ -1,5 +1,27 @@
 # American Kingdoms atlas groundwork
 
+## Music player continuity across pages — 11 September 2026 (later still)
+
+The player used to restart from track one, silent, every time a visitor
+navigated between the world atlas and a submap page (Massachusetts's duchy
+map, say) -- these are separate full page loads, not an SPA, so the
+`<audio>` element and all its JS state were simply gone on arrival.
+`music-player.js` now persists `{queue, queueIndex, currentTime, volume,
+playing}` to `sessionStorage` (shared across the whole origin, so it
+survives any number of hops between map pages) on `pagehide`, on
+`visibilitychange` going hidden, on every `pause`/`volumechange`, and every
+5 seconds while playing, as a safety net beyond `pagehide` alone. On load,
+a valid saved state (validated against the current `TRACKS` list before
+trusting it) replaces the normal fresh shuffle: same track, `audio.load()`
++ a one-time `loadedmetadata` listener to seek back to the saved
+`currentTime` (preload="none" means nothing was buffering yet, and simply
+setting `currentTime` before metadata loads is a no-op), and the same
+volume. Whether playback resumes immediately on the new page depends on
+the browser's autoplay policy for that origin (increasingly permissive
+once a visitor has played audio with sound there before) -- when it's
+still refused, the existing first-interaction fallback picks it up, same
+as a cold load.
+
 ## Follow-up fixes — 11 September 2026 (later same day)
 
 Four corrections after review of the South America/Mayan/music changes above:
