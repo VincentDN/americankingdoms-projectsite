@@ -1,5 +1,39 @@
 # American Kingdoms atlas groundwork
 
+## Follow-up fixes — 11 September 2026 (later same day)
+
+Four corrections after review of the South America/Mayan/music changes above:
+
+- **The South America land trim was too aggressive.** Cutting the entire
+  wedge left Roman Colonies and Muslim Settlements sitting on almost no
+  backing land -- a thin, uniform-width ribbon over open water that read as
+  "stretched." `scripts/trim-south-america-land.py` now keeps a 2.5 degree
+  margin of ordinary land around every territory touching the wedge (Roman
+  Colonies, Muslim Settlements, the Aotearoan sliver, provisional-realm-46),
+  not just a 0.4 degree one -- still removing about 80% of the original
+  wedge (the genuinely deep, coastline-less interior and the straight
+  clip-box artifact edges), while giving those coastal territories a
+  believable landmass again, matching how the map looked before the wedge
+  existed. Re-run `trim-south-america-rivers.py` after, as before.
+- **Mayan States had a thin gap along its merge seam**, visible as a
+  dashed-looking line across the Yucatan where the canon polygon and
+  provisional-realm-43 didn't share exact topology. Fixed with a small
+  morphological closing (`buffer(0.01).buffer(-0.01)`) applied directly to
+  the merged geometry in `data/territories.geojson`; negligible area change
+  (+0.001%), same island count.
+- **The "Southern coasts" nav button was removed** (`#southern-coasts` in
+  `index.html`, its `fitBounds` handler in `atlas.js`) as no longer useful.
+- **The music player now plays on load at low volume (18%)** instead of
+  starting muted, per revised direction. Browsers only allow audio with
+  sound to autoplay after the visitor has already interacted with the page,
+  so `music-player.js` attempts `play()` immediately and, if that's
+  blocked, falls back to the visitor's first click/tap/keypress anywhere on
+  the page -- silent until then, never a muted autoplay dressed up as
+  playing.
+
+Regenerate the mobile bundle (`scripts/build-mobile-map.py`) after any of
+the geometry fixes above.
+
 ## Lightweight mobile atlas branch
 
 On `codex/mobile-lightweight-map`, phones load `data/mobile/atlas.json` instead

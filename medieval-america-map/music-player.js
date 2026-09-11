@@ -1,7 +1,10 @@
 /* Background music player, shared by the world atlas and its submap pages.
-   Muted (volume 0) until the visitor raises the slider or presses play --
-   nothing is fetched until that first gesture, since <audio preload="none">
-   only starts downloading once playback is requested. */
+   Plays on load at a low volume. Browsers only allow audio with sound to
+   autoplay after the visitor has already interacted with the page (or the
+   site's engagement heuristics allow it), so this attempts play() right
+   away and, if that's blocked, starts on the visitor's first click, tap or
+   keypress anywhere on the page instead -- silent until then, never muted
+   autoplay dressed up as playing. */
 (() => {
   'use strict';
   const TRACKS = [
@@ -69,8 +72,9 @@
     if (e.key === 'Escape' && open) { setOpen(false); toggleBtn.focus(); }
   });
 
-  audio.volume = 0;
-  if (volume) volume.value = 0;
+  const DEFAULT_VOLUME = 0.18;
+  audio.volume = DEFAULT_VOLUME;
+  if (volume) volume.value = Math.round(DEFAULT_VOLUME * 100);
 
   const updatePlayButton = () => {
     if (!playBtn) return;
@@ -88,5 +92,16 @@
 
   if (volume) volume.addEventListener('input', () => {
     audio.volume = Number(volume.value) / 100;
+  });
+
+  // Best-effort autoplay: most browsers refuse this on a cold load, in
+  // which case fall back to the visitor's first interaction anywhere on
+  // the page (not just the player itself).
+  const startOnFirstInteraction = () => {
+    audio.play().catch(() => {});
+    ['pointerdown', 'keydown'].forEach(type => document.removeEventListener(type, startOnFirstInteraction));
+  };
+  audio.play().catch(() => {
+    ['pointerdown', 'keydown'].forEach(type => document.addEventListener(type, startOnFirstInteraction, { once: true }));
   });
 })();
