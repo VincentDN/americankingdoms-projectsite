@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""One-off repair, 11 September 2026 (companion to trim-south-america-land.py).
+"""Repair, 11 September 2026 (revised same day; see trim-south-america-land.py).
 
-River lines in the removed South America interior wedge would otherwise be
-left dangling over open water once the land under them is gone. Clips them
-out with the same wedge polygon used to trim data/land.geojson.
+Clips the same refined removal region (the deep South America interior,
+minus a kept margin around Roman Colonies/Muslim Settlements/neighbours)
+out of data/rivers.geojson, so no river segments are left dangling over
+open water once the land under them is gone.
 
 Run from the repository root, after trim-south-america-land.py (which
-leaves /tmp/territories-orig.geojson in place):
+writes /tmp/sa-remove-region.geojson):
+  git show 9ba73e4:medieval-america-map/data/rivers.geojson > /tmp/rivers-pretrim.geojson
   python medieval-america-map/scripts/trim-south-america-rivers.py
 Requires shapely>=2.1.
 """
@@ -17,17 +19,15 @@ from shapely.geometry import shape, mapping, MultiLineString
 
 ROOT = Path(__file__).resolve().parent.parent
 RIVERS = ROOT / "data" / "rivers.geojson"
-ORIG_TERRITORIES = Path("/tmp/territories-orig.geojson")
+PRE_RIVERS = Path("/tmp/rivers-pretrim.geojson")
+REMOVE_REGION = Path("/tmp/sa-remove-region.geojson")
 
 
 def main():
-    orig = json.loads(ORIG_TERRITORIES.read_text())
-    sa_feature = next(f for f in orig["features"] if f["properties"]["id"] == "northern-south-america-interior")
-    sa_geom = shape(sa_feature["geometry"])
-    wedge = max(sa_geom.geoms, key=lambda p: p.area)
-    cut = wedge.buffer(0.01)
+    remove_region = shape(json.loads(REMOVE_REGION.read_text()))
+    cut = remove_region.buffer(0.01)
 
-    data = json.loads(RIVERS.read_text())
+    data = json.loads(PRE_RIVERS.read_text())
     feature = data["features"][0]
     geom = shape(feature["geometry"])
     before = geom.length

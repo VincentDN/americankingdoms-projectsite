@@ -50,10 +50,6 @@
   map.attributionControl.addAttribution('Geography: <a href="https://www.naturalearthdata.com/">Natural Earth</a>');
   const home = () => map.setView([48,-100], 4, {animate:false});
   home();
-  on('southern-coasts','onclick',()=>{
-    setPanel(false);
-    map.fitBounds([[-5,-83],[13,-58]],{padding:[40,40],animate:false});
-  });
   let panelMode = 'key';
   function setPanel(open, mode = panelMode) {
     panelMode = mode;
