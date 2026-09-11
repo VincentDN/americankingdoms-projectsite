@@ -10,17 +10,19 @@
   <link rel="icon" type="image/png" href="/medieval-america-map/assets/favicon.png?v=2">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/medieval-america-map/vendor/leaflet.css">
-  <link rel="stylesheet" href="/medieval-america-map/atlas.css?v=11">
+  <link rel="stylesheet" href="/medieval-america-map/atlas.css?v=15">
   <link rel="stylesheet" href="/medieval-america-map/submap.css?v=4">
   <script defer src="/medieval-america-map/vendor/leaflet.js"></script>
   <script defer src="/medieval-america-map/submaps.js?v=2"></script>
   <script defer src="/medieval-america-map/submap.js?v=3"></script>
+  <script defer src="/medieval-america-map/music-player.js?v=1"></script>
 </head>
 <body class="submap" data-submap="massachusetts">
   <header>
     <a href="/" aria-label="American Kingdoms home"><img src="/medieval-america-map/assets/ak-logo.svg" alt="American Kingdoms"></a>
     <div class="atlas-title"><h1 id="kingdom-title">The Kingdom of Massachusetts in 1377 A.D.</h1><p>Duchy and County Map</p></div>
-    <nav aria-label="Map navigation"><a class="map-button" href="/medieval-america-map/?return=1">Back to World Map</a><button id="reset-map" type="button" disabled>Reset view</button></nav>
+    <nav aria-label="Map navigation"><a class="map-button" href="/medieval-america-map/?return=1">Back to World Map</a><button id="reset-map" type="button" disabled>Reset view</button><div class="music-player"><button id="music-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="music-popover">♫ Music</button><div id="music-popover" class="music-popover" hidden><button id="music-playpause" type="button" aria-label="Play music">▶</button><label for="music-volume">Volume</label><input id="music-volume" type="range" min="0" max="100" value="0"><span id="music-track" class="music-track"></span></div></div></nav>
+    <audio id="music-audio" preload="none"></audio>
   </header>
   <main class="submap-layout">
     <aside class="county-panel" aria-label="Counties and subregions">

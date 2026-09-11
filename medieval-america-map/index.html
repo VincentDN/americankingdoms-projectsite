@@ -21,10 +21,11 @@
   <meta name="twitter:site" content="@kaisercatcinema">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="atlas.css?v=13">
+  <link rel="stylesheet" href="atlas.css?v=15">
   <script defer src="vendor/leaflet.js"></script>
   <script defer src="submaps.js?v=2"></script>
   <script defer src="atlas.js?v=18"></script>
+  <script defer src="music-player.js?v=1"></script>
 </head>
 <body>
   <div id="alpha-banner" role="status">Map is currently in alpha state! Expect shenanigans, shekanery and tomfoolery - Vincent</div>
@@ -34,7 +35,8 @@
       <h1>The New World in 1377 A.D.</h1>
       <p>13 dukes rise against their Anglo-Saxon overlords: The American Revolutionary War has begun</p>
     </div>
-    <nav aria-label="Atlas controls"><button id="southern-coasts" type="button">Southern coasts</button><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button></nav>
+    <nav aria-label="Atlas controls"><button id="southern-coasts" type="button">Southern coasts</button><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button><div class="music-player"><button id="music-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="music-popover">♫ Music</button><div id="music-popover" class="music-popover" hidden><button id="music-playpause" type="button" aria-label="Play music">▶</button><label for="music-volume">Volume</label><input id="music-volume" type="range" min="0" max="100" value="0"><span id="music-track" class="music-track"></span></div></div></nav>
+    <audio id="music-audio" preload="none"></audio>
   </header>
   <main>
     <div id="map" aria-label="Interactive Americas map. Use arrow keys to pan and plus or minus to zoom."></div>

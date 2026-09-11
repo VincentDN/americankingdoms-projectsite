@@ -3,6 +3,14 @@
 .map-button:hover{background:var(--parch-2)}
 .map-button-red{background:var(--red);border-color:#7d1523;color:#fff;margin-top:16px;width:100%}
 .map-button-red:hover{background:#8b1728}
+/* --- Background music player (map pages only) --- */
+.music-player{position:relative}
+.music-popover{position:absolute;top:calc(100% + 6px);right:0;z-index:1200;display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--parch);border:1px solid #9d865e;box-shadow:0 4px 20px #a78b6040;white-space:nowrap}
+.music-popover button{min-height:36px;min-width:36px;padding:4px;font-size:1.1rem;line-height:1}
+.music-popover label{margin:0;font-size:.78rem;color:var(--muted)}
+.music-popover input[type=range]{accent-color:var(--red);width:100px;vertical-align:middle}
+.music-track{font:italic .78rem var(--body);color:var(--muted);max-width:150px;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:700px){nav{position:relative}.music-player{position:static}.music-popover{left:12px;right:12px;top:calc(100% + 6px);justify-content:center}.music-track{display:none}}
 *{box-sizing:border-box}body{margin:0;color:var(--ink);font:18px/1.4 var(--body);height:100dvh;display:flex;flex-direction:column;background:var(--parch)}
 ::selection{background:var(--red);color:#f5f1dc}
 #alpha-banner{flex:none;background:var(--red);color:#fff;text-align:center;font:600 .85rem/1.4 var(--sans);padding:8px 16px;letter-spacing:.01em;z-index:1001}
