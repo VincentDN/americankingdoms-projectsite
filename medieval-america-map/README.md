@@ -19,14 +19,77 @@ Run `python scripts/build-mobile-map.py` with Shapely >= 2.1 after editing sourc
 geography. The generator nodes the shared border network before coverage
 simplification, removes minor fragments while retaining every canonical realm,
 and validates exported polygons. It enforces a 900 KB raw data ceiling. The current
-build is 873,038 bytes versus 6,082,825 bytes for the full data (85.6% smaller),
-approximately 295,708 bytes with gzip. Exact figures live in
+build is 856,005 bytes versus 6,049,988 bytes for the full data (85.9% smaller),
+approximately 290,606 bytes with gzip. Exact figures live in
 `data/mobile/build-stats.json`; these are payload measurements, not device FPS.
+Rerun this after any edit to `data/territories.geojson`, `data/land.geojson` or
+`data/rivers.geojson` so the mobile bundle stays in sync with the full data.
 
 Run `node scripts/test-map-loading.mjs` to check automatic/forced data selection,
 canvas settings, realm selection, full-detail switching and offline feedback.
-The test uses lightweight DOM/Leaflet doubles; physical smartphone performance
-and touch behavior still need device testing before merging this branch.
+Verified in-browser on real phone-width, touch-emulated viewports: tap-to-select
+against the rendered canvas paths, the bottom-sheet map key, and the full/lite
+detail switch all work correctly (an earlier manual spot-check that appeared to
+find dead taps was miscalibrated screen coordinates, not a hit-testing bug --
+Leaflet's per-pane Canvas renderer already hit-tests every layer in its own pane
+correctly).
+
+## South America interior trim and Mayan States — 11 September 2026
+
+The "Uncharted Northern South America" catch-all territory covered a large,
+label-less inland wedge south-east of Roman Colonies (roughly lon -81..-58,
+lat -5..11) with no coastline of its own -- an artifact of the original
+Natural Earth import's clip box, not a real landform boundary. Removing just
+its political overlay wasn't enough, since `data/land.geojson` is a separate
+physical base layer: `scripts/trim-south-america-land.py` subtracts the exact
+same wedge polygon from the single continental land ring (recovered from the
+pre-edit territories file), and `scripts/trim-south-america-rivers.py` clips
+the same wedge out of `data/rivers.geojson` so no river segments are left
+dangling over open water. North/Central America and the Roman Colonies
+coastal strip are unaffected; `scripts/fix-south-america-and-mayan.py` drops
+only that one sub-polygon (of thousands of unrelated Aleutian-island slivers)
+from the territory itself. Run in order: `fix-south-america-and-mayan.py`,
+then `trim-south-america-land.py`, then `trim-south-america-rivers.py`
+(the latter two read the pre-edit territories geometry from
+`/tmp/territories-orig.geojson`, written by `git show HEAD:...` beforehand).
+
+`fix-south-america-and-mayan.py` also expands Mayan Civilizations -- renamed
+**Mayan States** -- south and west to absorb the neighbouring unclaimed
+provisional realms 43 (Chiapas/Guatemala/Belize) and 45 (El Salvador/Honduras/
+Nicaragua's Pacific coast), matching both the user-traced extent and the real
+historical reach of Maya civilization. The union produces a disconnected
+sliver toward Oaxaca and dozens of sub-pixel topology slivers along that same
+imprecise canon/provisional seam (west of lon -96, well outside the historical
+Maya heartland); the script keeps the main body plus genuine small offshore
+islands and drops the rest. `assets/flags/mayan-states.svg` and
+`-shield.svg` are an original tricolour after the historical Republic of
+Yucatan flag (green/white/red bands, three five-pointed stars per band on the
+flag, one per vertical band on the shield). Its `summary` blends that real
+history with AK lore: Roman contact on the Gulf coast taught Maya engineers
+iron tools, arch-and-vault masonry and the wheel, and the Mayan States run a
+rich sea trade with the Sidennic League.
+
+Aztec Empire also gained an original flag/shield (a golden sun with five
+rays rising over green and red, after the reference supplied for this
+change) and a `summary` blending the real founding of Tenochtitlan and the
+Triple Alliance with an AK-specific note that the Aztecs trade only warily
+with the Roman colonies and Mayan States to their east.
+
+## Background music player — 11 September 2026
+
+`music-player.js` (loaded by both `index.html` and the Massachusetts submap
+page, never the main site) shuffles the three tracks in
+`assets/music/`, advancing to the next shuffled track on `ended` and
+reshuffling once the queue is exhausted (never immediately repeating the
+track that just played across a reshuffle). Nothing is fetched until
+playback is requested: the `<audio preload="none">` element only downloads
+once the visitor presses play, and the player starts at volume 0 ("muted by
+default") regardless. The nav gets a third "Music" button that opens a small
+popover with a play/pause button and a volume slider; both pages already
+share `atlas.css`/this script via absolute `/medieval-america-map/...` paths,
+so no page-specific wiring was needed beyond the shared markup. On narrow
+viewports the popover switches from anchoring off the small button (which
+would overflow the viewport) to spanning the full nav width instead.
 
 ## Border repair and western expansions — 10 September 2026
 

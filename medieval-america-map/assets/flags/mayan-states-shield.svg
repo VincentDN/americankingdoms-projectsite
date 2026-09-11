@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" role="img" aria-label="Shield of the Mayan States: green, white and red vertical bands, each with a five-pointed star">
+  <title>Shield of the Mayan States</title>
+  <defs>
+    <clipPath id="mayan-shield-clip">
+      <path d="M3 3h34v22c0 10-9 16-17 20C12 41 3 35 3 25Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#mayan-shield-clip)">
+    <rect x="0" y="0" width="40" height="48" fill="#1a7a4c"/>
+    <rect x="14.33" y="0" width="11.34" height="48" fill="#ffffff"/>
+    <rect x="25.67" y="0" width="15" height="48" fill="#ce1126"/>
+    <path d="M8.67 18.80 L9.87 22.34 L13.62 22.39 L10.62 24.63 L11.73 28.21 L8.67 26.05 L5.61 28.21 L6.72 24.63 L3.72 22.39 L7.47 22.34 Z" fill="#ffffff"/>
+    <path d="M20.00 18.80 L21.20 22.34 L24.95 22.39 L21.95 24.63 L23.06 28.21 L20.00 26.05 L16.94 28.21 L18.05 24.63 L15.05 22.39 L18.80 22.34 Z" fill="#1a7a4c"/>
+    <path d="M31.33 18.80 L32.53 22.34 L36.28 22.39 L33.28 24.63 L34.39 28.21 L31.33 26.05 L28.27 28.21 L29.38 24.63 L26.38 22.39 L30.13 22.34 Z" fill="#ffffff"/>
+  </g>
+  <path d="M3 3h34v22c0 10-9 16-17 20C12 41 3 35 3 25Z" fill="none" stroke="#a78b60" stroke-width="2.5"/>
+</svg>

@@ -1,8 +1,8 @@
 {
-  "fullDataBytes": 6082825,
-  "mobileDataBytes": 873038,
-  "mobileGzipBytes": 295708,
-  "reductionPercent": 85.6,
-  "territories": 120,
+  "fullDataBytes": 6049988,
+  "mobileDataBytes": 856005,
+  "mobileGzipBytes": 290606,
+  "reductionPercent": 85.9,
+  "territories": 118,
   "canonicalTerritories": 50
 }

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 48" role="img" aria-label="Shield of the Aztec Empire: a golden sun with five rays over green and red">
+  <title>Shield of the Aztec Empire</title>
+  <defs>
+    <clipPath id="aztec-shield-clip">
+      <path d="M3 3h34v22c0 10-9 16-17 20C12 41 3 35 3 25Z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#aztec-shield-clip)">
+    <rect x="0" y="0" width="40" height="30" fill="#1a8f4a"/>
+    <rect x="0" y="30" width="40" height="18" fill="#e01f1f"/>
+    <g fill="#f2c320" stroke="#c99a12" stroke-width="0.9" stroke-linejoin="round">
+      <path d="M10.57 28.84 L4.31 24.90 L11.69 25.39 Z"/>
+      <path d="M13.05 23.52 L10.30 16.65 L15.99 21.39 Z"/>
+      <path d="M18.19 20.67 L20.00 13.50 L21.81 20.67 Z"/>
+      <path d="M24.01 21.39 L29.70 16.65 L26.95 23.52 Z"/>
+      <path d="M28.31 25.39 L35.69 24.90 L29.43 28.84 Z"/>
+      <path d="M10.50 30.00A9.50 9.50 0 0 1 29.50 30.00Z"/>
+    </g>
+  </g>
+  <path d="M3 3h34v22c0 10-9 16-17 20C12 41 3 35 3 25Z" fill="none" stroke="#a78b60" stroke-width="2.5"/>
+</svg>

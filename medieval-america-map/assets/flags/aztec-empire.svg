@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 300" width="500" height="300" role="img" aria-label="Flag of the Aztec Empire: a golden sun rising with five rays over a green field, above a red field">
+  <title>Flag of the Aztec Empire</title>
+  <rect width="500" height="300" fill="#1a8f4a"/>
+  <rect y="200" width="500" height="100" fill="#e01f1f"/>
+  <path d="M180.5 191.5 L64.5 139.7 L188.8 166.1 Z" fill="#f2c320" stroke="#c99a12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M198.8 152.3 L135.4 42.2 L220.4 136.6 Z" fill="#f2c320" stroke="#c99a12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M236.6 131.3 L250.0 5.0 L263.4 131.3 Z" fill="#f2c320" stroke="#c99a12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M279.6 136.6 L364.6 42.2 L301.2 152.3 Z" fill="#f2c320" stroke="#c99a12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M311.2 166.1 L435.5 139.7 L319.5 191.5 Z" fill="#f2c320" stroke="#c99a12" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M180 200A70 70 0 0 1 320 200Z" fill="#f2c320" stroke="#c99a12" stroke-width="2" stroke-linejoin="round"/>
+</svg>
