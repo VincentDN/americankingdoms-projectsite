@@ -1,6 +1,27 @@
 # americankingdoms-projectsite
 The project website for https://american-kingdoms.com/
 
+## Roadmap notes (raise these next time we pick up site work)
+
+- **Full interactive map, for both the AK site and the TDS site.** The
+  current `/medieval-america-map/` atlas (this repo) is still alpha —
+  see the dated entries in `medieval-america-map/README.md` for its
+  current feature set and known follow-ups (panning bounds, label
+  density, etc). TDS (The Divided States) is a separate sister site, not
+  in this repo, that wants the same treatment. Worth scoping what "full
+  interactive" means for each (zoom depth, submap coverage, mobile
+  parity) before starting.
+- **Every flag should be purchasable via a direct link to its Flagmaker
+  product page**, not just the generic collection link. Right now every
+  "Purchase a flag on Flagmaker & Print" link (main site, world atlas
+  details panel, Massachusetts submap panel) points at the same
+  `https://flagmaker-print.com/collections/alt-history-flags` collection
+  URL regardless of which territory/flag is showing. Territories already
+  carry a `flag` image path in `medieval-america-map/data/territories.geojson`;
+  they'd need a matching Flagmaker product URL (new property, e.g.
+  `flagShopUrl`) to link each territory's own flag straight to checkout
+  instead of the collection page.
+
 ## Newsletter signup
 
 The email box in the Connect section posts to `/api/subscribe`, a Cloudflare
