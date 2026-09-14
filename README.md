@@ -8,9 +8,13 @@ The project website for https://american-kingdoms.com/
   see the dated entries in `medieval-america-map/README.md` for its
   current feature set and known follow-ups (panning bounds, label
   density, etc). TDS (The Divided States) is a separate sister site, not
-  in this repo, that wants the same treatment. Worth scoping what "full
-  interactive" means for each (zoom depth, submap coverage, mobile
-  parity) before starting.
+  in this repo (`VincentDN/dividedstates-projectsite`); it now has a
+  first alpha of its own at `/map-alpha/` (four-faction 1940 civil-war
+  map, see that repo's `map-alpha/README.md`), orphaned and noindexed,
+  with a provisional/unconfirmed state-to-faction border split. Worth
+  scoping what "full interactive" means for each site long-term (zoom
+  depth, submap coverage, mobile parity) rather than assuming either
+  atlas's approach transfers directly to the other.
 - **Every flag should be purchasable via a direct link to its Flagmaker
   product page**, not just the generic collection link. Right now every
   "Purchase a flag on Flagmaker & Print" link (main site, world atlas
