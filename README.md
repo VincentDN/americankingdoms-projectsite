@@ -9,9 +9,11 @@ The project website for https://american-kingdoms.com/
   current feature set and known follow-ups (panning bounds, label
   density, etc). TDS (The Divided States) is a separate sister site, not
   in this repo (`VincentDN/dividedstates-projectsite`); it now has a
-  first alpha of its own at `/map-alpha/` (four-faction 1940 civil-war
-  map, see that repo's `map-alpha/README.md`), orphaned and noindexed,
-  with a provisional/unconfirmed state-to-faction border split. Worth
+  first alpha of its own, live (linked from nav/footer/a homepage promo,
+  no longer orphaned) at `/world-map/` (three-faction 1940 civil-war
+  map per its "Declassified" faction lore, see that repo's
+  `world-map/README.md`), with a provisional/unconfirmed state-to-faction
+  border split. Worth
   scoping what "full interactive" means for each site long-term (zoom
   depth, submap coverage, mobile parity) rather than assuming either
   atlas's approach transfers directly to the other.
