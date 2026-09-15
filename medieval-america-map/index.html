@@ -21,10 +21,10 @@
   <meta name="twitter:site" content="@kaisercatcinema">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Ysabeau:wght@600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="vendor/leaflet.css">
-  <link rel="stylesheet" href="atlas.css?v=15">
+  <link rel="stylesheet" href="atlas.css?v=16">
   <script defer src="vendor/leaflet.js"></script>
   <script defer src="submaps.js?v=2"></script>
-  <script defer src="atlas.js?v=19"></script>
+  <script defer src="atlas.js?v=20"></script>
   <script defer src="music-player.js?v=3"></script>
 </head>
 <body>
@@ -35,7 +35,20 @@
       <h1>The New World in 1377 A.D.</h1>
       <p>13 dukes rise against their Anglo-Saxon overlords: The American Revolutionary War has begun</p>
     </div>
-    <nav aria-label="Atlas controls"><button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button><div class="music-player"><button id="music-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="music-popover">♫ Music</button><div id="music-popover" class="music-popover" hidden><button id="music-playpause" type="button" aria-label="Play music">▶</button><label for="music-volume">Volume</label><input id="music-volume" type="range" min="0" max="100" value="0"><span id="music-track" class="music-track"></span></div></div></nav>
+    <nav aria-label="Atlas controls">
+      <div class="site-menu-wrap">
+        <button id="site-menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false">Site menu</button>
+        <ul id="site-menu" class="site-menu" hidden>
+          <li><a href="https://american-kingdoms.com/">Home</a></li>
+          <li><a href="https://american-kingdoms.com/#world">Lore</a></li>
+          <li><a href="https://american-kingdoms.com/#gallery">Gallery</a></li>
+          <li><a href="https://american-kingdoms.com/#explore">Projects</a></li>
+          <li><a href="https://american-kingdoms.com/#connect">Connect</a></li>
+          <li><a href="https://american-kingdoms.com/#prints">Merchandise</a></li>
+        </ul>
+      </div>
+      <button id="panel-toggle" type="button" aria-controls="panel" aria-expanded="true">Map key</button><div class="music-player"><button id="music-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="music-popover">♫ Music</button><div id="music-popover" class="music-popover" hidden><button id="music-playpause" type="button" aria-label="Play music">▶</button><label for="music-volume">Volume</label><input id="music-volume" type="range" min="0" max="100" value="0"><span id="music-track" class="music-track"></span></div></div>
+    </nav>
     <audio id="music-audio" preload="none"></audio>
   </header>
   <main>

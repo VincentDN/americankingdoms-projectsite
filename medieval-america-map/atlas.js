@@ -72,7 +72,16 @@
   });
   const closePanel = () => { setPanel(false); $('panel-toggle')?.focus({preventScroll:true}); };
   on('panel-close','onclick', closePanel);
-  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); });
+  const siteMenu = $('site-menu'), siteMenuToggle = $('site-menu-toggle');
+  const closeSiteMenu = () => { if (siteMenu) siteMenu.hidden = true; siteMenuToggle?.setAttribute('aria-expanded','false'); };
+  on('site-menu-toggle','onclick', e => {
+    e.stopPropagation();
+    const open = siteMenuToggle.getAttribute('aria-expanded') !== 'true';
+    siteMenuToggle.setAttribute('aria-expanded', String(open));
+    siteMenu.hidden = !open;
+  });
+  document.addEventListener('click', e => { if (siteMenu && !siteMenu.hidden && !siteMenu.contains(e.target) && e.target !== siteMenuToggle) closeSiteMenu(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); if(e.key === 'Escape' && siteMenu && !siteMenu.hidden) closeSiteMenu(); });
   setPanel(!liteMode && !matchMedia('(max-width:700px)').matches, editMode ? 'key' : 'welcome');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
