@@ -1,5 +1,8 @@
 # American Kingdoms — Changelog
 
+## 1.28.0 — 2026-09-18
+- Added Cloudflare Zaraz conversion-event tracking: `zaraz.track()` calls (safe no-ops until Zaraz is enabled) fire on newsletter signups, video plays, and outbound clicks to the Shopify-backed merch/flag stores. See README "Conversion tracking" for the dashboard-side setup (Web Analytics + Zaraz, no build step).
+
 ## 1.27.0 — 2026-09-11
 - Redesigned the Map Promo section as a full-bleed background band (a fresh, panel-free atlas capture with a dark-to-transparent tint fading into the map on the right), dropping the eyebrow and tilted-screen card in favour of new copy: "Explore the New World in 1377 A.D. This interactive map is being continuously updated with submissions from our wiki writers."
 

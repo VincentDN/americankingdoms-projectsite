@@ -126,6 +126,9 @@
     1.27.0 Rebuilt Map Promo as a full-bleed background band (panel-free
            atlas capture, dark-to-transparent tint), dropped the eyebrow
            and tilted card, and rewrote its copy.
+    1.28.0 Added Cloudflare Zaraz conversion-event tracking (newsletter
+           signups, video plays, outbound merch/flag-store clicks); see
+           README "Conversion tracking" for the dashboard-side setup.
   ══════════════════════════════════════════════════════════════════════
 -->
 <html lang="en">
@@ -136,7 +139,7 @@
 <meta name="description" content="In American Kingdoms, American history is re-imagined as a medieval setting, an age defined not by musket and cannon, but by knightly honour and courtly intrigue. A collaborative alt-history world by Kaiser Cat Cinema.">
 <link rel="icon" type="image/png" href="assets/favicon.png?v=2">
 <meta name="theme-color" content="#14110d">
-<meta name="version" content="1.24.0">
+<meta name="version" content="1.28.0">
 
 <!-- Open Graph / social -->
 <meta property="og:type" content="website">
@@ -1344,6 +1347,12 @@ body.newsletter-open{overflow:hidden}
 </dialog>
 
 <script>
+// Conversion tracking via Cloudflare Zaraz (zaraz.track), enabled per-zone in
+// the Cloudflare dashboard with a destination (e.g. GA4) configured there.
+// No-ops until Zaraz is turned on, so this ships ahead of that dashboard step.
+// See README "Conversion tracking".
+const track=(name,props)=>{try{window.zaraz&&window.zaraz.track(name,props)}catch(e){}};
+
 // mobile menu
 const burger=document.getElementById('burger'), navLinks=document.getElementById('navLinks');
 burger.addEventListener('click',()=>{const o=navLinks.classList.toggle('open');burger.setAttribute('aria-expanded',o)});
@@ -1363,6 +1372,7 @@ document.querySelectorAll('.video-facade[data-embed]').forEach(video=>{
     frame.title=video.dataset.title||'American Kingdoms video';
     video.innerHTML='';
     video.appendChild(frame);
+    track('video_play',{title:video.dataset.title||'American Kingdoms video',embed:video.dataset.embed});
   };
   video.addEventListener('click',playVideo);
   video.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();playVideo()}});
@@ -1522,6 +1532,7 @@ document.querySelectorAll('.newsletter-form').forEach(form=>{
       if(res.ok&&data.ok){
         widget.innerHTML='<div class="newsletter-success"><p class="newsletter-success-title">Thanks for subscribing!</p><p class="newsletter-success-copy">You will receive an email confirmation shortly.</p></div>';
         try{localStorage.setItem('ak-newsletter-dismissed',String(Date.now()))}catch(err){}
+        track('newsletter_signup',{form:widget.id||form.id||'newsletter'});
       }else{
         errorMsg.textContent=data.error||'Something went wrong. Please try again.';
         errorMsg.hidden=false;
@@ -1535,6 +1546,20 @@ document.querySelectorAll('.newsletter-form').forEach(form=>{
         submitBtn.textContent=originalLabel;
       }
     }
+  });
+});
+
+// Outbound conversion-link tracking: clicks on links to the Shopify-backed
+// merch/flag stores (the actual purchase funnel, off-site). Delegated so
+// new links picked up automatically without extra wiring per button.
+document.addEventListener('click',event=>{
+  const link=event.target.closest('a[href]');
+  if(!link) return;
+  if(!/^https?:\/\/([\w-]+\.)?(kaisercatcinema|flagmaker-print)\.com/.test(link.href)) return;
+  track('outbound_click',{
+    url:link.href,
+    label:(link.textContent||link.getAttribute('aria-label')||'').trim().slice(0,80),
+    section:link.closest('section[id]')?.id||''
   });
 });
 </script>
