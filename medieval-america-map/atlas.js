@@ -84,6 +84,12 @@
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('panel').hidden) closePanel(); if(e.key === 'Escape' && siteMenu && !siteMenu.hidden) closeSiteMenu(); });
   setPanel(!liteMode && !matchMedia('(max-width:700px)').matches, editMode ? 'key' : 'welcome');
   for (const [name,z] of [['land',200],['water',250],['countries',350],['regions',360]]) { map.createPane(name); map.getPane(name).style.zIndex=z; }
+  // Separate canvases catch clicks across their entire rectangular surface, so
+  // the regions canvas can swallow taps on countries below it. SVG territory
+  // paths hit-test only their shapes; keep the heavier geography on canvas.
+  const territoryRenderers = liteMode ? {
+    countries:L.svg({pane:'countries'}), regions:L.svg({pane:'regions'}),
+  } : null;
   const groups = {country:L.featureGroup().addTo(map),region:L.featureGroup().addTo(map),sample:L.featureGroup()};
   map.createPane('stateLabels');map.getPane('stateLabels').style.zIndex=500;
   map.getPane('stateLabels').style.pointerEvents='none';
@@ -248,7 +254,7 @@
     if(editMode) { $('edit-name').value=p.name || ''; $('edit-kind').value=p.kind==='region'?'region':'country';$('edit-color').value=p.color || '#b31f34';$('edit-description').value=p.summary || '';$('edit-wiki').value=url || ''; }
   }
   function wire(layer,feature,sample=false) {
-    layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';layer.setStyle(style(feature));
+    layer.feature=feature;layer.sample=sample;if(!map.hasLayer(layer))layer.options.pane=feature.properties.kind==='region'?'regions':'countries';if(territoryRenderers)layer.options.renderer=territoryRenderers[layer.options.pane];layer.setStyle(style(feature));
     addStateLabel(layer,feature,sample);
     if (!liteMode) {
       layer.bindTooltip(tooltip(feature),{className:'territory-tooltip',sticky:true,direction:'top'});

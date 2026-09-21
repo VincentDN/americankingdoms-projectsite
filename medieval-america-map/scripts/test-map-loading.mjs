@@ -10,7 +10,7 @@ async function scenario({width=390,query='',fail=false}={}) {
   const layer=()=>({options:{},on(){return this;},setStyle(){return this;},bindTooltip(){return this;},closeTooltip(){},setTooltipContent(){},getElement(){return null;},addTo(){return this;},getLatLng(){return {lat:40,lng:-90};},getBounds(){return [[30,-100],[45,-80]];}});
   const group=()=>{const g={layers:[],addTo(){return this;},addLayer(l){this.layers.push(l);return this;},removeLayer(){},eachLayer(fn){this.layers.forEach(fn);}};groups.push(g);return g;};
   const map={options:null,attributionControl:{setPrefix(){},addAttribution(){}},setView(){return this;},createPane(){},getPane(){return {style:{}};},eachLayer(){},on(){},getSize(){return {x:width,y:800};},getZoom(){return 4;},latLngToContainerPoint(){return {x:150,y:150};},hasLayer(){return false;},removeLayer(){},getCenter(){return {lat:48,lng:-100};},fitBounds(){},closeTooltip(){}};
-  const L={CRS:{Earth:{}},point(){},latLng(){},bounds(){},extend:Object.assign,Transformation:function(){},Tooltip:function(){},map(id,options){map.options=options;return map;},control:{zoom(){return {addTo(){}};}},featureGroup:group,layerGroup:group,marker:layer,divIcon:x=>x,geoJSON(data,options){if(options.onEachFeature)data.features.forEach(f=>options.onEachFeature(f,layer()));return {addTo(){}};}};
+  const L={svg:options=>({options}),CRS:{Earth:{}},point(){},latLng(){},bounds(){},extend:Object.assign,Transformation:function(){},Tooltip:function(){},map(id,options){map.options=options;return map;},control:{zoom(){return {addTo(){}};}},featureGroup:group,layerGroup:group,marker:layer,divIcon:x=>x,geoJSON(data,options){if(options.onEachFeature)data.features.forEach(f=>options.onEachFeature(f,layer()));return {addTo(){}};}};
   const location=new URL('http://localhost/medieval-america-map/'+query);
   const radios=[Object.assign(element(),{value:'realms'}),Object.assign(element(),{value:'cultures'})];
   const context={L,URL,URLSearchParams,location,navigator:{},performance:{getEntriesByType:()=>[]},matchMedia:q=>({matches:q.includes('max-width')?width<=Number(q.match(/\d+/)[0]):false}),sessionStorage:{getItem(){return null;},setItem(){}},Event:function(type){this.type=type;},setTimeout,console:{error:e=>errors.push(e)},document:{getElementById:node,createElement:element,documentElement:element(),querySelectorAll:()=>radios,querySelector:()=>radios[0],addEventListener(){},head:element()},addEventListener(){},fetch:async path=>{requests.push(path);if(fail)throw Error('offline');return {ok:true,json:async()=>JSON.parse(readFileSync(new URL(path.split('?')[0],root),'utf8'))};}};
@@ -24,6 +24,11 @@ assert.deepEqual(lite.requests,['data/mobile/atlas.json?v=1']);
 assert.equal(lite.errors.length,0);
 assert.equal(lite.map.options.preferCanvas,true);
 assert.equal(lite.map.options.maxZoom,7);
+for(const group of lite.groups)for(const layer of group.layers){
+  if(!layer.feature)continue;
+  const pane=layer.feature.properties.kind==='region'?'regions':'countries';
+  assert.equal(layer.options.renderer.options.pane,pane,'Territories need shape-based SVG hit testing above canvas geography');
+}
 assert.equal(lite.nodes.get('panel').hidden,true);
 assert.equal(lite.nodes.get('cities').disabled,true);
 assert.equal(lite.nodes.get('rivers').disabled,true);
